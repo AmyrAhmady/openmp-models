@@ -1,0 +1,25 @@
+{
+  "name": "open.mp-models",
+  "scripts": {
+    "dev": "next",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "@types/react-native": "^0.64.4",
+    "modal-react-native-web": "^0.2.0",
+    "next": "latest",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-native-web": "^0.13.14"
+  },
+  "devDependencies": {
+    "@types/react": "^17.0.4",
+    "babel-plugin-react-native-web": "^0.13.14",
+    "babel-preset-react-native": "^4.0.1",
+    "eslint": "^7.25.0",
+    "eslint-plugin-react": "^7.23.2",
+    "typescript": "^4.2.4"
+  },
+  "license": "MIT"
+}
