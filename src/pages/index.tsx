@@ -1,7 +1,9 @@
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import Header from 'src/components/Header'
-import Menu from 'src/components/Menu'
+import MenuDesktop from 'src/components/Menu/Desktop';
+import MenuMobile from 'src/components/Menu/Mobile';
+import SideBar from 'src/components/SideBar'
 
 interface Props {
     isMobileView: boolean;
@@ -46,16 +48,22 @@ export default class Main extends React.Component<Props, any> {
                     }}
                 />
                 <View style={{ flexDirection: isMobileView ? 'column' : 'row', flex: 1, width: '100%' }}>
-                    <Menu
-                        modelType={modelType}
-                        isMobile={isMobileView}
-                        onSelectItem={(model: any) => {
-                            this.setState({ info: JSON.stringify(model, null, 4) })
-                        }}
-                    />
+                    <SideBar isMobile={isMobileView} style={{ width: '20%' }}>
+                        {isMobileView ? (
+                            <MenuMobile {...this.props} modelType={modelType} onSelectItem={(model) => this.setState({ info: JSON.stringify(model, null, 4) })} />
+                        ) : (
+                            <MenuDesktop {...this.props} modelType={modelType} onSelectItem={(model) => this.setState({ info: JSON.stringify(model, null, 4) })} />
+                        )}
+
+                    </SideBar>
                     <View style={{ flex: 1 }}>
                         <Text style={{ fontSize: 24 }}>{info}</Text>
                     </View>
+                    {isMobileView ? null : (
+                        <SideBar isMobile={isMobileView} style={{ width: '20%' }}>
+                            <Text>Hey</Text>
+                        </SideBar>
+                    )}
                 </View>
             </View >
         )

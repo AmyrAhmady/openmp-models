@@ -3,12 +3,11 @@ import { View, StyleSheet, Platform, StyleProp, ViewStyle, Image, Pressable, Lin
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from '../../../utils/screensize';
 import Modal from "modal-react-native-web";
 import Row from '../../Row';
-import ListModal from './ListModal';
+import ModelList from './ModelList';
 import { request } from 'src/utils/api';
 import { ObjectInfo, SkinInfo, VehicleInfo } from 'src/types';
 
 interface Props {
-    isMobile?: boolean
     modelType: "vehicle" | "object" | "skin";
     onSelectItem: (model: any) => void;
 }
@@ -128,7 +127,7 @@ export default class MenuMobile extends Component<Props, States> {
                         </View>
                     }
                 />
-                <ListModal
+                <ModelList
                     visible={listVisible}
                     onRequestClose={() => this.setState({ listVisible: !listVisible })}
                     data={list}

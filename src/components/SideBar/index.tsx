@@ -2,44 +2,36 @@ import React, { Component } from 'react';
 import { View, StyleSheet, Platform, StyleProp, ViewStyle, Image, Pressable, Linking, Switch, TouchableOpacity, Text } from 'react-native';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from '../../utils/screensize';
 import Row from '../Row';
-import MenuDesktop from './Desktop';
-import MenuMobile from './Mobile';
+import MenuDesktop from '../Menu/Desktop';
+import MenuMobile from '../Menu/Mobile';
 
 interface Props {
     isMobile?: boolean;
-    modelType: "vehicle" | "object" | "skin";
-    onSelectItem: (model: any) => void;
+    style?: ViewStyle;
 }
 
 export default class Menu extends Component<Props, any> {
 
     constructor(props: Props) {
         super(props);
-
-        this.state = {
-        }
     }
 
     render() {
 
         const {
-        } = this.state;
-
-        const {
             isMobile,
-            modelType,
-            onSelectItem
+            style
         } = this.props;
 
         if (isMobile) {
-            return (
-                <MenuMobile {...this.props} modelType={modelType} onSelectItem={onSelectItem} />
-            );
+            return this.props.children;
         }
         else {
             return (
-                <MenuDesktop {...this.props} modelType={modelType} onSelectItem={onSelectItem} />
-            );
+                <View style={[{ height: '100%' }, style]}>
+                    {this.props.children}
+                </View>
+            )
         }
     }
 }

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import { View, StyleSheet, Platform, StyleProp, ViewStyle, Image, Pressable, Linking, Switch, TouchableOpacity, Text, Modal as RNModal, TextInput, FlatList } from 'react-native';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from '../../../utils/screensize';
 import Modal from "modal-react-native-web";
@@ -13,7 +13,7 @@ interface Props {
     onSelect: (model: any) => void;
 }
 
-const ListModal = (props: Props) => {
+const ModelList = (props: Props) => {
 
     const {
         visible,
@@ -23,6 +23,8 @@ const ListModal = (props: Props) => {
         data,
         onSelect
     } = props;
+
+    const [searchInputValue, setSearchInputValue] = useState('');
 
     return (
         <Modal
@@ -40,12 +42,14 @@ const ListModal = (props: Props) => {
                     leftComponent={
                         <View style={{ width: '100%', paddingHorizontal: 10 }}>
                             <TextInput
+                                value={searchInputValue}
                                 style={{
                                     borderWidth: 0.5, borderRadius: 10, borderColor: '#999',
                                     height: 60, width: '100%', paddingHorizontal: 8
                                 }}
                                 placeholder={"Search for a model by name or id"}
                                 onChangeText={(text) => {
+                                    setSearchInputValue(text);
                                     if (text.length) {
                                         if (onSearch) {
                                             onSearch(text);
@@ -63,7 +67,10 @@ const ListModal = (props: Props) => {
                     rightContainerStyle={{ height: '100%', flex: undefined }}
                     rightComponent={
                         <TouchableOpacity
-                            onPress={() => onRequestClose()}
+                            onPress={() => {
+                                setSearchInputValue('');
+                                onSearchEnd();
+                            }}
                         >
                             <Text style={{ fontSize: 30, color: 'black' }}>×</Text>
                         </TouchableOpacity>
@@ -105,4 +112,4 @@ const ListModal = (props: Props) => {
     );
 }
 
-export default React.memo(ListModal);
+export default React.memo(ModelList);
