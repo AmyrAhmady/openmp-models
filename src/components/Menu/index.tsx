@@ -31,8 +31,6 @@ export default class Menu extends Component<Props, any> {
             onSelectItem
         } = this.props;
 
-        console.log(isMobile)
-
         if (isMobile) {
             return (
                 <MenuMobile {...this.props} modelType={modelType} onSelectItem={onSelectItem} />

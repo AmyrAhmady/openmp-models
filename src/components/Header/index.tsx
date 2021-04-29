@@ -38,8 +38,6 @@ export default class Header extends Component<Props, any> {
             "skin": "Skins"
         };
 
-        console.log(modelType)
-
         return (
             <View style={styles.container} onLayout={(event) => this.setState({ headerHeight: event.nativeEvent.layout.height })}>
                 <Row

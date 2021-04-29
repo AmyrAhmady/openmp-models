@@ -29,7 +29,6 @@ const ModalList = (
             >
                 {buttonComponent}
             </TouchableOpacity>
-
             <Modal
                 visible={visible}
                 animationType="fade"

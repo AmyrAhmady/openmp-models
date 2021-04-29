@@ -1,7 +1,5 @@
 export function request<Request, Response>(method: string, path: string, data?: Request) {
 
-    console.log(path)
-
     const onSuccess = (response: Response) => {
         return response;
     }

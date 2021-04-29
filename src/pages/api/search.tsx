@@ -43,7 +43,6 @@ export default (req: NextApiRequest, res: NextApiResponse) => {
                 break;
             }
             case "vehicle": {
-                console.log("step2", req.query);
                 results = req.query.q
                     ? sortedVehicleList.filter((vehicle) =>
                         vehicle.name.toLowerCase().includes((req.query.q as string).toLowerCase())
