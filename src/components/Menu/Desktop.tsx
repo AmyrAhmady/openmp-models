@@ -6,7 +6,6 @@ import { heightPercentageToDP as hp, widthPercentageToDP as wp } from '../../uti
 import Row from '../Row';
 
 interface Props {
-    isMobile?: boolean
     modelType: "vehicle" | "object" | "skin";
     onSelectItem: (model: any) => void;
 }
@@ -78,7 +77,7 @@ export default class MenuDesktop extends Component<Props, States> {
 
         return (
             <View style={{
-                width: '20%', height: hp(100) - 70, direction: 'rtl',
+                width: '100%', height: '100%', direction: 'rtl',
                 shadowColor: "#000",
                 shadowOffset: {
                     width: 1,
@@ -118,7 +117,8 @@ export default class MenuDesktop extends Component<Props, States> {
                     rightComponent={
                         <TouchableOpacity
                             onPress={() => {
-
+                                this.setState({ searchInputValue: '' });
+                                this.setState({ list: this.fullList });
                             }}
                         >
                             <Text style={{ fontSize: 30, color: 'black' }}>×</Text>
