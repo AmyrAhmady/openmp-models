@@ -6,6 +6,8 @@ import MenuDesktop from 'src/components/Menu/Desktop';
 import MenuMobile from 'src/components/Menu/Mobile';
 import RoundCard from 'src/components/RoundCard';
 import SideBar from 'src/components/SideBar'
+import ModelInfo from 'src/container/ModelInfo';
+import realNames from 'src/resources/realNames';
 
 interface Props {
     isMobileView: boolean;
@@ -60,14 +62,14 @@ export default class Main extends React.Component<Props, any> {
                 <View style={{ flexDirection: isMobileView ? 'column' : 'row', flex: 1, width: '100%' }}>
                     <SideBar isMobile={isMobileView} style={{ width: '20%' }}>
                         {isMobileView ? (
-                            <MenuMobile {...this.props} modelType={modelType} onSelectItem={(model) => this.setState({ info: JSON.stringify(model, null, 4) })} />
+                            <MenuMobile {...this.props} modelType={modelType} onSelectItem={(model) => this.setState({ info: model })} />
                         ) : (
-                            <MenuDesktop {...this.props} modelType={modelType} onSelectItem={(model) => this.setState({ info: JSON.stringify(model, null, 4) })} />
+                            <MenuDesktop {...this.props} modelType={modelType} onSelectItem={(model) => this.setState({ info: model })} />
                         )}
 
                     </SideBar>
                     <View style={{ flex: 1 }}>
-                        <Text style={{ fontSize: 24 }}>{info}</Text>
+                        <Text style={{ fontSize: 24 }}> </Text>
                     </View>
                     {isMobileView ? null : (
                         <SideBar isMobile={isMobileView} style={{ width: '20%' }}>
@@ -81,6 +83,17 @@ export default class Main extends React.Component<Props, any> {
                                     '#ffd8b1', '#000075', '#808080', '#ffffff', '#000000'
                                 ]}
                                 rows={2}
+                            />
+                            <ModelInfo
+                                title="Model info"
+                                style={{ marginHorizontal: 20, marginTop: 15 }}
+                                data={Object.entries(info).map((item) => {
+                                    const itemName = realNames[item[0]];
+                                    return {
+                                        label: itemName ? itemName : "Unknown info",
+                                        value: item[1].toString()
+                                    }
+                                })}
                             />
                         </SideBar>
                     )}
