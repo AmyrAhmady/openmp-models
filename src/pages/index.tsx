@@ -54,6 +54,7 @@ export default class Main extends React.Component<Props, any> {
         return (
             <View style={styles.container}>
                 <Header
+                    isMobile={isMobileView}
                     modelType={modelType}
                     onModelTypeChange={(type) => {
                         this.setState({ modelType: type.value });

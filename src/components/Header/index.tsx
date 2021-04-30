@@ -6,6 +6,7 @@ import Row from '../Row';
 
 interface Props {
     modelType: string;
+    isMobile?: boolean;
     onModelTypeChange: (type: { label: string, value: string }) => void;
 }
 
@@ -24,12 +25,13 @@ export default class Header extends Component<Props, any> {
 
         const {
             headerHeight,
-            darkModeEnabled
+            darkModeEnabled,
         } = this.state;
 
         const {
             modelType,
-            onModelTypeChange
+            onModelTypeChange,
+            isMobile
         } = this.props;
 
         const modelTypes = {
@@ -57,6 +59,7 @@ export default class Header extends Component<Props, any> {
                     centerComponent={
                         <View>
                             <ModalList
+                                isMobile={isMobile}
                                 data={[
                                     {
                                         label: 'Vehicles',
