@@ -17,7 +17,14 @@ export default class Main extends React.Component<Props, any> {
         super(props);
 
         this.state = {
-            modelType: 'vehicle'
+            modelType: 'vehicle',
+            info: {
+                "id": 400,
+                "name": "Landstalker",
+                "cat": "Off Road",
+                "mods": "Transfender",
+                "model": "landstal"
+            }
         }
     }
 
