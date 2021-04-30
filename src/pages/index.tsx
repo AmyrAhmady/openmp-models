@@ -4,6 +4,7 @@ import ColorPicker from 'src/components/ColorPicker';
 import Header from 'src/components/Header'
 import MenuDesktop from 'src/components/Menu/Desktop';
 import MenuMobile from 'src/components/Menu/Mobile';
+import RoundCard from 'src/components/RoundCard';
 import SideBar from 'src/components/SideBar'
 
 interface Props {
@@ -73,7 +74,7 @@ export default class Main extends React.Component<Props, any> {
                                     '#9a6324', '#fffac8', '#800000', '#aaffc3', '#808000',
                                     '#ffd8b1', '#000075', '#808080', '#ffffff', '#000000'
                                 ]}
-                                eachRowCount={5}
+                                rows={2}
                             />
                         </SideBar>
                     )}

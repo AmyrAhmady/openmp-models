@@ -6,7 +6,7 @@ import RoundCard from '../RoundCard';
 interface Props {
     title: string;
     titleColor: string;
-    eachRowCount: number;
+    rows: number;
     onSelect?: (color: string) => void;
     colors?: string[];
     style?: ViewStyle
@@ -21,18 +21,17 @@ const ColorPicker = (props: Props) => {
         title,
         titleColor,
         onSelect,
-        eachRowCount,
+        rows,
         colors,
         style
     } = props;
 
     useEffect(() => {
         setColorItemSize(
-            ((eachRowCount - 1) / (colors.length ? colors.length : 1)) * parentWidth
+            (rows / (colors.length ? colors.length : 1)) * parentWidth
         )
     }, [parentWidth]);
 
-    console.log(colorItemSize, eachRowCount, colors.length);
     return (
         <RoundCard color="#ccc" padding={20} style={style} shadowed>
             <Text style={{ fontSize: wp(1), color: titleColor, marginBottom: 10 }}>{title}</Text>
@@ -42,7 +41,7 @@ const ColorPicker = (props: Props) => {
                         <Pressable
                             style={{
                                 width: colorItemSize - 5, height: colorItemSize - 5, backgroundColor: color,
-                                marginBottom: 5, borderWidth: 0.5, borderColor: '#555'
+                                marginBottom: 5, borderWidth: 0.5, borderColor: '#555', marginRight: 5
                             }}
                             key={index}
                             accessibilityRole="link"
