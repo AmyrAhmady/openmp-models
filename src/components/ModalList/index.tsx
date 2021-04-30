@@ -40,7 +40,7 @@ const ModalList = (
                 onRequestClose={() => setVisible(false)}
                 onDismiss={() => setVisible(false)}
             >
-                <View style={{ height: '100%', width: '100%', justifyContent: 'center', alignItems: 'center' }}>
+                <View style={{ height: '100%', width: '100%', justifyContent: isMobile ? undefined : 'center', alignItems: isMobile ? undefined : 'center' }}>
                     <TouchableOpacity
                         activeOpacity={1}
                         style={{ position: 'absolute', top: 0, left: 0, height: '100%', width: '100%', backgroundColor: 'rgba(0, 0, 0, 0.2)' }}
@@ -100,7 +100,7 @@ const ModalList = (
                     </TouchableOpacity>
                 </View>
             </Modal>
-        </View>
+        </View >
 
     );
 }
