@@ -5,7 +5,6 @@ import RoundCard from '../RoundCard';
 
 interface Props {
     title: string;
-    titleColor: string;
     rows: number;
     onSelect?: (color: string) => void;
     colors?: string[];
@@ -19,7 +18,6 @@ const ColorPicker = (props: Props) => {
 
     const {
         title,
-        titleColor,
         onSelect,
         rows,
         colors,
@@ -34,7 +32,7 @@ const ColorPicker = (props: Props) => {
 
     return (
         <RoundCard color="#ccc" padding={20} style={style} shadowed>
-            <Text style={{ fontSize: wp(1), color: titleColor, marginBottom: 10 }}>{title}</Text>
+            <Text style={{ fontSize: wp(1), color: '#555', marginBottom: 10 }}>{title}</Text>
             <View style={{ flexWrap: 'wrap', flexDirection: 'row', justifyContent: 'space-between', width: '100%' }} onLayout={(event) => setParentWidth(event.nativeEvent.layout.width)}>
                 {colors && colors.map((color, index) => {
                     return (

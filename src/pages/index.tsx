@@ -66,7 +66,6 @@ export default class Main extends React.Component<Props, any> {
                         <SideBar isMobile={isMobileView} style={{ width: '20%' }}>
                             <ColorPicker
                                 title="Background color"
-                                titleColor="#555"
                                 style={{ marginHorizontal: 20, marginTop: 15 }}
                                 colors={[
                                     '#e6194b', '#3cb44b', '#ffe119', '#4363d8', '#f58231',
