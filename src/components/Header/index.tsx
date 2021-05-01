@@ -1,6 +1,7 @@
 import React, { Component, useEffect, useState } from 'react';
 import { View, StyleSheet, StyleProp, ViewStyle, Image, Pressable, Linking, Switch, Text, TouchableOpacity } from 'react-native';
 import { themeSelect } from 'src/resources/theme';
+import store from 'src/state/store';
 import ModalList from '../ModalList';
 import Row from '../Row';
 
@@ -17,8 +18,24 @@ const Header = (props: Props) => {
     const [headerHeight, setHeaderHeight] = useState(0);
 
     useEffect(() => {
-        onThemeModeChange(darkMode ? 'dark' : 'light');
+        const _darkMode = store.state.themeMode === 'dark';
+        if (darkMode !== _darkMode) {
+            const date = new Date();
+            date.setFullYear(new Date().getFullYear() + 1);
+            store.state.cookie.set("themeMode", darkMode ? 'dark' : 'light', { expires: date });
+            onThemeModeChange(darkMode ? 'dark' : 'light');
+        }
     }, [darkMode]);
+
+    useEffect(() => {
+        const asyncFunc = async () => {
+            const themeMode = store.state.cookie.get("themeMode")
+            store.dispatch("setThemeMode", themeMode || 'light');
+            if (themeMode)
+                setDarkMode(themeMode === "dark" ? true : false);
+        };
+        asyncFunc();
+    }, [])
 
     const theme = themeSelect();
 
@@ -51,7 +68,10 @@ const Header = (props: Props) => {
     ];
 
     return (
-        <View style={[styles.container, { backgroundColor: theme.navbar, borderBottomColor: theme.lines }]} onLayout={(event) => setHeaderHeight(event.nativeEvent.layout.height)}>
+        <View
+            style={[styles.container, { backgroundColor: theme.navbar, borderBottomColor: theme.lines }]}
+            onLayout={(event) => setHeaderHeight(event.nativeEvent.layout.height)}
+        >
             <Row
                 style={{ height: headerHeight, width: '100%', backgroundColor: theme.navbar, alignItems: 'center' }}
                 leftContainerStyle={{ height: '100%', flex: undefined }}
@@ -97,10 +117,11 @@ const Header = (props: Props) => {
                                     if (item.value === modelType) {
                                         return (
                                             <View
+                                                key={index}
                                                 style={{
                                                     height: '100%', justifyContent: 'center',
                                                     paddingBottom: 5, paddingHorizontal: 40, borderBottomWidth: 0.7, borderColor: theme.lines,
-                                                    shadowColor: "#000", shadowOpacity: 0.4, shadowRadius: 7.00,
+                                                    shadowColor: "#000", shadowOpacity: 0.2, shadowRadius: 3.00,
                                                     shadowOffset: { width: 0, height: 2, },
                                                 }}
                                             >
@@ -111,6 +132,7 @@ const Header = (props: Props) => {
                                     else {
                                         return (
                                             <TouchableOpacity
+                                                key={index}
                                                 style={{ height: headerHeight * 70 / 100 }}
                                                 onPress={() => {
                                                     if (onModelTypeChange)
@@ -140,8 +162,8 @@ const Header = (props: Props) => {
                         <Switch
                             trackColor={{ false: "#767577", true: "#81b0ff" }}
                             thumbColor={darkMode ? "#f5dd4b" : "#f4f3f4"}
-                            onValueChange={() => {
-                                setDarkMode(!darkMode);
+                            onValueChange={(value) => {
+                                setDarkMode(value);
                             }}
                             value={darkMode}
                         />

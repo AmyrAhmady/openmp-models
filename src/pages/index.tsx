@@ -36,8 +36,7 @@ export default class Main extends React.Component<Props, any> {
             if (prevState.themeMode === store.state.themeMode) {
                 this.forceUpdate();
             }
-        })
-
+        });
     }
 
     static async getInitialProps({ req }) {
@@ -53,7 +52,6 @@ export default class Main extends React.Component<Props, any> {
     render() {
 
         const theme = themeSelect();
-        console.log(theme);
 
         const {
             modelType,
