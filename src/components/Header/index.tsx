@@ -1,5 +1,5 @@
 import React, { Component, useEffect, useState } from 'react';
-import { View, StyleSheet, StyleProp, ViewStyle, Image, Pressable, Linking, Switch, Text } from 'react-native';
+import { View, StyleSheet, StyleProp, ViewStyle, Image, Pressable, Linking, Switch, Text, TouchableOpacity } from 'react-native';
 import { themeSelect } from 'src/resources/theme';
 import ModalList from '../ModalList';
 import Row from '../Row';
@@ -35,6 +35,21 @@ const Header = (props: Props) => {
         "skin": "Skins"
     };
 
+    const menuItems = [
+        {
+            label: 'Vehicles',
+            value: 'vehicle'
+        },
+        {
+            label: 'Skins',
+            value: 'skin'
+        },
+        {
+            label: 'Objects',
+            value: 'object'
+        },
+    ];
+
     return (
         <View style={[styles.container, { backgroundColor: theme.navbar, borderBottomColor: theme.lines }]} onLayout={(event) => setHeaderHeight(event.nativeEvent.layout.height)}>
             <Row
@@ -51,53 +66,77 @@ const Header = (props: Props) => {
                         />
                     </Pressable>
                 }
-                centerContainerStyle={{ height: headerHeight, justifyContent: 'center', alignItems: 'center' }}
+                centerContainerStyle={{ height: headerHeight, justifyContent: 'center', alignItems: isMobile ? 'center' : 'flex-start' }}
                 centerComponent={
                     <View style={{ height: headerHeight * 70 / 100 }}>
-                        <ModalList
-                            style={{ height: headerHeight * 70 / 100 }}
-                            isMobile={isMobile}
-                            data={[
-                                {
-                                    label: 'Vehicles',
-                                    value: 'vehicle'
-                                },
-                                {
-                                    label: 'Skins',
-                                    value: 'skin'
-                                },
-                                {
-                                    label: 'Objects',
-                                    value: 'object'
-                                },
-                            ]}
-                            onPress={(item, index) => {
-                                if (onModelTypeChange)
-                                    onModelTypeChange(item);
-                            }}
-                            buttonComponent={
-                                <View
-                                    style={{
-                                        backgroundColor: theme.textBox, height: '100%', justifyContent: 'center',
-                                        paddingBottom: 5, paddingHorizontal: isMobile ? 30 : 40, borderBottomWidth: 0.7, borderColor: theme.lines,
-                                        shadowColor: "#000",
-                                        shadowOffset: {
-                                            width: 0,
-                                            height: 2,
-                                        },
-                                        shadowOpacity: 0.1,
-                                        shadowRadius: 3.00,
-                                    }}
-                                >
-                                    <Text style={{ fontWeight: 'bold', color: theme.title, fontSize: 17 }}>{modelTypes[modelType]}</Text>
-                                </View>
-                            }
-                        />
+                        {isMobile ? (
+                            <ModalList
+                                style={{ height: headerHeight * 70 / 100 }}
+                                isMobile={isMobile}
+                                data={menuItems}
+                                onPress={(item, index) => {
+                                    if (onModelTypeChange)
+                                        onModelTypeChange(item);
+                                }}
+                                buttonComponent={
+                                    <View
+                                        style={{
+                                            backgroundColor: theme.textBox, height: '100%', justifyContent: 'center',
+                                            paddingBottom: 5, paddingHorizontal: 30, borderBottomWidth: 0.7, borderColor: theme.lines,
+                                            shadowColor: "#000", shadowOpacity: 0.1, shadowRadius: 3.00,
+                                            shadowOffset: { width: 0, height: 2, },
+                                        }}
+                                    >
+                                        <Text style={{ fontWeight: 'bold', color: theme.title, fontSize: 17 }}>{modelTypes[modelType]}</Text>
+                                    </View>
+                                }
+                            />
+                        ) : (
+                            <View style={{ flexDirection: 'row', alignItems: 'center', paddingLeft: 20 }}>
+                                {menuItems.map((item, index) => {
+                                    if (item.value === modelType) {
+                                        return (
+                                            <View
+                                                style={{
+                                                    height: '100%', justifyContent: 'center',
+                                                    paddingBottom: 5, paddingHorizontal: 40, borderBottomWidth: 0.7, borderColor: theme.lines,
+                                                    shadowColor: "#000", shadowOpacity: 0.1, shadowRadius: 3.00,
+                                                    shadowOffset: { width: 0, height: 2, },
+                                                }}
+                                            >
+                                                <Text style={{ fontWeight: 'bold', color: theme.title, fontSize: 17 }}>{item.label}</Text>
+                                            </View>
+                                        );
+                                    }
+                                    else {
+                                        return (
+                                            <TouchableOpacity
+                                                style={{ height: headerHeight * 70 / 100 }}
+                                                onPress={() => {
+                                                    if (onModelTypeChange)
+                                                        onModelTypeChange(item);
+                                                }}
+                                            >
+                                                <View
+                                                    style={{
+                                                        height: '100%', justifyContent: 'center',
+                                                        paddingBottom: 5, paddingHorizontal: 40,
+                                                    }}
+                                                >
+                                                    <Text style={{ fontWeight: 'bold', color: theme.title, fontSize: 17 }}>{item.label}</Text>
+                                                </View>
+                                            </TouchableOpacity>
+                                        );
+                                    }
+                                })}
+
+                            </View>
+                        )}
                     </View>
                 }
                 rightContainerStyle={{ height: '100%', flex: undefined }}
                 rightComponent={
-                    <View>
+                    < View >
                         <Switch
                             trackColor={{ false: "#767577", true: "#81b0ff" }}
                             thumbColor={darkMode ? "#f5dd4b" : "#f4f3f4"}
@@ -106,10 +145,10 @@ const Header = (props: Props) => {
                             }}
                             value={darkMode}
                         />
-                    </View>
+                    </View >
                 }
             />
-        </View>
+        </View >
     );
 }
 
