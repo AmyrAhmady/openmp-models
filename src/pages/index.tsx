@@ -8,6 +8,8 @@ import RoundCard from 'src/components/RoundCard';
 import SideBar from 'src/components/SideBar'
 import ModelInfo from 'src/container/ModelInfo';
 import realNames from 'src/resources/realNames';
+import { themeSelect } from 'src/resources/theme';
+import store from 'src/state/store';
 
 interface Props {
     isMobileView: boolean;
@@ -28,6 +30,14 @@ export default class Main extends React.Component<Props, any> {
                 "model": "landstal"
             }
         }
+
+        store.events.subscribe('stateChange', prevState => {
+            console.log("prevState", prevState, "newState", store.state);
+            if (prevState.themeMode === store.state.themeMode) {
+                this.forceUpdate();
+            }
+        })
+
     }
 
     static async getInitialProps({ req }) {
@@ -42,6 +52,9 @@ export default class Main extends React.Component<Props, any> {
 
     render() {
 
+        const theme = themeSelect();
+        console.log(theme);
+
         const {
             modelType,
             info
@@ -52,10 +65,13 @@ export default class Main extends React.Component<Props, any> {
         } = this.props;
 
         return (
-            <View style={styles.container}>
+            <View style={[styles.container, { backgroundColor: theme.mainBg }]}>
                 <Header
                     isMobile={isMobileView}
                     modelType={modelType}
+                    onThemeModeChange={(mode) => {
+                        store.dispatch('setThemeMode', mode);
+                    }}
                     onModelTypeChange={(type) => {
                         this.setState({ modelType: type.value });
                     }}

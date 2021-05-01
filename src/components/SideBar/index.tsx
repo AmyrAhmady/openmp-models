@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { View, StyleSheet, Platform, StyleProp, ViewStyle, Image, Pressable, Linking, Switch, TouchableOpacity, Text } from 'react-native';
-import { heightPercentageToDP as hp, widthPercentageToDP as wp } from '../../utils/screensize';
 import Row from '../Row';
 import MenuDesktop from '../Menu/Desktop';
 import MenuMobile from '../Menu/Mobile';

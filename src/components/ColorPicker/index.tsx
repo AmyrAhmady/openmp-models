@@ -1,6 +1,6 @@
 import React, { Component, useEffect, useState } from 'react';
 import { View, StyleSheet, StyleProp, ViewStyle, Image, Pressable, Linking, Switch, Text, ColorValue } from 'react-native';
-import { heightPercentageToDP as hp, widthPercentageToDP as wp } from '../../utils/screensize';
+import { themeSelect } from 'src/resources/theme';
 import RoundCard from '../RoundCard';
 
 interface Props {
@@ -15,6 +15,8 @@ const ColorPicker = (props: Props) => {
 
     const [parentWidth, setParentWidth] = useState(0);
     const [colorItemSize, setColorItemSize] = useState(0);
+
+    const theme = themeSelect();
 
     const {
         title,
@@ -31,8 +33,8 @@ const ColorPicker = (props: Props) => {
     }, [parentWidth]);
 
     return (
-        <RoundCard color="#ccc" padding={20} style={style} shadowed>
-            <Text style={{ fontSize: wp(1), color: '#555', marginBottom: 10 }}>{title}</Text>
+        <RoundCard color={theme.elementBg} padding={20} style={style} shadowed>
+            <Text style={{ fontSize: 20, color: theme.title, marginBottom: 10 }}>{title}</Text>
             <View style={{ flexWrap: 'wrap', flexDirection: 'row', justifyContent: 'space-between', width: '100%' }} onLayout={(event) => setParentWidth(event.nativeEvent.layout.width)}>
                 {colors && colors.map((color, index) => {
                     return (

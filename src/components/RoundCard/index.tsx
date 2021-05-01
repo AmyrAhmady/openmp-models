@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { View, StyleSheet, StyleProp, ViewStyle, Image, Pressable, Linking, Switch, Text, ColorValue } from 'react-native';
-import { heightPercentageToDP as hp, widthPercentageToDP as wp } from '../../utils/screensize';
 
 interface Props {
     padding: number;

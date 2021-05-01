@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 import { View, StyleSheet, Platform, StyleProp, ViewStyle, Image, Pressable, Linking, Switch, TouchableOpacity, Text, Modal as RNModal, TextInput } from 'react-native';
-import { heightPercentageToDP as hp, widthPercentageToDP as wp } from '../../../utils/screensize';
-import Modal from "modal-react-native-web";
 import Row from '../../Row';
 import ModelList from './ModelList';
 import { request } from 'src/utils/api';
 import { ObjectInfo, SkinInfo, VehicleInfo } from 'src/types';
+import { themeSelect } from 'src/resources/theme';
 
 interface Props {
     modelType: "vehicle" | "object" | "skin";
@@ -68,6 +67,8 @@ export default class MenuMobile extends Component<Props, States> {
 
     render() {
 
+        const theme = themeSelect();
+
         const {
             listVisible,
             list
@@ -80,7 +81,7 @@ export default class MenuMobile extends Component<Props, States> {
         return (
             <>
                 <Row
-                    style={{ height: '4rem', width: '100%', paddingHorizontal: 20, justifyContent: 'flex-start' }}
+                    style={{ height: '4rem', width: '100%', paddingHorizontal: 20, justifyContent: 'flex-start', backgroundColor: theme.mainBg }}
                     leftContainerStyle={{ height: '100%', flex: undefined, marginRight: '0.5rem' }}
                     leftComponent={
                         <TouchableOpacity
@@ -100,13 +101,13 @@ export default class MenuMobile extends Component<Props, States> {
                             <TouchableOpacity
                                 style={{
                                     borderWidth: 0.5,
-                                    borderColor: '#999',
+                                    borderColor: theme.button,
                                     borderRadius: 100,
                                     paddingHorizontal: '1rem',
                                     paddingVertical: 5
                                 }}
                             >
-                                <Text>Background color</Text>
+                                <Text style={{ color: theme.button }}>Background color</Text>
                             </TouchableOpacity>
                         </View>
                     }
@@ -116,13 +117,13 @@ export default class MenuMobile extends Component<Props, States> {
                             <TouchableOpacity
                                 style={{
                                     borderWidth: 0.5,
-                                    borderColor: '#999',
+                                    borderColor: theme.button,
                                     borderRadius: 100,
                                     paddingHorizontal: '1rem',
                                     paddingVertical: 5
                                 }}
                             >
-                                <Text>Model info</Text>
+                                <Text style={{ color: theme.button }}>Model info</Text>
                             </TouchableOpacity>
                         </View>
                     }

@@ -2,7 +2,6 @@ import { Children } from 'react'
 import Document, { Html, Head, Main, NextScript } from 'next/document'
 import { AppRegistry } from 'react-native'
 import config from '../../app.json'
-import "../utils/screensize"
 
 // Force Next-generated DOM elements to fill their parent's height
 const normalizeNextElements = `

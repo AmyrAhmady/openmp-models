@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { View, StyleSheet, Platform, StyleProp, ViewStyle, Image, Pressable, Linking, Switch, TouchableOpacity, Text, FlatList, TextInput, ScrollView } from 'react-native';
+import { themeSelect } from 'src/resources/theme';
 import { ObjectInfo, SkinInfo, VehicleInfo } from 'src/types';
 import { request } from 'src/utils/api';
-import { heightPercentageToDP as hp, widthPercentageToDP as wp } from '../../utils/screensize';
 import Row from '../Row';
 
 interface Props {
@@ -66,6 +66,8 @@ export default class MenuDesktop extends Component<Props, States> {
 
     render() {
 
+        const theme = themeSelect();
+
         const {
             onSelectItem
         } = this.props;
@@ -76,20 +78,17 @@ export default class MenuDesktop extends Component<Props, States> {
         } = this.state;
 
         return (
-            <View style={{
-                width: '100%', height: '100%', direction: 'rtl',
-                shadowColor: "#000",
-                shadowOffset: {
-                    width: 1,
-                    height: 1,
-                },
-                shadowOpacity: 0.18,
-                shadowRadius: 3.00,
-            }}>
+            <View
+                style={{
+                    width: '100%', height: '100%', direction: 'rtl',
+                    shadowColor: "#000", shadowOpacity: 0.18, shadowRadius: 3.00,
+                    shadowOffset: { width: 1, height: 1, }
+                }}
+            >
                 <Row
                     style={{
-                        height: 70, width: '100%', backgroundColor: 'transparent',
-                        direction: 'ltr', borderBottomWidth: 0.5, borderColor: '#999',
+                        height: 70, width: '100%', backgroundColor: theme.textBox,
+                        direction: 'ltr', borderBottomWidth: 0.5, borderColor: theme.lines,
                     }}
                     centerContainerStyle={{ flex: undefined }}
                     leftContainerStyle={{ height: '100%', flex: 1 }}
@@ -101,6 +100,7 @@ export default class MenuDesktop extends Component<Props, States> {
                                     height: 60, width: '100%', paddingHorizontal: 15
                                 }}
                                 placeholder={"Search for a model by name or id"}
+                                placeholderTextColor={theme.textBoxPlaceholder}
                                 onChangeText={(text) => {
                                     this.setState({ searchInputValue: text })
                                     if (text.length) {
@@ -150,7 +150,7 @@ export default class MenuDesktop extends Component<Props, States> {
                                 </View>
                                 <View
                                     style={{
-                                        borderBottomWidth: 0.5, borderColor: '#ccc', marginHorizontal: 20
+                                        borderBottomWidth: 0.5, borderColor: '#999', marginHorizontal: 20
                                     }}
                                 />
                             </TouchableOpacity>
