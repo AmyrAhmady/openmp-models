@@ -100,7 +100,7 @@ const Header = (props: Props) => {
                                                 style={{
                                                     height: '100%', justifyContent: 'center',
                                                     paddingBottom: 5, paddingHorizontal: 40, borderBottomWidth: 0.7, borderColor: theme.lines,
-                                                    shadowColor: "#000", shadowOpacity: 0.1, shadowRadius: 3.00,
+                                                    shadowColor: "#000", shadowOpacity: 0.4, shadowRadius: 7.00,
                                                     shadowOffset: { width: 0, height: 2, },
                                                 }}
                                             >
