@@ -103,11 +103,12 @@ const Header = (props: Props) => {
                                         style={{
                                             backgroundColor: theme.textBox, height: '100%', justifyContent: 'center',
                                             paddingBottom: 5, paddingHorizontal: 30, borderBottomWidth: 0.7, borderColor: theme.lines,
-                                            shadowColor: "#000", shadowOpacity: 0.1, shadowRadius: 3.00,
-                                            shadowOffset: { width: 0, height: 2, },
+                                            shadowColor: "#000", shadowOpacity: 0.1, shadowRadius: 3.00, alignItems: 'center',
+                                            shadowOffset: { width: 0, height: 2, }, flexDirection: 'row',
                                         }}
                                     >
-                                        <Text style={{ fontWeight: 'bold', color: theme.title, fontSize: 17 }}>{modelTypes[modelType]}</Text>
+                                        <Text style={{ fontWeight: 'bold', color: theme.title, fontSize: 17 }}>{modelTypes[modelType]}  </Text>
+                                        <Text style={{ fontWeight: 'bold', color: theme.title, fontSize: 17, marginTop: 1 }}>▼</Text>
                                     </View>
                                 }
                             />
