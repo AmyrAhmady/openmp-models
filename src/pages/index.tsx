@@ -21,6 +21,7 @@ export default class Main extends React.Component<Props, any> {
         super(props);
 
         this.state = {
+            isMobileView: props.isMobileView,
             modelType: 'vehicle',
             info: {
                 "id": 400,
@@ -30,6 +31,13 @@ export default class Main extends React.Component<Props, any> {
                 "model": "landstal"
             }
         }
+
+        this.updateSize = this.updateSize.bind(this);
+    }
+
+    componentDidMount() {
+        window.addEventListener('resize', this.updateSize);
+        this.updateSize();
 
         store.events.subscribe('stateChange', prevState => {
             console.log("prevState", prevState, "newState", store.state);
@@ -49,18 +57,28 @@ export default class Main extends React.Component<Props, any> {
         return { isMobileView: Boolean(isMobileView) }
     }
 
+    updateSize() {
+        if (window.innerWidth < 1200) {
+            console.log("low", window.innerWidth, this.state.isMobileView)
+            if (!this.state.isMobileView)
+                this.setState({ isMobileView: true });
+        }
+        else {
+            console.log("High", window.innerWidth, this.state.isMobileView)
+            if (this.state.isMobileView)
+                this.setState({ isMobileView: false });
+        }
+    }
+
     render() {
 
         const theme = themeSelect();
 
         const {
             modelType,
-            info
-        } = this.state;
-
-        const {
+            info,
             isMobileView
-        } = this.props;
+        } = this.state;
 
         return (
             <View style={[styles.container, { backgroundColor: theme.mainBg }]}>
