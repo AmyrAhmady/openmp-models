@@ -12,6 +12,8 @@
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-native-web": "^0.13.14",
+    "three": "^0.124.0",
+    "three-orbit-controls": "^82.1.0",
     "universal-cookie": "^4.0.4"
   },
   "devDependencies": {

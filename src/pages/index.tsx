@@ -4,7 +4,8 @@ import ColorPicker from 'src/components/ColorPicker';
 import Header from 'src/components/Header'
 import MenuDesktop from 'src/components/Menu/Desktop';
 import MenuMobile from 'src/components/Menu/Mobile';
-import RoundCard from 'src/components/RoundCard';
+import ModelViewer from 'src/components/ModelViewer';
+import { ModelData } from 'src/components/ModelViewer/types';
 import SideBar from 'src/components/SideBar'
 import ModelInfo from 'src/container/ModelInfo';
 import realNames from 'src/resources/realNames';
@@ -29,10 +30,63 @@ export default class Main extends React.Component<Props, any> {
                 "cat": "Off Road",
                 "mods": "Transfender",
                 "model": "landstal"
-            }
+            },
+            models: [] as ModelData[]
         }
 
         this.updateSize = this.updateSize.bind(this);
+    }
+
+    async loadModel(name: string, type: string) {
+        let models: ModelData[] = [];
+        this.setState({ models: [] });
+        await fetch(`https://assets.open.mp/assets/models/exports/${name}.json`)
+            .then((r) => r.json())
+            .then(data => {
+                console.log("hi")
+                let texArr: any[] = [];
+                data.forEach((frame: any) => {
+
+                    if (frame.geometry && frame.geometry.textures) {
+                        frame.geometry.textures.forEach((texture: any) => {
+
+                            let tempArr = texArr.filter((item: any) => item.name === texture.name);
+
+                            if (!tempArr.length) {
+                                if (texture.name) {
+                                    let obj = {
+                                        name: texture.name,
+                                        url: "https://assets.open.mp/assets/models/exports/" + texture.name.toLowerCase() + ".png"
+                                    };
+                                    console.log("adding a texture to list", texture.name)
+                                    texArr.push(obj);
+                                }
+                            }
+
+                        });
+                    }
+
+                });
+
+                let modelData = {
+                    type: type,
+                    name: name.toLowerCase(),
+                    obj: data,
+                    textures: texArr,
+                    color: {
+                        primary: Math.floor(Math.random() * 255),
+                        secondary: Math.floor(Math.random() * 255),
+                    },
+                    modifications: [1077, 1008]
+                };
+
+                models.push(modelData);
+            })
+            .catch(error => {
+                console.log(error);
+            });
+
+        this.setState({ models: models, isReady: true })
     }
 
     componentDidMount() {
@@ -45,6 +99,8 @@ export default class Main extends React.Component<Props, any> {
                 this.forceUpdate();
             }
         });
+
+        this.loadModel(this.state.info.model, 'vehicle');
     }
 
     static async getInitialProps({ req }) {
@@ -59,12 +115,10 @@ export default class Main extends React.Component<Props, any> {
 
     updateSize() {
         if (window.innerWidth < 1200) {
-            console.log("low", window.innerWidth, this.state.isMobileView)
             if (!this.state.isMobileView)
                 this.setState({ isMobileView: true });
         }
         else {
-            console.log("High", window.innerWidth, this.state.isMobileView)
             if (this.state.isMobileView)
                 this.setState({ isMobileView: false });
         }
@@ -95,14 +149,41 @@ export default class Main extends React.Component<Props, any> {
                 <View style={{ flexDirection: isMobileView ? 'column' : 'row', flex: 1, width: '100%' }}>
                     <SideBar isMobile={isMobileView} style={{ width: '20%' }}>
                         {isMobileView ? (
-                            <MenuMobile {...this.props} modelType={modelType} onSelectItem={(model) => this.setState({ info: model })} />
+                            <MenuMobile
+                                {...this.props}
+                                modelType={modelType}
+                                onSelectItem={(model) => {
+                                    this.setState({ info: model }, () => {
+                                        const {
+                                            info
+                                        } = this.state;
+                                        this.loadModel(info.model || info.name, modelType);
+                                    });
+                                }}
+                            />
                         ) : (
-                            <MenuDesktop {...this.props} modelType={modelType} onSelectItem={(model) => this.setState({ info: model })} />
+                            <MenuDesktop
+                                {...this.props}
+                                modelType={modelType}
+                                onSelectItem={(model) => {
+                                    this.setState({ info: model }, () => {
+                                        const {
+                                            info
+                                        } = this.state;
+                                        this.loadModel(info.model || info.name, modelType);
+                                    });
+                                }}
+                            />
                         )}
 
                     </SideBar>
-                    <View style={{ flex: 1 }}>
-                        <Text style={{ fontSize: 24 }}> </Text>
+                    <View style={{ flex: 1, height: '100%' }}>
+                        {this.state.models.length ? (
+                            <ModelViewer
+                                models={this.state.models === undefined ? [] : this.state.models}
+                                autoSpin={false}
+                            />
+                        ) : null}
                     </View>
                     {isMobileView ? null : (
                         <SideBar isMobile={isMobileView} style={{ width: '20%' }}>

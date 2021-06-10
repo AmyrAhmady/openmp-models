@@ -138,7 +138,8 @@ export default class MenuMobile extends Component<Props, States> {
                     }}
                     onSearch={(query) => this.searchInModelList(query)}
                     onSearchEnd={() => {
-                        this.setState({ list: this.fullList })
+                        this.setState({ list: this.fullList });
+                        this.setState({ listVisible: !listVisible })
                     }}
                 />
             </>
