@@ -125,8 +125,11 @@ export default class MenuDesktop extends Component<Props, States> {
                         </TouchableOpacity>
                     }
                 />
-                <ScrollView style={{ height: '100%' }} contentContainerStyle={{ flexGrow: 1, direction: 'ltr' }}>
-                    {list.map((item, index) => {
+                <FlatList
+                    style={{ height: '100%' }}
+                    contentContainerStyle={{ flexGrow: 1, direction: 'ltr' }}
+                    data={list}
+                    renderItem={({ item, index }) => {
                         return (
                             <TouchableOpacity
                                 key={index}
@@ -155,9 +158,9 @@ export default class MenuDesktop extends Component<Props, States> {
                                 />
                             </TouchableOpacity>
                         )
-                    })}
-                </ScrollView>
-            </View>
+                    }}
+                />
+            </View >
         );
     }
 }
