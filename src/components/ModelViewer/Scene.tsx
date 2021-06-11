@@ -281,7 +281,7 @@ export default class Scene {
         const model = await this.addModelToScene(vehicleModel);
         this.scene.add(new THREE.AmbientLight(0xffffff, 1));
         this.camera.fov = 50;
-        // this.camera.zoom = 1;
+        this.camera.zoom = 0.5;
         this.camera.updateProjectionMatrix();
 
         if (!model) {
