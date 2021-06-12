@@ -10,7 +10,6 @@ interface Props {
     visible: boolean;
     onRequestClose: () => void;
     onSelect: (model: any) => void;
-    isMobileView?: boolean;
 }
 
 const BGColorPicker = (props: Props) => {
@@ -18,9 +17,10 @@ const BGColorPicker = (props: Props) => {
     const {
         visible,
         onRequestClose,
-        onSelect,
-        isMobileView
+        onSelect
     } = props;
+
+    const theme = themeSelect();
 
     return (
         <Modal
@@ -42,7 +42,6 @@ const BGColorPicker = (props: Props) => {
                     <View />
                 </TouchableOpacity>
                 <ColorPicker
-                    isMobileView={isMobileView}
                     title="Background color"
                     style={{ width: '80%', height: '80%' }}
                     colors={[

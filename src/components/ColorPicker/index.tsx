@@ -8,7 +8,8 @@ interface Props {
     rows: number;
     onSelect?: (color: string) => void;
     colors?: string[];
-    style?: ViewStyle
+    style?: ViewStyle;
+    isMobileView?: boolean;
 }
 
 const ColorPicker = (props: Props) => {
@@ -23,7 +24,8 @@ const ColorPicker = (props: Props) => {
         onSelect,
         rows,
         colors,
-        style
+        style,
+        isMobileView
     } = props;
 
     useEffect(() => {
@@ -40,8 +42,8 @@ const ColorPicker = (props: Props) => {
                     return (
                         <Pressable
                             style={{
-                                width: colorItemSize - 10, height: colorItemSize - 10, backgroundColor: color,
-                                marginBottom: 5, borderWidth: 0.5, borderColor: '#555',
+                                width: colorItemSize - (isMobileView ? 10 : 5), height: colorItemSize - (isMobileView ? 10 : 5), backgroundColor: color,
+                                marginBottom: 5, borderWidth: 0.5, borderColor: '#555', marginLeft: isMobileView ? 0 : 5
                             }}
                             key={index}
                             accessibilityRole="link"

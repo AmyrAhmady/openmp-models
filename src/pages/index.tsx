@@ -210,6 +210,7 @@ export default class Main extends React.Component<Props, any> {
                     {isMobileView ? null : (
                         <SideBar isMobile={isMobileView} style={{ width: '20%' }}>
                             <ColorPicker
+                                isMobileView={isMobileView}
                                 title="Background color"
                                 style={{ marginHorizontal: 20, marginTop: 15 }}
                                 colors={[

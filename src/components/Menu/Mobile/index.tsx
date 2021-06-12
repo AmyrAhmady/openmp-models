@@ -147,6 +147,7 @@ export default class MenuMobile extends Component<Props, States> {
                     }}
                 />
                 <BGColorPicker
+                    isMobileView={true}
                     visible={bgColorModalVisible}
                     onRequestClose={() => this.setState({ bgColorModalVisible: false })}
                     onSelect={(color) => onSelectColor(color)}
