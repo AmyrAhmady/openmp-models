@@ -5,19 +5,20 @@ import Modal from "modal-react-native-web";
 import Row from '../../Row';
 import { themeSelect } from 'src/resources/theme';
 import ColorPicker from 'src/components/ColorPicker';
+import ModelInfo from 'src/container/ModelInfo';
 
 interface Props {
     visible: boolean;
     onRequestClose: () => void;
-    onSelect: (model: any) => void;
+    data: any[];
 }
 
-const BGColorPicker = (props: Props) => {
+const ModelInfoMobile = (props: Props) => {
 
     const {
         visible,
         onRequestClose,
-        onSelect
+        data
     } = props;
 
     const theme = themeSelect();
@@ -41,21 +42,14 @@ const BGColorPicker = (props: Props) => {
                 >
                     <View />
                 </TouchableOpacity>
-                <ColorPicker
-                    title="Background color"
+                <ModelInfo
+                    title="Model info"
                     style={{ width: '80%', height: '80%' }}
-                    colors={[
-                        '#e6194b', '#3cb44b', '#ffe119', '#4363d8', '#f58231',
-                        '#f032e6', '#bcf60c', '#fabebe', '#008080', '#e6beff',
-                        '#9a6324', '#fffac8', '#800000', '#aaffc3', '#808000',
-                        '#ffd8b1', '#000075', '#808080', '#ffffff', '#000000'
-                    ]}
-                    rows={5}
-                    onSelect={color => onSelect(color)}
+                    data={data}
                 />
             </View>
         </Modal>
     );
 }
 
-export default React.memo(BGColorPicker);
+export default React.memo(ModelInfoMobile);

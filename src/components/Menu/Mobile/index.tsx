@@ -4,6 +4,7 @@ import Row from '../../Row';
 import ModelList from './ModelList';
 import { request } from 'src/utils/api';
 import { ObjectInfo, SkinInfo, VehicleInfo } from 'src/types';
+import ModalInfoMobile from './ModelInfoMobile';
 import { themeSelect } from 'src/resources/theme';
 import BGColorPicker from './BGColorPicker';
 
@@ -11,11 +12,13 @@ interface Props {
     modelType: "vehicle" | "object" | "skin";
     onSelectItem: (model: any) => void;
     onSelectColor: (color: string) => void;
+    modelData: any[];
 }
 
 interface States {
     listVisible: boolean;
     bgColorModalVisible: boolean;
+    modelInfoModalVisible: boolean;
     list: any[];
 }
 
@@ -29,6 +32,7 @@ export default class MenuMobile extends Component<Props, States> {
         this.state = {
             listVisible: false,
             bgColorModalVisible: false,
+            modelInfoModalVisible: false,
             list: []
         }
     }
@@ -76,12 +80,14 @@ export default class MenuMobile extends Component<Props, States> {
         const {
             listVisible,
             bgColorModalVisible,
+            modelInfoModalVisible,
             list
         } = this.state;
 
         const {
             onSelectItem,
-            onSelectColor
+            onSelectColor,
+            modelData
         } = this.props;
 
         return (
@@ -125,7 +131,7 @@ export default class MenuMobile extends Component<Props, States> {
                                     justifyContent: 'center', alignItems: 'center', height: '100%',
                                     paddingHorizontal: '1rem'
                                 }}
-                                onPress={() => this.setState({})}
+                                onPress={() => this.setState({ modelInfoModalVisible: true })}
                             >
                                 <Text style={{ color: theme.button }}>Model info</Text>
                             </TouchableOpacity>
@@ -151,6 +157,11 @@ export default class MenuMobile extends Component<Props, States> {
                     visible={bgColorModalVisible}
                     onRequestClose={() => this.setState({ bgColorModalVisible: false })}
                     onSelect={(color) => onSelectColor(color)}
+                />
+                <ModalInfoMobile
+                    data={modelData}
+                    visible={modelInfoModalVisible}
+                    onRequestClose={() => this.setState({ modelInfoModalVisible: false })}
                 />
             </>
         );

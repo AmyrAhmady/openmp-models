@@ -176,6 +176,13 @@ export default class Main extends React.Component<Props, any> {
                                     this.userHasABGSelected = true;
                                     this.setState({ viewBgColor: color })
                                 }}
+                                modelData={Object.entries(info).map((item) => {
+                                    const itemName = realNames[item[0]];
+                                    return {
+                                        label: itemName ? itemName : "Unknown info",
+                                        value: item[1].toString()
+                                    }
+                                })}
                                 onSelectItem={(model) => {
                                     this.setState({ info: model }, () => {
                                         const {
