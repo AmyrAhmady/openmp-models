@@ -108,20 +108,16 @@ export default class Scene {
     }
 
     createRenderer() {
-        // Create a THREEJS WebGL renderer with AA enabled
         this.renderer = new THREE.WebGLRenderer({
             antialias: true,
             alpha: this.alpha,
             preserveDrawingBuffer: true,
         });
-
-        // set viewport
         this.renderer.setSize(
             this.rootElement!.offsetWidth,
             this.rootElement!.offsetHeight
         );
 
-        // append to HTML
         this.rootElement!.appendChild(this.renderer.domElement);
     }
 

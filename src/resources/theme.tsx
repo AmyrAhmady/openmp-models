@@ -24,6 +24,9 @@ const darkTheme = {
     textBoxPlaceholder: '#9D9D9D'
 }
 
-export const themeSelect = () => {
+export const themeSelect = (custom?: string) => {
+    if (custom) {
+        return custom === "dark" ? darkTheme : lightTheme;
+    }
     return store.state.themeMode === "dark" ? darkTheme : lightTheme;
 }

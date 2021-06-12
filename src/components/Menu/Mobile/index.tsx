@@ -5,15 +5,18 @@ import ModelList from './ModelList';
 import { request } from 'src/utils/api';
 import { ObjectInfo, SkinInfo, VehicleInfo } from 'src/types';
 import { themeSelect } from 'src/resources/theme';
+import BGColorPicker from './BGColorPicker';
 
 interface Props {
     modelType: "vehicle" | "object" | "skin";
     onSelectItem: (model: any) => void;
+    onSelectColor: (color: string) => void;
 }
 
 interface States {
-    listVisible: boolean
-    list: any[]
+    listVisible: boolean;
+    bgColorModalVisible: boolean;
+    list: any[];
 }
 
 export default class MenuMobile extends Component<Props, States> {
@@ -25,6 +28,7 @@ export default class MenuMobile extends Component<Props, States> {
 
         this.state = {
             listVisible: false,
+            bgColorModalVisible: false,
             list: []
         }
     }
@@ -71,11 +75,13 @@ export default class MenuMobile extends Component<Props, States> {
 
         const {
             listVisible,
+            bgColorModalVisible,
             list
         } = this.state;
 
         const {
-            onSelectItem
+            onSelectItem,
+            onSelectColor
         } = this.props;
 
         return (
@@ -97,15 +103,14 @@ export default class MenuMobile extends Component<Props, States> {
                     }
                     centerContainerStyle={{ height: '100%', flex: undefined, marginRight: '0.5rem' }}
                     centerComponent={
-                        <View>
+                        <View style={{ height: '3rem', paddingVertical: 3 }}>
                             <TouchableOpacity
                                 style={{
-                                    borderWidth: 0.5,
-                                    borderColor: theme.button,
-                                    borderRadius: 100,
-                                    paddingHorizontal: '1rem',
-                                    paddingVertical: 5
+                                    borderWidth: 1.8, borderColor: theme.button, borderRadius: 100,
+                                    justifyContent: 'center', alignItems: 'center', height: '100%',
+                                    paddingHorizontal: '1rem'
                                 }}
+                                onPress={() => this.setState({ bgColorModalVisible: true })}
                             >
                                 <Text style={{ color: theme.button }}>Background color</Text>
                             </TouchableOpacity>
@@ -113,15 +118,14 @@ export default class MenuMobile extends Component<Props, States> {
                     }
                     rightContainerStyle={{ height: '100%', flex: undefined }}
                     rightComponent={
-                        <View>
+                        <View style={{ height: '3rem', paddingVertical: 3 }}>
                             <TouchableOpacity
                                 style={{
-                                    borderWidth: 0.5,
-                                    borderColor: theme.button,
-                                    borderRadius: 100,
-                                    paddingHorizontal: '1rem',
-                                    paddingVertical: 5
+                                    borderWidth: 1.8, borderColor: theme.button, borderRadius: 100,
+                                    justifyContent: 'center', alignItems: 'center', height: '100%',
+                                    paddingHorizontal: '1rem'
                                 }}
+                                onPress={() => this.setState({})}
                             >
                                 <Text style={{ color: theme.button }}>Model info</Text>
                             </TouchableOpacity>
@@ -141,6 +145,11 @@ export default class MenuMobile extends Component<Props, States> {
                         this.setState({ list: this.fullList });
                         this.setState({ listVisible: !listVisible })
                     }}
+                />
+                <BGColorPicker
+                    visible={bgColorModalVisible}
+                    onRequestClose={() => this.setState({ bgColorModalVisible: false })}
+                    onSelect={(color) => onSelectColor(color)}
                 />
             </>
         );

@@ -82,7 +82,7 @@ export default class MenuDesktop extends Component<Props, States> {
                 style={{
                     width: '100%', height: '100%', direction: 'rtl',
                     shadowColor: "#000", shadowOpacity: 0.18, shadowRadius: 3.00,
-                    shadowOffset: { width: 1, height: 1, }
+                    shadowOffset: { width: 1, height: 1, }, backgroundColor: theme.mainBg
                 }}
             >
                 <Row

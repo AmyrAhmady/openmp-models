@@ -1,5 +1,5 @@
 import React, { Component, useEffect, useState } from 'react';
-import { View, StyleSheet, StyleProp, ViewStyle, Image, Pressable, Linking, Switch, Text, ColorValue } from 'react-native';
+import { View, StyleSheet, StyleProp, ViewStyle, Image, Pressable, Linking, Switch, Text, ColorValue, ScrollView } from 'react-native';
 import { themeSelect } from 'src/resources/theme';
 import RoundCard from '../RoundCard';
 
@@ -35,13 +35,13 @@ const ColorPicker = (props: Props) => {
     return (
         <RoundCard color={theme.elementBg} padding={20} style={style} shadowed>
             <Text style={{ fontSize: 20, color: theme.title, marginBottom: 10 }}>{title}</Text>
-            <View style={{ flexWrap: 'wrap', flexDirection: 'row', justifyContent: 'space-between', width: '100%' }} onLayout={(event) => setParentWidth(event.nativeEvent.layout.width)}>
+            <ScrollView contentContainerStyle={{ flexWrap: 'wrap', flexDirection: 'row', justifyContent: 'space-between', width: '100%' }} onLayout={(event) => setParentWidth(event.nativeEvent.layout.width)}>
                 {colors && colors.map((color, index) => {
                     return (
                         <Pressable
                             style={{
-                                width: colorItemSize - 5, height: colorItemSize - 5, backgroundColor: color,
-                                marginBottom: 5, borderWidth: 0.5, borderColor: '#555', marginRight: 5
+                                width: colorItemSize - 10, height: colorItemSize - 10, backgroundColor: color,
+                                marginBottom: 5, borderWidth: 0.5, borderColor: '#555',
                             }}
                             key={index}
                             accessibilityRole="link"
@@ -52,7 +52,7 @@ const ColorPicker = (props: Props) => {
                         />
                     )
                 })}
-            </View>
+            </ScrollView>
         </RoundCard >
     );
 

@@ -18,6 +18,8 @@ interface Props {
 
 export default class Main extends React.Component<Props, any> {
 
+    userHasABGSelected: boolean = false;
+
     constructor(props: Props) {
         super(props);
 
@@ -31,7 +33,8 @@ export default class Main extends React.Component<Props, any> {
                 "mods": "Transfender",
                 "model": "landstal"
             },
-            models: [] as ModelData[]
+            models: [] as ModelData[],
+            viewBgColor: '#FFFFFF'
         }
 
         this.updateSize = this.updateSize.bind(this);
@@ -43,7 +46,6 @@ export default class Main extends React.Component<Props, any> {
         await fetch(`https://assets.open.mp/assets/models/exports/${name}.json`)
             .then((r) => r.json())
             .then(data => {
-                console.log("hi")
                 let texArr: any[] = [];
                 data.forEach((frame: any) => {
 
@@ -58,7 +60,6 @@ export default class Main extends React.Component<Props, any> {
                                         name: texture.name,
                                         url: "https://assets.open.mp/assets/models/exports/" + texture.name.toLowerCase() + ".png"
                                     };
-                                    console.log("adding a texture to list", texture.name)
                                     texArr.push(obj);
                                 }
                             }
@@ -95,6 +96,12 @@ export default class Main extends React.Component<Props, any> {
 
         store.events.subscribe('stateChange', prevState => {
             console.log("prevState", prevState, "newState", store.state);
+
+            const customTheme = themeSelect(store.state.themeMode);
+
+            if (this.state.viewBgColor !== customTheme.mainBg) {
+                this.setState({ viewBgColor: customTheme.mainBg });
+            }
             if (prevState.themeMode === store.state.themeMode) {
                 this.forceUpdate();
             }
@@ -124,6 +131,13 @@ export default class Main extends React.Component<Props, any> {
         }
     }
 
+    componentDidUpdate() {
+        const customTheme = themeSelect(store.state.themeMode);
+        if (!this.userHasABGSelected && this.state.viewBgColor !== customTheme.mainBg) {
+            this.setState({ viewBgColor: customTheme.mainBg });
+        }
+    }
+
     render() {
 
         const theme = themeSelect();
@@ -141,17 +155,27 @@ export default class Main extends React.Component<Props, any> {
                     modelType={modelType}
                     onThemeModeChange={(mode) => {
                         store.dispatch('setThemeMode', mode);
+                        const customTheme = themeSelect(mode);
+                        if (mode === "dark") {
+                            this.setState({ viewBgColor: customTheme.mainBg })
+                        }
+                        else {
+                            this.setState({ viewBgColor: customTheme.mainBg })
+                        }
                     }}
                     onModelTypeChange={(type) => {
                         this.setState({ modelType: type.value });
                     }}
                 />
-                <View style={{ flexDirection: isMobileView ? 'column' : 'row', flex: 1, width: '100%' }}>
+                <View style={{ flexDirection: isMobileView ? 'column' : 'row', flex: 1, width: '100%', backgroundColor: theme.mainBg }}>
                     <SideBar isMobile={isMobileView} style={{ width: '20%' }}>
                         {isMobileView ? (
                             <MenuMobile
-                                {...this.props}
                                 modelType={modelType}
+                                onSelectColor={(color) => {
+                                    this.userHasABGSelected = true;
+                                    this.setState({ viewBgColor: color })
+                                }}
                                 onSelectItem={(model) => {
                                     this.setState({ info: model }, () => {
                                         const {
@@ -163,7 +187,6 @@ export default class Main extends React.Component<Props, any> {
                             />
                         ) : (
                             <MenuDesktop
-                                {...this.props}
                                 modelType={modelType}
                                 onSelectItem={(model) => {
                                     this.setState({ info: model }, () => {
@@ -175,9 +198,8 @@ export default class Main extends React.Component<Props, any> {
                                 }}
                             />
                         )}
-
                     </SideBar>
-                    <View style={{ flex: 1, height: '100%' }}>
+                    <View style={{ flex: 1, height: '100%', backgroundColor: this.state.viewBgColor }}>
                         {this.state.models.length ? (
                             <ModelViewer
                                 models={this.state.models === undefined ? [] : this.state.models}
@@ -197,6 +219,10 @@ export default class Main extends React.Component<Props, any> {
                                     '#ffd8b1', '#000075', '#808080', '#ffffff', '#000000'
                                 ]}
                                 rows={2}
+                                onSelect={color => {
+                                    this.userHasABGSelected = true;
+                                    this.setState({ viewBgColor: color })
+                                }}
                             />
                             <ModelInfo
                                 title="Model info"

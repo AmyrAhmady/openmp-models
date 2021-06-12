@@ -3,6 +3,7 @@ import { View, StyleSheet, Platform, StyleProp, ViewStyle, Image, Pressable, Lin
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from '../../../utils/screensize';
 import Modal from "modal-react-native-web";
 import Row from '../../Row';
+import { themeSelect } from 'src/resources/theme';
 
 interface Props {
     visible: boolean;
@@ -26,6 +27,8 @@ const ModelList = (props: Props) => {
 
     const [searchInputValue, setSearchInputValue] = useState('');
 
+    const theme = themeSelect();
+
     return (
         <Modal
             visible={visible}
@@ -34,7 +37,7 @@ const ModelList = (props: Props) => {
             onRequestClose={() => onRequestClose()}
             onDismiss={() => onRequestClose()}
         >
-            <View style={{ backgroundColor: 'white', height: '100%', width: '100%', paddingTop: 5 }}>
+            <View style={{ backgroundColor: theme.mainBg, height: '100%', width: '100%', paddingTop: 5 }}>
                 <Row
                     style={{ height: 70, width: '100%', backgroundColor: 'transparent' }}
                     centerContainerStyle={{ flex: undefined }}
@@ -47,6 +50,7 @@ const ModelList = (props: Props) => {
                                     borderWidth: 0.5, borderRadius: 10, borderColor: '#999',
                                     height: 60, width: '100%', paddingHorizontal: 8
                                 }}
+                                placeholderTextColor={theme.textBoxPlaceholder}
                                 placeholder={"Search for a model by name or id"}
                                 onChangeText={(text) => {
                                     setSearchInputValue(text);
