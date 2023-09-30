@@ -1,7 +1,6 @@
 import React, { Component, useState } from 'react';
-import { View, TouchableOpacity } from 'react-native';
+import { View, TouchableOpacity, Modal } from 'react-native';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from '../../../utils/screensize';
-import Modal from "modal-react-native-web";
 import Row from '../../Row';
 import { themeSelect } from 'src/resources/theme';
 import ColorPicker from 'src/components/ColorPicker';

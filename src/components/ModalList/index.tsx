@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { View, TouchableOpacity, FlatList, Platform, StyleProp, ViewStyle, ActionSheetIOS, Text } from 'react-native';
+import { View, TouchableOpacity, FlatList, Platform, StyleProp, ViewStyle, Modal, Text } from 'react-native';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from '../../utils/screensize';
-import Modal from "modal-react-native-web";
 
 interface Props {
     data?: { label: string, value: any }[],

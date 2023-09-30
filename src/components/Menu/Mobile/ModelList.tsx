@@ -1,7 +1,6 @@
 import React, { Component, useState } from 'react';
-import { View, StyleSheet, Platform, StyleProp, ViewStyle, Image, Pressable, Linking, Switch, TouchableOpacity, Text, Modal as RNModal, TextInput, FlatList } from 'react-native';
+import { View, Modal, TouchableOpacity, Text, Modal as RNModal, TextInput, FlatList } from 'react-native';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from '../../../utils/screensize';
-import Modal from "modal-react-native-web";
 import Row from '../../Row';
 import { themeSelect } from 'src/resources/theme';
 
