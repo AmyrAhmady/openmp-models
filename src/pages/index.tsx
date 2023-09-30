@@ -43,7 +43,7 @@ export default class Main extends React.Component<Props, any> {
     async loadModel(name: string, type: string) {
         let models: ModelData[] = [];
         this.setState({ models: [] });
-        await fetch(`https://assets.open.mp/assets/models/exports/${name}.json`)
+        await fetch(`https://assets.open.mp/models/exports/${name}.json`)
             .then((r) => r.json())
             .then(data => {
                 let texArr: any[] = [];
@@ -58,7 +58,7 @@ export default class Main extends React.Component<Props, any> {
                                 if (texture.name) {
                                     let obj = {
                                         name: texture.name,
-                                        url: "https://assets.open.mp/assets/models/exports/" + texture.name.toLowerCase() + ".png"
+                                        url: "https://assets.open.mp/models/exports/" + texture.name.toLowerCase() + ".png"
                                     };
                                     texArr.push(obj);
                                 }

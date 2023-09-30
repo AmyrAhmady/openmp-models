@@ -80,7 +80,7 @@ export default class Model {
 
     async loadModelData() {
         let result: any = {};
-        await fetch("https://assets.open.mp/assets/models/exports/" + this.data?.name + ".json")
+        await fetch("https://assets.open.mp/models/exports/" + this.data?.name + ".json")
             .then((r) => r.json())
             .then((data) => {
                 result = data;
