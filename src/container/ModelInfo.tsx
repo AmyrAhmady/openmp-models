@@ -3,6 +3,7 @@ import { View, StyleSheet, StyleProp, ViewStyle, Image, Pressable, Linking, Swit
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from '../utils/screensize';
 import RoundCard from '../components/RoundCard';
 import { themeSelect } from 'src/resources/theme';
+import ModalCloseButton from '../components/ModalCloseButton';
 
 interface Props {
     title: string;
@@ -10,7 +11,8 @@ interface Props {
         label: string,
         value: number | string
     }[];
-    style?: ViewStyle
+    style?: ViewStyle;
+    onClose?: () => void;
 }
 
 const ModelInfo = (props: Props) => {
@@ -20,12 +22,14 @@ const ModelInfo = (props: Props) => {
     const {
         title,
         data,
-        style
+        style,
+        onClose
     } = props;
 
     return (
-        <RoundCard color={theme.elementBg} padding={18} style={style} shadowed>
-            <Text style={{ fontSize: 16, fontWeight: '800', color: theme.title, marginBottom: 14 }}>{title}</Text>
+        <RoundCard color={theme.elementBg} padding={18} style={[{ position: 'relative' }, style]} shadowed>
+            <Text style={{ paddingRight: onClose ? 32 : 0, fontSize: 16, fontWeight: '800', color: theme.title, marginBottom: 14 }}>{title}</Text>
+            {onClose && <ModalCloseButton onPress={onClose} color={theme.title} style={{ position: 'absolute', top: 8, right: 8 }} />}
             <View style={{ justifyContent: 'flex-start', width: '100%' }} >
                 {data && data.map((item, index) => {
                     return (

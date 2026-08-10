@@ -101,7 +101,7 @@ export default class MenuMobile extends Component<Props, States> {
                                 width: '3rem', height: '3rem', borderRadius: 100
                             }}
                             onPress={() => {
-                                this.setState({ listVisible: !listVisible });
+                                this.setState({ listVisible: true });
                             }}
                         >
                             <Image source={{ uri: '/img/menu.png' }} style={{ width: '100%', height: '100%', tintColor: '#999' }} />
@@ -140,16 +140,15 @@ export default class MenuMobile extends Component<Props, States> {
                 />
                 <ModelList
                     visible={listVisible}
-                    onRequestClose={() => this.setState({ listVisible: !listVisible })}
+                    onRequestClose={() => this.setState({ listVisible: false })}
                     data={list}
                     onSelect={(item) => {
                         onSelectItem(item);
-                        this.setState({ listVisible: !listVisible });
+                        this.setState({ listVisible: false });
                     }}
                     onSearch={(query) => this.searchInModelList(query)}
                     onSearchEnd={() => {
                         this.setState({ list: this.fullList });
-                        this.setState({ listVisible: !listVisible })
                     }}
                 />
                 <BGColorPicker

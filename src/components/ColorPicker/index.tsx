@@ -2,6 +2,7 @@ import React, { Component, useEffect, useState } from 'react';
 import { View, StyleSheet, StyleProp, ViewStyle, Image, Pressable, Linking, Switch, Text, ColorValue, ScrollView } from 'react-native';
 import { themeSelect } from 'src/resources/theme';
 import RoundCard from '../RoundCard';
+import ModalCloseButton from '../ModalCloseButton';
 
 interface Props {
     title: string;
@@ -10,6 +11,7 @@ interface Props {
     colors?: string[];
     style?: ViewStyle;
     isMobileView?: boolean;
+    onClose?: () => void;
 }
 
 const ColorPicker = (props: Props) => {
@@ -25,18 +27,21 @@ const ColorPicker = (props: Props) => {
         rows,
         colors,
         style,
-        isMobileView
+        isMobileView,
+        onClose
     } = props;
 
     useEffect(() => {
+        const colorCount = colors?.length ?? 0;
         setColorItemSize(
-            (rows / (colors.length ? colors.length : 1)) * parentWidth
+            (rows / (colorCount || 1)) * parentWidth
         )
-    }, [parentWidth]);
+    }, [parentWidth, rows, colors]);
 
     return (
-        <RoundCard color={theme.elementBg} padding={18} style={style} shadowed>
-            <Text style={{ fontSize: 16, fontWeight: '800', color: theme.title, marginBottom: 14 }}>{title}</Text>
+        <RoundCard color={theme.elementBg} padding={18} style={[{ position: 'relative' }, style]} shadowed>
+            <Text style={{ paddingRight: onClose ? 32 : 0, fontSize: 16, fontWeight: '800', color: theme.title, marginBottom: 14 }}>{title}</Text>
+            {onClose && <ModalCloseButton onPress={onClose} color={theme.title} style={{ position: 'absolute', top: 8, right: 8 }} />}
             <ScrollView contentContainerStyle={{ flexWrap: 'wrap', flexDirection: 'row', justifyContent: 'space-between', width: '100%' }} onLayout={(event) => setParentWidth(event.nativeEvent.layout.width)}>
                 {colors && colors.map((color, index) => {
                     return (

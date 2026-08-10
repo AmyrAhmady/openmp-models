@@ -5,7 +5,7 @@ interface Props {
     padding: number;
     color: ColorValue;
     children: React.ReactNode | (() => React.ReactNode);
-    style?: ViewStyle;
+    style?: StyleProp<ViewStyle>;
     shadowed?: boolean;
 }
 

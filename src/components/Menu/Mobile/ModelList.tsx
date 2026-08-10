@@ -3,6 +3,7 @@ import { View, Modal, TouchableOpacity, Text, Modal as RNModal, TextInput, FlatL
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from '../../../utils/screensize';
 import Row from '../../Row';
 import { themeSelect } from 'src/resources/theme';
+import ModalCloseButton from 'src/components/ModalCloseButton';
 
 interface Props {
     visible: boolean;
@@ -34,11 +35,10 @@ const ModelList = (props: Props) => {
             animationType="slide"
             transparent={false}
             onRequestClose={() => onRequestClose()}
-            onDismiss={() => onRequestClose()}
         >
-            <View style={{ backgroundColor: theme.mainBg, height: '100%', width: '100%', paddingTop: 5 }}>
+            <View style={{ backgroundColor: theme.mainBg, flex: 1, minWidth: 0, minHeight: 0, width: '100%', paddingTop: 5 }}>
                 <Row
-                    style={{ height: 70, width: '100%', backgroundColor: 'transparent' }}
+                    style={{ height: 70, width: '100%', flexShrink: 0, backgroundColor: 'transparent' }}
                     centerContainerStyle={{ flex: undefined }}
                     leftContainerStyle={{ height: '100%', flex: 1 }}
                     leftComponent={
@@ -69,18 +69,19 @@ const ModelList = (props: Props) => {
                     }
                     rightContainerStyle={{ height: '100%', flex: undefined }}
                     rightComponent={
-                        <TouchableOpacity
+                        <ModalCloseButton
                             onPress={() => {
                                 setSearchInputValue('');
-                                onSearchEnd();
+                                onSearchEnd?.();
+                                onRequestClose();
                             }}
-                        >
-                            <Text style={{ fontSize: 30, color: 'black' }}>×</Text>
-                        </TouchableOpacity>
+                        />
                     }
                 />
                 <FlatList
+                    style={{ flex: 1, minWidth: 0, minHeight: 0, width: '100%' }}
                     data={data}
+                    keyExtractor={(item) => String(item.id)}
                     renderItem={({ item, index }) => {
                         return (
                             <TouchableOpacity

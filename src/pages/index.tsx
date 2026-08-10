@@ -167,7 +167,7 @@ export default class Main extends React.Component<Props, any> {
                         this.setState({ modelType: type.value });
                     }}
                 />
-                <View style={{ flexDirection: isMobileView ? 'column' : 'row', flex: 1, width: '100%', backgroundColor: theme.mainBg }}>
+                <View style={{ flexDirection: isMobileView ? 'column' : 'row', flex: 1, minHeight: 0, minWidth: 0, width: '100%', backgroundColor: theme.mainBg }}>
                     <SideBar isMobile={isMobileView} style={isMobileView ? {} : { width: 300, flexShrink: 0 }}>
                         {isMobileView ? (
                             <MenuMobile
@@ -206,7 +206,7 @@ export default class Main extends React.Component<Props, any> {
                             />
                         )}
                     </SideBar>
-                    <View style={[styles.stage, { backgroundColor: this.state.viewBgColor }]}>
+                    <View style={[styles.stage, isMobileView && styles.mobileStage, { backgroundColor: this.state.viewBgColor }]}>
                         <View style={styles.stageHeader}>
                             <View>
                                 <Text style={[styles.stageEyebrow, { color: theme.mutedText }]}>{modelType === 'vehicle' ? 'VEHICLE' : modelType.toUpperCase()}</Text>
@@ -270,9 +270,12 @@ const styles = StyleSheet.create({
     },
     stage: {
         flex: 1,
-        height: '100%',
         position: 'relative',
         minWidth: 0,
+        minHeight: 0,
+    },
+    mobileStage: {
+        width: '100%',
     },
     stageHeader: {
         position: 'absolute',

@@ -65,8 +65,9 @@ const Header = (props: Props) => {
     ];
 
     return (
-        <View style={[styles.container, { backgroundColor: theme.navbar, borderBottomColor: theme.lines }]}>
-            <View style={styles.brand}>
+        <>
+        <View style={[styles.container, isMobile && styles.mobileContainer, { backgroundColor: theme.navbar, borderBottomColor: theme.lines }]}>
+            <View style={[styles.brand, isMobile && styles.mobileBrand]}>
                 <Pressable accessibilityRole="link" onPress={() => Linking.openURL("https://open.mp/")}>
                     <Image source={{ uri: 'https://assets.open.mp/assets/images/assets/logo-dark-trans.png' }} style={styles.logo} />
                 </Pressable>
@@ -82,7 +83,7 @@ const Header = (props: Props) => {
                     isMobile={isMobile}
                     data={menuItems}
                     onPress={(item) => onModelTypeChange(item)}
-                    buttonComponent={<View style={[styles.mobilePickerButton, { backgroundColor: theme.accentSoft }]}><Text style={[styles.mobilePickerText, { color: theme.accent }]}>{modelTypes[modelType]} ▾</Text></View>}
+                    buttonComponent={<View style={[styles.mobilePickerButton, styles.mobilePickerButtonCompact, { backgroundColor: theme.accentSoft }]}><Text style={[styles.mobilePickerText, { color: theme.accent }]}>{modelTypes[modelType]} ▾</Text></View>}
                 />
             ) : (
                 <View style={styles.tabs}>
@@ -94,8 +95,20 @@ const Header = (props: Props) => {
                 </View>
             )}
 
-            <View style={styles.actions}>
-                <Text style={[styles.modeLabel, { color: theme.mutedText }]}>{darkMode ? 'Dark' : 'Light'}</Text>
+            {!isMobile && (
+                <View style={styles.actions}>
+                    <Text style={[styles.modeLabel, { color: theme.mutedText }]}>{darkMode ? 'Dark' : 'Light'}</Text>
+                    <Switch
+                        trackColor={{ false: theme.lines, true: theme.accent }}
+                        thumbColor="#ffffff"
+                        onValueChange={setDarkMode}
+                        value={darkMode}
+                    />
+                </View>
+            )}
+        </View>
+        {isMobile && (
+            <View style={[styles.actions, styles.mobileActions]}>
                 <Switch
                     trackColor={{ false: theme.lines, true: theme.accent }}
                     thumbColor="#ffffff"
@@ -103,7 +116,8 @@ const Header = (props: Props) => {
                     value={darkMode}
                 />
             </View>
-        </View>
+        )}
+        </>
     );
 }
 
@@ -117,10 +131,18 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-between',
     },
+    mobileContainer: {
+        height: 64,
+        paddingHorizontal: 12,
+    },
     brand: {
         flexDirection: 'row',
         alignItems: 'center',
         width: 250,
+    },
+    mobileBrand: {
+        width: 150,
+        flexShrink: 1,
     },
     logo: {
         width: 46,
@@ -158,6 +180,14 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-end',
         alignItems: 'center',
     },
+    mobileActions: {
+        position: 'absolute',
+        right: 16,
+        bottom: 16,
+        zIndex: 10,
+        width: 'auto',
+        flexShrink: 0,
+    },
     modeLabel: {
         fontSize: 12,
         marginRight: 8,
@@ -171,6 +201,9 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         paddingHorizontal: 24,
         borderRadius: 10,
+    },
+    mobilePickerButtonCompact: {
+        paddingHorizontal: 12,
     },
     mobilePickerText: {
         fontSize: 14,

@@ -1,5 +1,5 @@
 import React, { Component, useState } from 'react';
-import { View, TouchableOpacity, Modal } from 'react-native';
+import { View, TouchableOpacity, Modal, ScrollView, Pressable } from 'react-native';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from '../../../utils/screensize';
 import Row from '../../Row';
 import { themeSelect } from 'src/resources/theme';
@@ -29,21 +29,19 @@ const BGColorPicker = (props: Props) => {
             onRequestClose={() => onRequestClose()}
             onDismiss={() => onRequestClose()}
         >
-            <View style={{ height: '100%', width: '100%', justifyContent: 'center', alignItems: 'center' }}>
-                <TouchableOpacity
-                    activeOpacity={0.7}
+            <View style={{ flex: 1, minWidth: 0, minHeight: 0, width: '100%', justifyContent: 'center', alignItems: 'center', padding: 12 }}>
+                <Pressable
                     style={{
                         position: 'absolute', top: 0, left: 0, width: '100%',
-                        height: '100%', backgroundColor: 'rgba(100, 100, 100, 0.7)'
+                        height: '100%', backgroundColor: 'rgba(100, 100, 100, 0.7)', zIndex: 0
                     }}
-                    onPress={() => onRequestClose()}
-                >
-                    <View />
-                </TouchableOpacity>
+                    onPress={onRequestClose}
+                />
                 <ColorPicker
                     isMobileView={isMobileView}
                     title="Background color"
-                    style={{ width: '80%', height: '80%' }}
+                    style={{ width: '100%', maxWidth: 420 }}
+                    onClose={onRequestClose}
                     colors={[
                         '#e6194b', '#3cb44b', '#ffe119', '#4363d8', '#f58231',
                         '#f032e6', '#bcf60c', '#fabebe', '#008080', '#e6beff',
