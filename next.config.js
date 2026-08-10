@@ -1,4 +1,5 @@
 module.exports = {
+  swcMinify: true,
   webpack: (config) => {
     config.resolve.alias = {
       ...(config.resolve.alias || {}),
