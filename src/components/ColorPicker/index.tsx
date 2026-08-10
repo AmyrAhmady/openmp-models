@@ -35,15 +35,15 @@ const ColorPicker = (props: Props) => {
     }, [parentWidth]);
 
     return (
-        <RoundCard color={theme.elementBg} padding={20} style={style} shadowed>
-            <Text style={{ fontSize: 20, color: theme.title, marginBottom: 10 }}>{title}</Text>
+        <RoundCard color={theme.elementBg} padding={18} style={style} shadowed>
+            <Text style={{ fontSize: 16, fontWeight: '800', color: theme.title, marginBottom: 14 }}>{title}</Text>
             <ScrollView contentContainerStyle={{ flexWrap: 'wrap', flexDirection: 'row', justifyContent: 'space-between', width: '100%' }} onLayout={(event) => setParentWidth(event.nativeEvent.layout.width)}>
                 {colors && colors.map((color, index) => {
                     return (
                         <Pressable
                             style={{
                                 width: colorItemSize - (isMobileView ? 10 : 5), height: colorItemSize - (isMobileView ? 10 : 5), backgroundColor: color,
-                                marginBottom: 5, borderWidth: 0.5, borderColor: '#555', marginLeft: isMobileView ? 0 : 5
+                                marginBottom: 6, borderWidth: 1, borderColor: theme.lines, borderRadius: 4, marginLeft: isMobileView ? 0 : 5
                             }}
                             key={index}
                             accessibilityRole="link"

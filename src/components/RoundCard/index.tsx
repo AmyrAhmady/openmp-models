@@ -22,12 +22,12 @@ const RoundCard = (props: Props) => {
     return (
         <View
             style={[
-                { backgroundColor: color, padding: padding, borderRadius: 13 },
+                { backgroundColor: color, padding: padding, borderRadius: 14, borderWidth: 1, borderColor: '#ffffff12' },
                 style,
                 shadowed ? {
                     shadowColor: "#000",
-                    shadowOffset: { width: 0, height: 2, },
-                    shadowOpacity: 0.25, shadowRadius: 3.84,
+                    shadowOffset: { width: 0, height: 5 },
+                    shadowOpacity: 0.12, shadowRadius: 12,
                 } : {}]}
         >
             {children}

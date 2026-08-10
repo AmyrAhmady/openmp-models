@@ -24,17 +24,17 @@ const ModelInfo = (props: Props) => {
     } = props;
 
     return (
-        <RoundCard color={theme.elementBg} padding={20} style={style} shadowed>
-            <Text style={{ fontSize: 20, color: theme.title, marginBottom: 10 }}>{title}</Text>
+        <RoundCard color={theme.elementBg} padding={18} style={style} shadowed>
+            <Text style={{ fontSize: 16, fontWeight: '800', color: theme.title, marginBottom: 14 }}>{title}</Text>
             <View style={{ justifyContent: 'flex-start', width: '100%' }} >
                 {data && data.map((item, index) => {
                     return (
                         <View
                             key={index}
-                            style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', marginTop: 10 }}
+                            style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', marginTop: 11 }}
                         >
-                            <Text style={{ marginRight: 5, fontWeight: 'bold', fontSize: 15, color: theme.normalText }}>{item.label}:</Text>
-                            <Text style={{ flex: 1, fontSize: 15, color: theme.normalText }}>{item.value}</Text>
+                            <Text style={{ marginRight: 8, fontWeight: '700', fontSize: 12, color: theme.mutedText }}>{item.label}</Text>
+                            <Text style={{ flex: 1, fontSize: 13, color: theme.normalText, textAlign: 'right' }}>{item.value}</Text>
                         </View>
                     )
                 })}

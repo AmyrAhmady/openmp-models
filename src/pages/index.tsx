@@ -168,7 +168,7 @@ export default class Main extends React.Component<Props, any> {
                     }}
                 />
                 <View style={{ flexDirection: isMobileView ? 'column' : 'row', flex: 1, width: '100%', backgroundColor: theme.mainBg }}>
-                    <SideBar isMobile={isMobileView} style={{ width: '20%' }}>
+                    <SideBar isMobile={isMobileView} style={isMobileView ? {} : { width: 300, flexShrink: 0 }}>
                         {isMobileView ? (
                             <MenuMobile
                                 modelType={modelType}
@@ -206,20 +206,32 @@ export default class Main extends React.Component<Props, any> {
                             />
                         )}
                     </SideBar>
-                    <View style={{ flex: 1, height: '100%', backgroundColor: this.state.viewBgColor }}>
-                        {this.state.models.length ? (
-                            <ModelViewer
-                                models={this.state.models === undefined ? [] : this.state.models}
-                                autoSpin={false}
-                            />
-                        ) : null}
+                    <View style={[styles.stage, { backgroundColor: this.state.viewBgColor }]}>
+                        <View style={styles.stageHeader}>
+                            <View>
+                                <Text style={[styles.stageEyebrow, { color: theme.mutedText }]}>{modelType === 'vehicle' ? 'VEHICLE' : modelType.toUpperCase()}</Text>
+                                <Text style={[styles.stageTitle, { color: theme.title }]}>{info.name}</Text>
+                            </View>
+                            <View style={[styles.stageBadge, { backgroundColor: theme.accentSoft }]}>
+                                <Text style={{ color: theme.accent, fontSize: 12, fontWeight: '800' }}>ID {info.id}</Text>
+                            </View>
+                        </View>
+                        <View style={styles.viewer}>
+                            {this.state.models.length ? (
+                                <ModelViewer
+                                    models={this.state.models === undefined ? [] : this.state.models}
+                                    autoSpin={false}
+                                />
+                            ) : null}
+                        </View>
+                        <Text style={[styles.stageHint, { color: theme.mutedText }]}>Drag to rotate · Scroll to zoom</Text>
                     </View>
                     {isMobileView ? null : (
-                        <SideBar isMobile={isMobileView} style={{ width: '20%' }}>
+                        <SideBar isMobile={isMobileView} style={{ width: 320, flexShrink: 0, padding: 18 }}>
                             <ColorPicker
                                 isMobileView={isMobileView}
                                 title="Background color"
-                                style={{ marginHorizontal: 20, marginTop: 15 }}
+                                style={{ marginBottom: 14 }}
                                 colors={[
                                     '#e6194b', '#3cb44b', '#ffe119', '#4363d8', '#f58231',
                                     '#f032e6', '#bcf60c', '#fabebe', '#008080', '#e6beff',
@@ -234,7 +246,7 @@ export default class Main extends React.Component<Props, any> {
                             />
                             <ModelInfo
                                 title="Model info"
-                                style={{ marginHorizontal: 20, marginTop: 15 }}
+                                style={{ marginBottom: 14 }}
                                 data={Object.entries(info).map((item) => {
                                     const itemName = realNames[item[0]];
                                     return {
@@ -255,5 +267,46 @@ const styles = StyleSheet.create({
     container: {
         flexGrow: 1,
         height: '100%'
+    },
+    stage: {
+        flex: 1,
+        height: '100%',
+        position: 'relative',
+        minWidth: 0,
+    },
+    stageHeader: {
+        position: 'absolute',
+        top: 24,
+        left: 28,
+        right: 28,
+        zIndex: 2,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'flex-start',
+    },
+    stageEyebrow: {
+        fontSize: 11,
+        fontWeight: '800',
+        letterSpacing: 1.4,
+    },
+    stageTitle: {
+        fontSize: 25,
+        fontWeight: '800',
+        marginTop: 5,
+    },
+    stageBadge: {
+        paddingHorizontal: 11,
+        paddingVertical: 7,
+        borderRadius: 8,
+    },
+    viewer: {
+        flex: 1,
+        minHeight: 0,
+    },
+    stageHint: {
+        position: 'absolute',
+        bottom: 22,
+        left: 28,
+        fontSize: 12,
     },
 })

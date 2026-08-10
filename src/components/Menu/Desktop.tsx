@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, Platform, StyleProp, ViewStyle, Image, Pressable, Linking, Switch, TouchableOpacity, Text, FlatList, TextInput, ScrollView } from 'react-native';
+import { View, TouchableOpacity, Text, FlatList, TextInput } from 'react-native';
 import { themeSelect } from 'src/resources/theme';
 import { ObjectInfo, SkinInfo, VehicleInfo } from 'src/types';
 import { request } from 'src/utils/api';
@@ -80,15 +80,19 @@ export default class MenuDesktop extends Component<Props, States> {
         return (
             <View
                 style={{
-                    width: '100%', height: '100%', direction: 'rtl',
-                    shadowColor: "#000", shadowOpacity: 0.18, shadowRadius: 3.00,
-                    shadowOffset: { width: 1, height: 1, }, backgroundColor: theme.mainBg
+                    width: '100%', height: '100%', backgroundColor: theme.elementBg,
+                    borderRightWidth: 1, borderColor: theme.lines,
                 }}
             >
+                <View style={{ paddingHorizontal: 22, paddingTop: 22, paddingBottom: 14 }}>
+                    <Text style={{ color: theme.title, fontSize: 19, fontWeight: '800' }}>Browse models</Text>
+                    <Text style={{ color: theme.mutedText, fontSize: 13, marginTop: 5 }}>Choose a model to preview</Text>
+                </View>
                 <Row
                     style={{
-                        height: 70, width: '100%', backgroundColor: theme.textBox,
-                        direction: 'ltr', borderBottomWidth: 0.5, borderColor: theme.lines,
+                        height: 48, width: 'auto', marginHorizontal: 18, backgroundColor: theme.textBox,
+                        direction: 'ltr', borderWidth: 1, borderColor: theme.lines, borderRadius: 10,
+                        paddingHorizontal: 12,
                     }}
                     centerContainerStyle={{ flex: undefined }}
                     leftContainerStyle={{ height: '100%', flex: 1 }}
@@ -97,7 +101,7 @@ export default class MenuDesktop extends Component<Props, States> {
                             <TextInput
                                 value={searchInputValue}
                                 style={{
-                                    height: 60, width: '100%', paddingHorizontal: 15
+                                    height: 44, width: '100%', paddingHorizontal: 0, fontSize: 14, color: theme.normalText
                                 }}
                                 placeholder={"Search for a model by name or id"}
                                 placeholderTextColor={theme.textBoxPlaceholder}
@@ -121,21 +125,19 @@ export default class MenuDesktop extends Component<Props, States> {
                                 this.setState({ list: this.fullList });
                             }}
                         >
-                            <Text style={{ fontSize: 30, color: 'black' }}>×</Text>
+                            <Text style={{ fontSize: 22, color: theme.mutedText }}>×</Text>
                         </TouchableOpacity>
                     }
                 />
                 <FlatList
-                    style={{ height: '100%' }}
-                    contentContainerStyle={{ flexGrow: 1, direction: 'ltr' }}
+                    style={{ height: '100%', marginTop: 14 }}
+                    contentContainerStyle={{ paddingHorizontal: 14, paddingBottom: 20, direction: 'ltr' }}
                     data={list}
                     renderItem={({ item, index }) => {
                         return (
                             <TouchableOpacity
                                 key={index}
-                                style={{
-                                    paddingHorizontal: 18
-                                }}
+                                style={{ paddingHorizontal: 6, marginBottom: 4 }}
                                 onPress={() => {
                                     if (onSelectItem) {
                                         onSelectItem(item);
@@ -144,18 +146,14 @@ export default class MenuDesktop extends Component<Props, States> {
                             >
                                 <View
                                     style={{
-                                        height: '100%', width: '100%', alignItems: 'center',
-                                        paddingVertical: 20, flexDirection: 'row', justifyContent: 'space-between'
+                                        width: '100%', alignItems: 'center',
+                                        paddingVertical: 13, paddingHorizontal: 12, flexDirection: 'row', justifyContent: 'space-between',
+                                        borderRadius: 9,
                                     }}
                                 >
-                                    <Text style={{ color: '#aaa', fontSize: 18 }}>{item.name}</Text>
-                                    <Text style={{ color: '#aaa', fontSize: 18 }}>{item.id}</Text>
+                                    <Text style={{ color: theme.normalText, fontSize: 14, fontWeight: '600' }}>{item.name}</Text>
+                                    <Text style={{ color: theme.mutedText, fontSize: 12, fontWeight: '700' }}>{item.id}</Text>
                                 </View>
-                                <View
-                                    style={{
-                                        borderBottomWidth: 0.5, borderColor: '#999', marginHorizontal: 20
-                                    }}
-                                />
                             </TouchableOpacity>
                         )
                     }}

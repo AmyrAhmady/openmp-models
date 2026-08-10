@@ -1,9 +1,8 @@
-import React, { Component, useEffect, useState } from 'react';
-import { View, StyleSheet, StyleProp, ViewStyle, Image, Pressable, Linking, Switch, Text, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, StyleSheet, Image, Pressable, Linking, Switch, Text, TouchableOpacity } from 'react-native';
 import { themeSelect } from 'src/resources/theme';
 import store from 'src/state/store';
 import ModalList from '../ModalList';
-import Row from '../Row';
 
 interface Props {
     modelType: string;
@@ -15,8 +14,6 @@ interface Props {
 const Header = (props: Props) => {
 
     const [darkMode, setDarkMode] = useState(false);
-    const [headerHeight, setHeaderHeight] = useState(0);
-
     useEffect(() => {
         const _darkMode = store.state.themeMode === 'dark';
         if (darkMode !== _darkMode) {
@@ -68,127 +65,116 @@ const Header = (props: Props) => {
     ];
 
     return (
-        <View
-            style={[styles.container, { backgroundColor: theme.navbar, borderBottomColor: theme.lines }]}
-            onLayout={(event) => setHeaderHeight(event.nativeEvent.layout.height)}
-        >
-            <Row
-                style={{ height: headerHeight, width: '100%', backgroundColor: theme.navbar, alignItems: 'center' }}
-                leftContainerStyle={{ height: '100%', flex: undefined }}
-                leftComponent={
-                    <Pressable
-                        accessibilityRole="link"
-                        onPress={() => Linking.openURL("https://open.mp/")}
-                    >
-                        <Image
-                            source={{ uri: 'https://assets.open.mp/assets/images/assets/logo-dark-trans.png' }}
-                            style={{ width: headerHeight - 10, height: headerHeight - 10 }}
-                        />
-                    </Pressable>
-                }
-                centerContainerStyle={{ height: headerHeight, justifyContent: 'center', alignItems: isMobile ? 'center' : 'flex-start' }}
-                centerComponent={
-                    <View style={{ height: headerHeight * 70 / 100 }}>
-                        {isMobile ? (
-                            <ModalList
-                                style={{ height: headerHeight * 70 / 100 }}
-                                isMobile={isMobile}
-                                data={menuItems}
-                                onPress={(item, index) => {
-                                    if (onModelTypeChange)
-                                        onModelTypeChange(item);
-                                }}
-                                buttonComponent={
-                                    <View
-                                        style={{
-                                            backgroundColor: theme.textBox, height: '100%', justifyContent: 'center',
-                                            paddingBottom: 5, paddingHorizontal: 30, borderBottomWidth: 0.7, borderColor: theme.lines,
-                                            shadowColor: "#000", shadowOpacity: 0.1, shadowRadius: 3.00, alignItems: 'center',
-                                            shadowOffset: { width: 0, height: 2, }, flexDirection: 'row',
-                                        }}
-                                    >
-                                        <Text style={{ fontWeight: 'bold', color: theme.title, fontSize: 17 }}>{modelTypes[modelType]}  </Text>
-                                        <Text style={{ fontWeight: 'bold', color: theme.title, fontSize: 17, marginTop: 1 }}>▼</Text>
-                                    </View>
-                                }
-                            />
-                        ) : (
-                            <View style={{ flexDirection: 'row', alignItems: 'center', paddingLeft: 20 }}>
-                                {menuItems.map((item, index) => {
-                                    if (item.value === modelType) {
-                                        return (
-                                            <View
-                                                key={index}
-                                                style={{
-                                                    height: '100%', justifyContent: 'center',
-                                                    paddingBottom: 5, paddingHorizontal: 40, borderBottomWidth: 0.7, borderColor: theme.lines,
-                                                    shadowColor: "#000", shadowOpacity: 0.2, shadowRadius: 3.00,
-                                                    shadowOffset: { width: 0, height: 2, },
-                                                }}
-                                            >
-                                                <Text style={{ fontWeight: 'bold', color: theme.title, fontSize: 17 }}>{item.label}</Text>
-                                            </View>
-                                        );
-                                    }
-                                    else {
-                                        return (
-                                            <TouchableOpacity
-                                                key={index}
-                                                style={{ height: headerHeight * 70 / 100 }}
-                                                onPress={() => {
-                                                    if (onModelTypeChange)
-                                                        onModelTypeChange(item);
-                                                }}
-                                            >
-                                                <View
-                                                    style={{
-                                                        height: '100%', justifyContent: 'center',
-                                                        paddingBottom: 5, paddingHorizontal: 40,
-                                                    }}
-                                                >
-                                                    <Text style={{ fontWeight: 'bold', color: theme.title, fontSize: 17 }}>{item.label}</Text>
-                                                </View>
-                                            </TouchableOpacity>
-                                        );
-                                    }
-                                })}
+        <View style={[styles.container, { backgroundColor: theme.navbar, borderBottomColor: theme.lines }]}>
+            <View style={styles.brand}>
+                <Pressable accessibilityRole="link" onPress={() => Linking.openURL("https://open.mp/")}>
+                    <Image source={{ uri: 'https://assets.open.mp/assets/images/assets/logo-dark-trans.png' }} style={styles.logo} />
+                </Pressable>
+                <View>
+                    <Text style={[styles.brandTitle, { color: theme.title }]}>open.mp</Text>
+                    <Text style={[styles.brandSubtitle, { color: theme.mutedText }]}>Model library</Text>
+                </View>
+            </View>
 
-                            </View>
-                        )}
-                    </View>
-                }
-                rightContainerStyle={{ height: '100%', flex: undefined }}
-                rightComponent={
-                    < View >
-                        <Switch
-                            trackColor={{ false: "#767577", true: "#81b0ff" }}
-                            thumbColor={darkMode ? "#f5dd4b" : "#f4f3f4"}
-                            onValueChange={(value) => {
-                                setDarkMode(value);
-                            }}
-                            value={darkMode}
-                        />
-                    </View >
-                }
-            />
-        </View >
+            {isMobile ? (
+                <ModalList
+                    style={styles.mobilePicker}
+                    isMobile={isMobile}
+                    data={menuItems}
+                    onPress={(item) => onModelTypeChange(item)}
+                    buttonComponent={<View style={[styles.mobilePickerButton, { backgroundColor: theme.accentSoft }]}><Text style={[styles.mobilePickerText, { color: theme.accent }]}>{modelTypes[modelType]} ▾</Text></View>}
+                />
+            ) : (
+                <View style={styles.tabs}>
+                    {menuItems.map((item) => (
+                        <TouchableOpacity key={item.value} onPress={() => onModelTypeChange(item)} style={[styles.tab, item.value === modelType && { backgroundColor: theme.accentSoft }]}>
+                            <Text style={[styles.tabText, { color: item.value === modelType ? theme.accent : theme.mutedText }]}>{item.label}</Text>
+                        </TouchableOpacity>
+                    ))}
+                </View>
+            )}
+
+            <View style={styles.actions}>
+                <Text style={[styles.modeLabel, { color: theme.mutedText }]}>{darkMode ? 'Dark' : 'Light'}</Text>
+                <Switch
+                    trackColor={{ false: theme.lines, true: theme.accent }}
+                    thumbColor="#ffffff"
+                    onValueChange={setDarkMode}
+                    value={darkMode}
+                />
+            </View>
+        </View>
     );
 }
 
 const styles = StyleSheet.create({
     container: {
-        paddingHorizontal: 10,
-        shadowColor: "#000",
-        shadowOffset: {
-            width: 0,
-            height: 1,
-        },
-        shadowOpacity: 0.18,
-        shadowRadius: 1.00,
+        paddingHorizontal: 24,
         width: '100%',
-        height: 70,
+        height: 76,
         borderBottomWidth: 1,
-        overflow: 'hidden'
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+    },
+    brand: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        width: 250,
+    },
+    logo: {
+        width: 46,
+        height: 46,
+        marginRight: 12,
+    },
+    brandTitle: {
+        fontSize: 17,
+        fontWeight: '800',
+        letterSpacing: 0.2,
+    },
+    brandSubtitle: {
+        fontSize: 12,
+        marginTop: 2,
+    },
+    tabs: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        flex: 1,
+        justifyContent: 'center',
+    },
+    tab: {
+        paddingHorizontal: 20,
+        paddingVertical: 10,
+        borderRadius: 10,
+        marginHorizontal: 4,
+    },
+    tabText: {
+        fontSize: 14,
+        fontWeight: '700',
+    },
+    actions: {
+        width: 250,
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+        alignItems: 'center',
+    },
+    modeLabel: {
+        fontSize: 12,
+        marginRight: 8,
+    },
+    mobilePicker: {
+        height: 44,
+    },
+    mobilePickerButton: {
+        height: '100%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingHorizontal: 24,
+        borderRadius: 10,
+    },
+    mobilePickerText: {
+        fontSize: 14,
+        fontWeight: '700',
     },
 });
 
