@@ -12,7 +12,7 @@ const normalizeNextElements = `
   }
 
   *, *::before, *::after {
-    font-family: Inter, sans-serif;
+    font-family: Inter, sans-serif !important;
   }
 `
 
