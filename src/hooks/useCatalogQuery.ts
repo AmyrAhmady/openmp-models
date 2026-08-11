@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { CATALOG_PAGE_SIZE } from 'src/domain/catalog';
+import { CATALOG_PAGE_SIZE } from 'src/catalog/catalogConstants';
 import type { CatalogListItem, ModelType } from 'src/domain/catalog';
 import { CatalogQueryController, isAbortError } from 'src/catalog/catalogQuery';
 import { catalogClient } from 'src/catalog/catalogClient';

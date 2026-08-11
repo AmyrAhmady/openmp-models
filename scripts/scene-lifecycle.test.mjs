@@ -143,6 +143,7 @@ function createLifecycleEnvironment() {
             return {
                 enabled: false,
                 addEventListener() {},
+                removeEventListener() {},
                 dispose() {
                     controlsDisposed += 1;
                 },

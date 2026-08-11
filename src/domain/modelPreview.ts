@@ -4,7 +4,6 @@ import type { ModelExport } from './modelAssets';
 import type { ModelType } from './modelType';
 
 const MODEL_TEXTURE_BASE_URL = 'https://assets.open.mp/models/exports/';
-const DEFAULT_VEHICLE_MODIFICATIONS = [1077, 1008];
 
 export interface ModelPreviewTexture {
     name: string;
@@ -67,7 +66,6 @@ export function createModelPreviewData(
             primary: getRandomColor(random),
             secondary: getRandomColor(random),
         },
-        ...(type === 'vehicle' ? { modifications: [...DEFAULT_VEHICLE_MODIFICATIONS] } : {}),
     };
 }
 

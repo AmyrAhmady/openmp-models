@@ -38,8 +38,6 @@ export interface CatalogRegistry {
 
 export type CatalogItem = CatalogRegistry[ModelType][number];
 
-export const CATALOG_PAGE_SIZE = 500;
-
 export interface ObjectListInfo {
     id: number;
     name: string;

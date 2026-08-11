@@ -266,7 +266,7 @@ test('model preview data normalizes names, deduplicates textures, and preserves 
             },
         ]);
         assert.deepEqual(model.color, { primary: 127, secondary: 127 });
-        assert.deepEqual(model.modifications, [1077, 1008]);
+        assert.equal(model.modifications, undefined);
 
         const skin = preview.createModelPreviewData('CJ', 'skin', modelExport, () => 0.5);
         const object = preview.createModelPreviewData('crate', 'object', modelExport, () => 0.5);

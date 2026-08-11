@@ -1,7 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import type { ApiErrorResponse, CatalogListResponse } from 'src/domain/catalog';
 import { getCatalogList, getCatalogListPage } from 'src/catalog/catalogRegistry';
-import { CATALOG_PAGE_SIZE, isModelType, queryValue } from 'src/domain/catalog';
+import { CATALOG_PAGE_SIZE } from 'src/catalog/catalogConstants';
+import { isModelType, queryValue } from 'src/domain/catalog';
 
 type ListResponse = CatalogListResponse | ApiErrorResponse;
 

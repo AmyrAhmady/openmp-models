@@ -54,6 +54,19 @@ function disposeSceneGraph(
     });
 }
 
+function configureShadowLight(light: THREE.DirectionalLight): void {
+    light.castShadow = true;
+    light.shadow.mapSize.set(1024, 1024);
+    light.shadow.bias = -0.0005;
+    light.shadow.normalBias = 0.02;
+    light.shadow.camera.near = 0.1;
+    light.shadow.camera.far = 120;
+    light.shadow.camera.left = -30;
+    light.shadow.camera.right = 30;
+    light.shadow.camera.top = 30;
+    light.shadow.camera.bottom = -30;
+}
+
 interface ModelFrameEntry {
     index: number;
     frame: ModelExport[number];
@@ -177,7 +190,7 @@ export default class Scene implements SceneController {
     private textureLoader: THREE.TextureLoader;
     private textureCache = new Map<string, THREE.Texture>();
     private textureUrlLookup = new Map<string, string>();
-    private materialCache = new Map<string, THREE.MeshPhongMaterial | THREE.MeshBasicMaterial>();
+    private materialCache = new Map<string, THREE.MeshPhongMaterial>();
     private readonly loadModelExport: ModelAssetLoader;
     private modelLoadAbortController: AbortController | null = null;
     private backgroundColor = 'transparent';
@@ -420,6 +433,11 @@ export default class Scene implements SceneController {
             antialias: true,
             alpha: this.alpha,
         });
+        this.renderer.outputColorSpace = THREE.SRGBColorSpace;
+        if ('shadowMap' in this.renderer && this.renderer.shadowMap) {
+            this.renderer.shadowMap.enabled = true;
+            this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        }
         const { width, height } = this.getViewportSize();
         this.renderer.setSize(width, height);
         this.applyBackgroundColor();
@@ -546,10 +564,12 @@ export default class Scene implements SceneController {
             return;
         }
 
-        const spotLight = new THREE.SpotLight(0xffffff, 0.3);
-        spotLight.position.set(0, 3, 50);
+        const keyLight = new THREE.DirectionalLight(0xffffff, 2.5);
+        keyLight.position.set(4, 8, 10);
+        configureShadowLight(keyLight);
 
-        this.scene.add(spotLight);
+        this.scene.add(keyLight);
+        this.scene.add(new THREE.HemisphereLight(0xffffff, 0x666666, 1.1));
 
         await this.addModelToScene(model);
         if (
@@ -560,8 +580,6 @@ export default class Scene implements SceneController {
         ) {
             return;
         }
-        this.scene.add(new THREE.AmbientLight(-1, 1));
-
         if (modelData.type === 'skin') {
             if (this.camera instanceof THREE.PerspectiveCamera) {
                 this.camera.fov = 40;
@@ -605,8 +623,9 @@ export default class Scene implements SceneController {
             return;
         }
 
-        const spotLight = new THREE.SpotLight(0xffffff, 2.5, 60);
-        spotLight.position.set(10, 10, 0);
+        const keyLight = new THREE.DirectionalLight(0xffffff, 3);
+        keyLight.position.set(8, 10, 8);
+        configureShadowLight(keyLight);
 
         if (!signal) {
             return;
@@ -635,7 +654,7 @@ export default class Scene implements SceneController {
         }
 
         this.lightHolder = new THREE.Group();
-        this.lightHolder.add(spotLight);
+        this.lightHolder.add(keyLight);
         this.scene.add(this.lightHolder);
 
         const model = await this.addModelToScene(vehicleModel);
@@ -647,7 +666,7 @@ export default class Scene implements SceneController {
         ) {
             return;
         }
-        this.scene.add(new THREE.AmbientLight(0xffffff, 1));
+        this.scene.add(new THREE.HemisphereLight(0xffffff, 0x666666, 1.2));
         if (this.camera instanceof THREE.PerspectiveCamera) {
             this.camera.fov = 50;
         }
@@ -777,6 +796,7 @@ export default class Scene implements SceneController {
                 this.render();
             }
         );
+        texture.colorSpace = THREE.SRGBColorSpace;
         texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
         this.textureCache.set(url, texture);
         return texture;
@@ -793,7 +813,7 @@ export default class Scene implements SceneController {
             return;
         }
 
-        const matsByName: (THREE.MeshPhongMaterial | THREE.MeshBasicMaterial)[] = [];
+        const matsByName: THREE.MeshPhongMaterial[] = [];
         const geometry = frame.geometry;
 
         geometry.textures.forEach((texture, msplit) => {
@@ -804,14 +824,11 @@ export default class Scene implements SceneController {
             }
 
             const textureUrl = this.textureUrlLookup.get(normalizeTextureName(texture.name));
-            let curColor = 0x000000;
-            if (textureUrl) {
-                curColor =
-                    texture.color[2] |
-                    (texture.color[1] << 8) |
-                    (texture.color[0] << 16) |
-                    (texture.color[3] << 24);
-            }
+            let curColor =
+                texture.color[2] |
+                (texture.color[1] << 8) |
+                (texture.color[0] << 16) |
+                (texture.color[3] << 24);
 
             const specialColorType = Scene.specialColorTypes.get(
                 getRgbKey(texture.color[0], texture.color[1], texture.color[2])
@@ -825,14 +842,14 @@ export default class Scene implements SceneController {
             const materialKey = `${textureUrl ?? 'basic'}:${curColor >>> 0}:${alpha}`;
             let material = this.materialCache.get(materialKey);
             if (!material) {
-                material = textureUrl
-                    ? new THREE.MeshPhongMaterial({
-                          map: this.getOrLoadTexture(textureUrl),
-                          shininess: 25,
-                          side: THREE.FrontSide,
-                          flatShading: true,
-                      })
-                    : new THREE.MeshBasicMaterial();
+                material = new THREE.MeshPhongMaterial({
+                    shininess: 25,
+                    side: THREE.FrontSide,
+                    flatShading: true,
+                });
+                if (textureUrl) {
+                    material.map = this.getOrLoadTexture(textureUrl);
+                }
 
                 material.color.fromArray([
                     ((curColor >> 16) & 0xff) * (1 / 255),
@@ -865,6 +882,8 @@ export default class Scene implements SceneController {
         geometryMesh.computeVertexNormals();
 
         const newMesh = new THREE.Mesh(geometryMesh, matsByName);
+        newMesh.castShadow = true;
+        newMesh.receiveShadow = true;
 
         if (frame.scaleDown) {
             newMesh.scale.set(frame.scaleDown.x, frame.scaleDown.y, frame.scaleDown.z);
