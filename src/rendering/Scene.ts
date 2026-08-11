@@ -72,6 +72,14 @@ interface ModelFrameEntry {
     frame: ModelExport[number];
 }
 
+interface SceneViewState {
+    position: THREE.Vector3;
+    quaternion: THREE.Quaternion;
+    sceneRotation: THREE.Euler;
+    target: THREE.Vector3 | null;
+    zoom: number;
+}
+
 type SpecialColorType = 'primary' | 'secondary';
 
 interface SpecialColorTable {
@@ -218,6 +226,16 @@ export default class Scene implements SceneController {
     }
 
     async setModel(models: ModelData[], autoSpin = this.options.spin): Promise<void> {
+        const previousModel = this.sceneData[0];
+        const nextModel = models[0];
+        const viewState =
+            previousModel &&
+            nextModel &&
+            previousModel.type === nextModel.type &&
+            previousModel.name === nextModel.name
+                ? this.captureViewState()
+                : null;
+
         this.sceneData = models;
         this.options.spin = autoSpin;
         this.textureUrlLookup = createTextureUrlLookup(models[0]?.textures ?? []);
@@ -241,6 +259,9 @@ export default class Scene implements SceneController {
 
         try {
             await this.loadCurrentModel(generation, abortController.signal);
+            if (viewState && generation === this.modelLoadGeneration && !this.disposed) {
+                this.restoreViewState(viewState);
+            }
             if (generation === this.modelLoadGeneration && !this.disposed) {
                 this.setSpin(this.options.spin);
             }
@@ -253,6 +274,39 @@ export default class Scene implements SceneController {
                 this.modelLoadAbortController = null;
             }
         }
+    }
+
+    private captureViewState(): SceneViewState | null {
+        if (!this.camera) {
+            return null;
+        }
+
+        return {
+            position: this.camera.position.clone(),
+            quaternion: this.camera.quaternion.clone(),
+            sceneRotation: this.scene?.rotation.clone() ?? new THREE.Euler(),
+            target: this.controls?.target?.clone() ?? null,
+            zoom: this.camera.zoom,
+        };
+    }
+
+    private restoreViewState(viewState: SceneViewState): void {
+        if (!this.camera) {
+            return;
+        }
+
+        this.scene?.rotation.copy(viewState.sceneRotation);
+        this.camera.position.copy(viewState.position);
+        this.camera.quaternion.copy(viewState.quaternion);
+        this.camera.zoom = viewState.zoom;
+
+        if (viewState.target && this.controls?.target) {
+            this.controls.target.copy(viewState.target);
+            this.controls.update();
+        }
+
+        this.camera.updateProjectionMatrix();
+        this.render();
     }
 
     private async loadCurrentModel(generation: number, signal: AbortSignal): Promise<void> {

@@ -5,6 +5,10 @@ import type { ModelExport } from 'src/domain/modelAssets';
 import type { ModelAssetLoader } from 'src/domain/modelAssetClient';
 import type { VehicleColorSelection } from 'src/domain/modelPreview';
 
+function cloneModelExport(modelExport: ModelExport): ModelExport {
+    return modelExport.map((frame) => ({ ...frame }));
+}
+
 export default class Model {
     data: ModelData;
     object: ModelExport = [];
@@ -34,7 +38,7 @@ export default class Model {
     }
 
     async load(): Promise<void> {
-        this.object = this.data.obj;
+        this.object = cloneModelExport(this.data.obj);
         this.wheelIndex = this.findPartIndex('wheel');
         if (this.modifications.length) {
             await this.applyModifications();
@@ -42,7 +46,7 @@ export default class Model {
     }
 
     async loadModelData(): Promise<void> {
-        this.object = await this.loadModelExport(this.data.name);
+        this.object = cloneModelExport(await this.loadModelExport(this.data.name));
 
         this.wheelIndex = this.findPartIndex('wheel');
 

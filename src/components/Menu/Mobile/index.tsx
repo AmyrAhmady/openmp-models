@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import { View, TouchableOpacity, Text } from 'react-native-web';
 import Row from '../../Row';
 import ModelList from './ModelList';
-import type { CatalogListItem, InfoRow } from 'src/domain/catalog';
+import type { CatalogListItem, InfoRow, ModelType } from 'src/domain/catalog';
 import type { UseCatalogQueryResult } from 'src/hooks/useCatalogQuery';
 import ModalInfoMobile from './ModelInfoMobile';
 import { useTheme } from 'src/theme/ThemeContext';
 import BGColorPicker from './BGColorPicker';
+import VehicleModPickerMobile from './VehicleModPickerMobile';
+import type { VehicleModification } from 'src/domain/vehicleModifications';
 
 interface Props {
     selectedItemId: number;
@@ -15,6 +17,10 @@ interface Props {
     selectedColor: string;
     modelData: InfoRow[];
     catalogQuery: UseCatalogQueryResult;
+    modelType: ModelType;
+    modifications: readonly VehicleModification[];
+    selectedModificationIds: readonly number[];
+    onToggleModification: (modification: VehicleModification) => void;
 }
 
 const MenuMobile = ({
@@ -24,10 +30,15 @@ const MenuMobile = ({
     selectedColor,
     modelData,
     catalogQuery,
+    modelType,
+    modifications,
+    selectedModificationIds,
+    onToggleModification,
 }: Props) => {
     const [listVisible, setListVisible] = useState(false);
     const [bgColorModalVisible, setBgColorModalVisible] = useState(false);
     const [modelInfoModalVisible, setModelInfoModalVisible] = useState(false);
+    const [vehicleModModalVisible, setVehicleModModalVisible] = useState(false);
     const { theme } = useTheme();
 
     return (
@@ -131,6 +142,31 @@ const MenuMobile = ({
                     </View>
                 }
             />
+            {modelType === 'vehicle' && (
+                <View style={{ paddingHorizontal: 8, paddingBottom: 4 }}>
+                    <TouchableOpacity
+                        style={{
+                            alignItems: 'center',
+                            borderColor: theme.button,
+                            borderRadius: 100,
+                            borderWidth: 1.8,
+                            height: '2.5rem',
+                            justifyContent: 'center',
+                            paddingHorizontal: 8,
+                        }}
+                        onPress={() => setVehicleModModalVisible(true)}
+                        accessibilityRole="button"
+                        accessibilityLabel="Open vehicle modifications selector"
+                    >
+                        <Text style={{ color: theme.button }}>
+                            Vehicle modifications
+                            {selectedModificationIds.length
+                                ? ` (${selectedModificationIds.length})`
+                                : ''}
+                        </Text>
+                    </TouchableOpacity>
+                </View>
+            )}
             <ModelList
                 visible={listVisible}
                 onRequestClose={() => setListVisible(false)}
@@ -160,6 +196,13 @@ const MenuMobile = ({
                 data={modelData}
                 visible={modelInfoModalVisible}
                 onRequestClose={() => setModelInfoModalVisible(false)}
+            />
+            <VehicleModPickerMobile
+                visible={vehicleModModalVisible}
+                onRequestClose={() => setVehicleModModalVisible(false)}
+                modifications={modifications}
+                selectedIds={selectedModificationIds}
+                onToggle={onToggleModification}
             />
         </>
     );

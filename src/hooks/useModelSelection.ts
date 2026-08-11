@@ -7,6 +7,8 @@ import { getModelPreview } from 'src/domain/modelPreview';
 import type { ModelPreviewData } from 'src/domain/modelPreview';
 import { isModelAssetAbortError, ModelAssetError } from 'src/domain/modelAssetClient';
 import { reportError } from 'src/monitoring/reportError';
+import { getVehicleModification, vehicleModifications } from 'src/domain/vehicleModifications';
+import type { VehicleModification } from 'src/domain/vehicleModifications';
 
 export type ModelLoadStatus = 'idle' | 'loading' | 'ready' | 'error';
 
@@ -19,6 +21,9 @@ export interface UseModelSelectionResult {
     onModelTypeChange: (type: ModelTypeSelection) => void;
     onSelectItem: (model: CatalogListItem) => void;
     retryModel: () => void;
+    availableModifications: readonly VehicleModification[];
+    selectedModificationIds: readonly number[];
+    onToggleModification: (modification: VehicleModification) => void;
 }
 
 const initialInfo: VehicleInfo = {
@@ -53,6 +58,16 @@ export function useModelSelection(modelType: ModelType): UseModelSelectionResult
     const modelLoadAbortController = useRef<AbortController | null>(null);
     const selectedItemGeneration = useRef(0);
     const selectedItemAbortController = useRef<AbortController | null>(null);
+
+    const currentModel = models[0];
+    const availableModifications =
+        modelType === 'vehicle' && currentModel
+            ? vehicleModifications.filter((modification) =>
+                  currentModel.obj.some((frame) => frame.name === modification.type)
+              )
+            : [];
+
+    const selectedModificationIds = models[0]?.modifications ?? [];
 
     const loadModel = useCallback(async (name: string, type: ModelType): Promise<void> => {
         modelLoadAbortController.current?.abort();
@@ -195,6 +210,31 @@ export function useModelSelection(modelType: ModelType): UseModelSelectionResult
         [loadSelectedItem]
     );
 
+    const onToggleModification = useCallback((modification: VehicleModification): void => {
+        const modificationId = Number(modification.id);
+        setModels((currentModels) => {
+            const currentModel = currentModels[0];
+            if (!currentModel || currentModel.type !== 'vehicle') {
+                return currentModels;
+            }
+
+            const currentModifications = currentModel.modifications ?? [];
+            const isSelected = currentModifications.includes(modificationId);
+            const nextModifications = isSelected
+                ? currentModifications.filter((id) => id !== modificationId)
+                : [
+                      ...currentModifications.filter(
+                          (id) =>
+                              getVehicleModification(id)?.type.toLowerCase() !==
+                              modification.type.toLowerCase()
+                      ),
+                      modificationId,
+                  ];
+
+            return [{ ...currentModel, modifications: nextModifications }];
+        });
+    }, []);
+
     return {
         info,
         selectedModelType,
@@ -204,5 +244,8 @@ export function useModelSelection(modelType: ModelType): UseModelSelectionResult
         onModelTypeChange,
         onSelectItem,
         retryModel,
+        availableModifications,
+        selectedModificationIds,
+        onToggleModification,
     };
 }

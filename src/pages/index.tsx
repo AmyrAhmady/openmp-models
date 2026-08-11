@@ -7,6 +7,7 @@ import MenuDesktop from 'src/components/Menu/Desktop';
 import MenuMobile from 'src/components/Menu/Mobile';
 import ModelInfo from 'src/components/ModelInfo';
 import ModelStage from 'src/components/ModelStage';
+import VehicleModPicker from 'src/components/VehicleModPicker';
 import { ThemeProvider } from 'src/theme/ThemeContext';
 import type { ModelType } from 'src/domain/catalog';
 import { getCatalogInfoRows } from 'src/domain/catalogInfo';
@@ -31,6 +32,9 @@ const Main: NextPage = () => {
         onModelTypeChange,
         onSelectItem,
         retryModel,
+        availableModifications,
+        selectedModificationIds,
+        onToggleModification,
     } = useModelSelection(modelType);
 
     const handleModelTypeChange = useCallback(
@@ -70,6 +74,10 @@ const Main: NextPage = () => {
                             modelData={infoRows}
                             onSelectItem={onSelectItem}
                             catalogQuery={catalogQuery}
+                            modelType={modelType}
+                            modifications={availableModifications}
+                            selectedModificationIds={selectedModificationIds}
+                            onToggleModification={onToggleModification}
                         />
                     ) : (
                         <View style={styles.desktopMenuColumn}>
@@ -103,6 +111,14 @@ const Main: NextPage = () => {
                                 rows={2}
                                 onSelect={onSelectColor}
                             />
+                            {modelType === 'vehicle' && (
+                                <VehicleModPicker
+                                    style={{ marginBottom: 14 }}
+                                    modifications={availableModifications}
+                                    selectedIds={selectedModificationIds}
+                                    onToggle={onToggleModification}
+                                />
+                            )}
                             <ModelInfo
                                 title="Model info"
                                 style={{ marginBottom: 14 }}
