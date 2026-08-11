@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { View, TouchableOpacity, Text } from 'react-native-web';
-import Row from '../../Row';
 import ModelList from './ModelList';
 import type { CatalogListItem, InfoRow, ModelType } from 'src/domain/catalog';
 import type { UseCatalogQueryResult } from 'src/hooks/useCatalogQuery';
@@ -43,107 +42,51 @@ const MenuMobile = ({
 
     return (
         <>
-            <Row
+            <View
                 style={{
-                    height: '4rem',
-                    width: '100%',
+                    alignItems: 'center',
+                    flexDirection: 'row',
+                    flexWrap: 'wrap',
                     paddingHorizontal: 8,
-                    justifyContent: 'flex-start',
+                    paddingBottom: 4,
                     backgroundColor: theme.mainBg,
+                    width: '100%',
                 }}
-                leftContainerStyle={{ height: '100%', flex: undefined, marginRight: 4 }}
-                leftComponent={
-                    <TouchableOpacity
-                        style={{
-                            width: '3rem',
-                            height: '3rem',
-                            borderRadius: 100,
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                        }}
-                        onPress={() => setListVisible(true)}
-                        accessibilityRole="button"
-                        accessibilityLabel="Open model selector"
-                    >
-                        <View accessibilityElementsHidden style={{ width: 22 }}>
-                            <View
-                                style={{ backgroundColor: theme.button, height: 2, width: '100%' }}
-                            />
-                            <View
-                                style={{
-                                    backgroundColor: theme.button,
-                                    height: 2,
-                                    marginTop: 4,
-                                    width: '100%',
-                                }}
-                            />
-                            <View
-                                style={{
-                                    backgroundColor: theme.button,
-                                    height: 2,
-                                    marginTop: 4,
-                                    width: '100%',
-                                }}
-                            />
-                        </View>
-                    </TouchableOpacity>
-                }
-                centerContainerStyle={{
-                    height: '100%',
-                    flex: undefined,
-                    flexShrink: 1,
-                    minWidth: 0,
-                    marginRight: 4,
-                }}
-                centerComponent={
-                    <View style={{ height: '3rem', paddingVertical: 3, flexShrink: 1 }}>
-                        <TouchableOpacity
+            >
+                <TouchableOpacity
+                    style={{
+                        alignItems: 'center',
+                        borderRadius: 100,
+                        height: '3rem',
+                        justifyContent: 'center',
+                        marginRight: 4,
+                        width: '3rem',
+                    }}
+                    onPress={() => setListVisible(true)}
+                    accessibilityRole="button"
+                    accessibilityLabel="Open model selector"
+                >
+                    <View accessibilityElementsHidden style={{ width: 22 }}>
+                        <View style={{ backgroundColor: theme.button, height: 2, width: '100%' }} />
+                        <View
                             style={{
-                                borderWidth: 1.8,
-                                borderColor: theme.button,
-                                borderRadius: 100,
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                height: '100%',
-                                paddingHorizontal: 8,
+                                backgroundColor: theme.button,
+                                height: 2,
+                                marginTop: 4,
+                                width: '100%',
                             }}
-                            onPress={() => setBgColorModalVisible(true)}
-                            accessibilityRole="button"
-                            accessibilityLabel="Open background color selector"
-                        >
-                            <Text style={{ color: theme.button }}>Background color</Text>
-                        </TouchableOpacity>
-                    </View>
-                }
-                rightContainerStyle={{
-                    height: '100%',
-                    flex: undefined,
-                    flexShrink: 1,
-                    minWidth: 0,
-                }}
-                rightComponent={
-                    <View style={{ height: '3rem', paddingVertical: 3, flexShrink: 1 }}>
-                        <TouchableOpacity
+                        />
+                        <View
                             style={{
-                                borderWidth: 1.8,
-                                borderColor: theme.button,
-                                borderRadius: 100,
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                height: '100%',
-                                paddingHorizontal: 8,
+                                backgroundColor: theme.button,
+                                height: 2,
+                                marginTop: 4,
+                                width: '100%',
                             }}
-                            onPress={() => setModelInfoModalVisible(true)}
-                            accessibilityRole="button"
-                            accessibilityLabel="Open model information"
-                        >
-                            <Text style={{ color: theme.button }}>Model info</Text>
-                        </TouchableOpacity>
+                        />
                     </View>
-                }
-            />
-            {modelType === 'vehicle' && (
-                <View style={{ paddingHorizontal: 8, paddingBottom: 4 }}>
+                </TouchableOpacity>
+                {modelType === 'vehicle' && (
                     <TouchableOpacity
                         style={{
                             alignItems: 'center',
@@ -152,6 +95,8 @@ const MenuMobile = ({
                             borderWidth: 1.8,
                             height: '2.5rem',
                             justifyContent: 'center',
+                            marginBottom: 4,
+                            marginRight: 4,
                             paddingHorizontal: 8,
                         }}
                         onPress={() => setVehicleModModalVisible(true)}
@@ -165,8 +110,43 @@ const MenuMobile = ({
                                 : ''}
                         </Text>
                     </TouchableOpacity>
-                </View>
-            )}
+                )}
+                <TouchableOpacity
+                    style={{
+                        alignItems: 'center',
+                        borderColor: theme.button,
+                        borderRadius: 100,
+                        borderWidth: 1.8,
+                        height: '2.5rem',
+                        justifyContent: 'center',
+                        marginBottom: 4,
+                        marginRight: 4,
+                        paddingHorizontal: 8,
+                    }}
+                    onPress={() => setBgColorModalVisible(true)}
+                    accessibilityRole="button"
+                    accessibilityLabel="Open background color selector"
+                >
+                    <Text style={{ color: theme.button }}>Background color</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    style={{
+                        alignItems: 'center',
+                        borderColor: theme.button,
+                        borderRadius: 100,
+                        borderWidth: 1.8,
+                        height: '2.5rem',
+                        justifyContent: 'center',
+                        marginBottom: 4,
+                        paddingHorizontal: 8,
+                    }}
+                    onPress={() => setModelInfoModalVisible(true)}
+                    accessibilityRole="button"
+                    accessibilityLabel="Open model information"
+                >
+                    <Text style={{ color: theme.button }}>Model info</Text>
+                </TouchableOpacity>
+            </View>
             <ModelList
                 visible={listVisible}
                 onRequestClose={() => setListVisible(false)}

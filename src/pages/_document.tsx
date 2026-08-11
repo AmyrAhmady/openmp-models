@@ -9,10 +9,28 @@ interface AppRegistryStyles {
 }
 
 const normalizeNextElements = `
+  html,
+  body {
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+    width: 100%;
+  }
+
+  html {
+    box-sizing: border-box;
+  }
+
+  *, *::before, *::after {
+    box-sizing: inherit;
+  }
+
   #__next {
     display: flex;
     flex-direction: column;
     height: 100%;
+    min-height: 100%;
+    width: 100%;
   }
 
   *, *::before, *::after {
@@ -54,7 +72,13 @@ export default class MyDocument extends Document {
                     <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
                 </Head>
                 <body
-                    style={{ height: '100%', overflow: 'hidden', fontFamily: 'Inter, sans-serif' }}
+                    style={{
+                        height: '100%',
+                        margin: 0,
+                        overflow: 'hidden',
+                        width: '100%',
+                        fontFamily: 'Inter, sans-serif',
+                    }}
                 >
                     <Main />
                     <NextScript />

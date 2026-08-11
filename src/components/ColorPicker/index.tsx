@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Pressable, ScrollView, Text } from 'react-native-web';
+import { Pressable, ScrollView, Text, View } from 'react-native-web';
 import type { StyleProp, ViewStyle } from 'react-native-web';
 import { useTheme } from 'src/theme/ThemeContext';
 import RoundCard from '../RoundCard';
@@ -14,6 +14,8 @@ interface Props {
     style?: StyleProp<ViewStyle>;
     isMobileView?: boolean;
     onClose?: () => void;
+    collapsible?: boolean;
+    initiallyExpanded?: boolean;
 }
 
 const ColorPicker = (props: Props) => {
@@ -30,7 +32,10 @@ const ColorPicker = (props: Props) => {
         style,
         isMobileView = false,
         onClose,
+        collapsible = false,
+        initiallyExpanded = true,
     } = props;
+    const [expanded, setExpanded] = useState(initiallyExpanded);
     const colorItemSize =
         parentWidth > 0 && colors.length > 0
             ? (Math.max(1, rows) / colors.length) * parentWidth
@@ -44,17 +49,36 @@ const ColorPicker = (props: Props) => {
             style={[{ position: 'relative' }, style]}
             shadowed
         >
-            <Text
+            <View
                 style={{
-                    paddingRight: onClose ? 32 : 0,
-                    fontSize: 16,
-                    fontWeight: '800',
-                    color: theme.title,
-                    marginBottom: 14,
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    marginBottom: expanded ? 14 : 0,
                 }}
             >
-                {title}
-            </Text>
+                <Pressable
+                    disabled={!collapsible}
+                    onPress={() => setExpanded((current) => !current)}
+                    style={{ alignItems: 'center', flex: 1, flexDirection: 'row', minWidth: 0 }}
+                >
+                    <Text
+                        style={{
+                            flex: 1,
+                            paddingRight: onClose ? 32 : 0,
+                            fontSize: 16,
+                            fontWeight: '800',
+                            color: theme.title,
+                        }}
+                    >
+                        {title}
+                    </Text>
+                    {collapsible && (
+                        <Text style={{ color: theme.mutedText, fontSize: 18 }}>
+                            {expanded ? '▾' : '▸'}
+                        </Text>
+                    )}
+                </Pressable>
+            </View>
             {onClose && (
                 <ModalCloseButton
                     onPress={onClose}
@@ -62,40 +86,42 @@ const ColorPicker = (props: Props) => {
                     style={{ position: 'absolute', top: 8, right: 8 }}
                 />
             )}
-            <ScrollView
-                contentContainerStyle={{
-                    flexWrap: 'wrap',
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    width: '100%',
-                }}
-                onLayout={(event) => setParentWidth(event.nativeEvent.layout.width)}
-            >
-                {parentWidth > 0 &&
-                    colors.map((color) => {
-                        return (
-                            <Pressable
-                                style={{
-                                    width: swatchSize,
-                                    height: swatchSize,
-                                    backgroundColor: color,
-                                    marginBottom: 6,
-                                    borderWidth: 1,
-                                    borderColor: theme.lines,
-                                    borderRadius: 4,
-                                    marginLeft: isMobileView ? 0 : 5,
-                                }}
-                                key={color}
-                                accessibilityRole="button"
-                                accessibilityLabel={`Select background color ${color}`}
-                                accessibilityState={{ selected: color === selectedColor }}
-                                onPress={() => {
-                                    onSelect(color);
-                                }}
-                            />
-                        );
-                    })}
-            </ScrollView>
+            {expanded && (
+                <ScrollView
+                    contentContainerStyle={{
+                        flexWrap: 'wrap',
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        width: '100%',
+                    }}
+                    onLayout={(event) => setParentWidth(event.nativeEvent.layout.width)}
+                >
+                    {parentWidth > 0 &&
+                        colors.map((color) => {
+                            return (
+                                <Pressable
+                                    style={{
+                                        width: swatchSize,
+                                        height: swatchSize,
+                                        backgroundColor: color,
+                                        marginBottom: 6,
+                                        borderWidth: 1,
+                                        borderColor: theme.lines,
+                                        borderRadius: 4,
+                                        marginLeft: isMobileView ? 0 : 5,
+                                    }}
+                                    key={color}
+                                    accessibilityRole="button"
+                                    accessibilityLabel={`Select background color ${color}`}
+                                    accessibilityState={{ selected: color === selectedColor }}
+                                    onPress={() => {
+                                        onSelect(color);
+                                    }}
+                                />
+                            );
+                        })}
+                </ScrollView>
+            )}
         </RoundCard>
     );
 };

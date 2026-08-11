@@ -13,16 +13,31 @@ interface Props {
     style?: StyleProp<ViewStyle>;
     isMobileView?: boolean;
     onClose?: () => void;
+    collapsible?: boolean;
+    initiallyExpanded?: boolean;
 }
 
 function formatType(type: string): string {
-    return type.replaceAll('_ok', ' ').replaceAll('_', ' ').replace(/\b\w/g, (character) => character.toUpperCase());
+    return type
+        .replaceAll('_ok', ' ')
+        .replaceAll('_', ' ')
+        .replace(/\b\w/g, (character) => character.toUpperCase());
 }
 
 const VehicleModPicker = (props: Props) => {
     const { theme } = useTheme();
-    const { modifications, selectedIds, onToggle, style, isMobileView = false, onClose } = props;
+    const {
+        modifications,
+        selectedIds,
+        onToggle,
+        style,
+        isMobileView = false,
+        onClose,
+        collapsible = false,
+        initiallyExpanded = true,
+    } = props;
     const selected = new Set(selectedIds);
+    const [expanded, setExpanded] = useState(initiallyExpanded);
     const [activeCategory, setActiveCategory] = useState('all');
     const categories = useMemo(() => {
         const categoryMap = new Map<string, string>();
@@ -54,17 +69,36 @@ const VehicleModPicker = (props: Props) => {
             style={[{ position: 'relative', minWidth: 0 }, style]}
             shadowed
         >
-            <Text
+            <View
                 style={{
-                    paddingRight: onClose ? 32 : 0,
-                    fontSize: 16,
-                    fontWeight: '800',
-                    color: theme.title,
-                    marginBottom: 12,
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    marginBottom: expanded ? 12 : 0,
                 }}
             >
-                Vehicle modifications
-            </Text>
+                <Pressable
+                    disabled={!collapsible}
+                    onPress={() => setExpanded((current) => !current)}
+                    style={{ alignItems: 'center', flex: 1, flexDirection: 'row', minWidth: 0 }}
+                >
+                    <Text
+                        style={{
+                            flex: 1,
+                            paddingRight: onClose ? 32 : 0,
+                            fontSize: 16,
+                            fontWeight: '800',
+                            color: theme.title,
+                        }}
+                    >
+                        Vehicle modifications
+                    </Text>
+                    {collapsible && (
+                        <Text style={{ color: theme.mutedText, fontSize: 18 }}>
+                            {expanded ? '▾' : '▸'}
+                        </Text>
+                    )}
+                </Pressable>
+            </View>
             {onClose && (
                 <ModalCloseButton
                     onPress={onClose}
@@ -72,7 +106,7 @@ const VehicleModPicker = (props: Props) => {
                     style={{ position: 'absolute', top: 8, right: 8 }}
                 />
             )}
-            {modifications.length ? (
+            {expanded && modifications.length ? (
                 <View
                     style={{
                         flexDirection: 'row',
@@ -116,7 +150,7 @@ const VehicleModPicker = (props: Props) => {
                     })}
                 </View>
             ) : null}
-            {modifications.length ? (
+            {expanded && modifications.length ? (
                 <ScrollView
                     style={{ maxHeight: isMobileView ? 420 : 260, width: '100%' }}
                     contentContainerStyle={{ paddingBottom: 2 }}
@@ -168,11 +202,11 @@ const VehicleModPicker = (props: Props) => {
                         );
                     })}
                 </ScrollView>
-            ) : (
+            ) : expanded ? (
                 <Text style={{ color: theme.mutedText, fontSize: 13 }}>
                     No compatible modifications for this vehicle.
                 </Text>
-            )}
+            ) : null}
         </RoundCard>
     );
 };

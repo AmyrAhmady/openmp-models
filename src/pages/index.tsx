@@ -102,6 +102,16 @@ const Main: NextPage = () => {
                     />
                     {isMobileView ? null : (
                         <View style={styles.desktopDetailsColumn}>
+                            {modelType === 'vehicle' && (
+                                <VehicleModPicker
+                                    style={{ marginBottom: 14 }}
+                                    modifications={availableModifications}
+                                    selectedIds={selectedModificationIds}
+                                    onToggle={onToggleModification}
+                                    collapsible
+                                    initiallyExpanded={false}
+                                />
+                            )}
                             <ColorPicker
                                 isMobileView={isMobileView}
                                 title="Background color"
@@ -110,19 +120,15 @@ const Main: NextPage = () => {
                                 selectedColor={backgroundSelection.color}
                                 rows={2}
                                 onSelect={onSelectColor}
+                                collapsible
+                                initiallyExpanded={false}
                             />
-                            {modelType === 'vehicle' && (
-                                <VehicleModPicker
-                                    style={{ marginBottom: 14 }}
-                                    modifications={availableModifications}
-                                    selectedIds={selectedModificationIds}
-                                    onToggle={onToggleModification}
-                                />
-                            )}
                             <ModelInfo
                                 title="Model info"
                                 style={{ marginBottom: 14 }}
                                 data={infoRows}
+                                collapsible
+                                initiallyExpanded={false}
                             />
                         </View>
                     )}
