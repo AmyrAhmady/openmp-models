@@ -1,125 +1,156 @@
-import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, Image, Pressable, Linking, Switch, Text, TouchableOpacity } from 'react-native';
-import { themeSelect } from 'src/resources/theme';
-import store from 'src/state/store';
+import React from 'react';
+import {
+    View,
+    StyleSheet,
+    Image,
+    Pressable,
+    Platform,
+    Linking,
+    Switch,
+    Text,
+    TouchableOpacity,
+} from 'react-native-web';
+import type { ModelType } from 'src/domain/catalog';
+import { MODEL_TYPE_LABELS, MODEL_TYPE_OPTIONS } from 'src/domain/modelType';
+import type { ModelTypeOption } from 'src/domain/modelType';
+import type { ThemeMode } from 'src/theme/themeTokens';
+import { useTheme } from 'src/theme/ThemeContext';
 import ModalList from '../ModalList';
 
 interface Props {
-    modelType: string;
+    modelType: ModelType;
     isMobile?: boolean;
-    onModelTypeChange: (type: { label: string, value: string }) => void;
-    onThemeModeChange: (mode: 'dark' | 'light') => void;
+    onModelTypeChange: (type: ModelTypeOption) => void;
+    themeMode: ThemeMode;
+    onThemeModeChange: (mode: ThemeMode) => void;
 }
 
 const Header = (props: Props) => {
-
-    const [darkMode, setDarkMode] = useState(false);
-    useEffect(() => {
-        const _darkMode = store.state.themeMode === 'dark';
-        if (darkMode !== _darkMode) {
-            const date = new Date();
-            date.setFullYear(new Date().getFullYear() + 1);
-            store.state.cookie.set("themeMode", darkMode ? 'dark' : 'light', { expires: date });
-            onThemeModeChange(darkMode ? 'dark' : 'light');
-        }
-    }, [darkMode]);
-
-    useEffect(() => {
-        const asyncFunc = async () => {
-            const themeMode = store.state.cookie.get("themeMode")
-            store.dispatch("setThemeMode", themeMode || 'light');
-            if (themeMode)
-                setDarkMode(themeMode === "dark" ? true : false);
-        };
-        asyncFunc();
-    }, [])
-
-    const theme = themeSelect();
-
-    const {
-        modelType,
-        onModelTypeChange,
-        onThemeModeChange,
-        isMobile
-    } = props;
-
-    const modelTypes = {
-        "vehicle": "Vehicles",
-        "object": "Objects",
-        "skin": "Skins"
-    };
-
-    const menuItems = [
-        {
-            label: 'Vehicles',
-            value: 'vehicle'
-        },
-        {
-            label: 'Skins',
-            value: 'skin'
-        },
-        {
-            label: 'Objects',
-            value: 'object'
-        },
-    ];
+    const { theme } = useTheme();
+    const { modelType, onModelTypeChange, onThemeModeChange, isMobile, themeMode } = props;
+    const darkMode = themeMode === 'dark';
 
     return (
         <>
-        <View style={[styles.container, isMobile && styles.mobileContainer, { backgroundColor: theme.navbar, borderBottomColor: theme.lines }]}>
-            <View style={[styles.brand, isMobile && styles.mobileBrand]}>
-                <Pressable accessibilityRole="link" onPress={() => Linking.openURL("https://open.mp/")}>
-                    <Image source={{ uri: 'https://assets.open.mp/assets/images/assets/logo-dark-trans.png' }} style={styles.logo} />
-                </Pressable>
-                <View>
-                    <Text style={[styles.brandTitle, { color: theme.title }]}>open.mp</Text>
-                    <Text style={[styles.brandSubtitle, { color: theme.mutedText }]}>Model library</Text>
+            <View
+                style={[
+                    styles.container,
+                    isMobile && styles.mobileContainer,
+                    { backgroundColor: theme.navbar, borderBottomColor: theme.lines },
+                ]}
+            >
+                <View style={[styles.brand, isMobile && styles.mobileBrand]}>
+                    <Pressable
+                        accessibilityRole="link"
+                        accessibilityLabel="Open open.mp home"
+                        onPress={() => Linking.openURL('https://open.mp/')}
+                    >
+                        <Image
+                            source={{
+                                uri: 'https://assets.open.mp/assets/images/assets/logo-dark-trans.png',
+                            }}
+                            style={styles.logo}
+                            accessibilityLabel="open.mp home"
+                        />
+                    </Pressable>
+                    <View>
+                        <Text style={[styles.brandTitle, { color: theme.title }]}>open.mp</Text>
+                        <Text style={[styles.brandSubtitle, { color: theme.mutedText }]}>
+                            Model library
+                        </Text>
+                    </View>
                 </View>
+
+                {isMobile ? (
+                    <ModalList<ModelTypeOption>
+                        style={styles.mobilePicker}
+                        isMobile={isMobile}
+                        data={MODEL_TYPE_OPTIONS}
+                        selectedValue={modelType}
+                        onPress={(item) => onModelTypeChange(item)}
+                        buttonComponent={
+                            <View
+                                style={[
+                                    styles.mobilePickerButton,
+                                    styles.mobilePickerButtonCompact,
+                                    { backgroundColor: theme.accentSoft },
+                                ]}
+                            >
+                                <Text style={[styles.mobilePickerText, { color: theme.accent }]}>
+                                    {MODEL_TYPE_LABELS[modelType]} ▾
+                                </Text>
+                            </View>
+                        }
+                    />
+                ) : (
+                    <View style={styles.tabs}>
+                        {MODEL_TYPE_OPTIONS.map((item) => (
+                            <TouchableOpacity
+                                key={item.value}
+                                accessibilityRole="button"
+                                accessibilityLabel={item.label}
+                                accessibilityState={{ selected: item.value === modelType }}
+                                onPress={() => onModelTypeChange(item)}
+                                style={[
+                                    styles.tab,
+                                    item.value === modelType && {
+                                        backgroundColor: theme.accentSoft,
+                                    },
+                                ]}
+                            >
+                                <Text
+                                    style={[
+                                        styles.tabText,
+                                        {
+                                            color:
+                                                item.value === modelType
+                                                    ? theme.accent
+                                                    : theme.mutedText,
+                                        },
+                                    ]}
+                                >
+                                    {item.label}
+                                </Text>
+                            </TouchableOpacity>
+                        ))}
+                    </View>
+                )}
+
+                {!isMobile && (
+                    <View style={styles.actions}>
+                        <Text style={[styles.modeLabel, { color: theme.mutedText }]}>
+                            {darkMode ? 'Dark' : 'Light'}
+                        </Text>
+                        <Switch
+                            accessibilityLabel="Toggle dark mode"
+                            trackColor={{ false: theme.lines, true: theme.accent }}
+                            thumbColor="#ffffff"
+                            onValueChange={(value) => onThemeModeChange(value ? 'dark' : 'light')}
+                            value={darkMode}
+                        />
+                    </View>
+                )}
             </View>
-
-            {isMobile ? (
-                <ModalList
-                    style={styles.mobilePicker}
-                    isMobile={isMobile}
-                    data={menuItems}
-                    onPress={(item) => onModelTypeChange(item)}
-                    buttonComponent={<View style={[styles.mobilePickerButton, styles.mobilePickerButtonCompact, { backgroundColor: theme.accentSoft }]}><Text style={[styles.mobilePickerText, { color: theme.accent }]}>{modelTypes[modelType]} ▾</Text></View>}
-                />
-            ) : (
-                <View style={styles.tabs}>
-                    {menuItems.map((item) => (
-                        <TouchableOpacity key={item.value} onPress={() => onModelTypeChange(item)} style={[styles.tab, item.value === modelType && { backgroundColor: theme.accentSoft }]}>
-                            <Text style={[styles.tabText, { color: item.value === modelType ? theme.accent : theme.mutedText }]}>{item.label}</Text>
-                        </TouchableOpacity>
-                    ))}
-                </View>
-            )}
-
-            {!isMobile && (
-                <View style={styles.actions}>
-                    <Text style={[styles.modeLabel, { color: theme.mutedText }]}>{darkMode ? 'Dark' : 'Light'}</Text>
+            {isMobile && (
+                <View
+                    style={[
+                        styles.actions,
+                        styles.mobileActions,
+                        Platform.OS === 'web' && styles.mobileActionsWeb,
+                    ]}
+                >
                     <Switch
+                        accessibilityLabel="Toggle dark mode"
                         trackColor={{ false: theme.lines, true: theme.accent }}
                         thumbColor="#ffffff"
-                        onValueChange={setDarkMode}
+                        onValueChange={(value) => onThemeModeChange(value ? 'dark' : 'light')}
                         value={darkMode}
                     />
                 </View>
             )}
-        </View>
-        {isMobile && (
-            <View style={[styles.actions, styles.mobileActions]}>
-                <Switch
-                    trackColor={{ false: theme.lines, true: theme.accent }}
-                    thumbColor="#ffffff"
-                    onValueChange={setDarkMode}
-                    value={darkMode}
-                />
-            </View>
-        )}
         </>
     );
-}
+};
 
 const styles = StyleSheet.create({
     container: {
@@ -187,6 +218,10 @@ const styles = StyleSheet.create({
         zIndex: 10,
         width: 'auto',
         flexShrink: 0,
+    },
+    mobileActionsWeb: {
+        // React Native Web supports fixed positioning, but its shared types do not.
+        position: 'fixed' as 'absolute',
     },
     modeLabel: {
         fontSize: 12,

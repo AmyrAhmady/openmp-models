@@ -1,39 +1,40 @@
-import React, { Component } from 'react';
-import { View, StyleSheet, StyleProp, ViewStyle, Image, Pressable, Linking, Switch, Text, ColorValue } from 'react-native';
+import React from 'react';
+import { View } from 'react-native-web';
+import type { ColorValue, StyleProp, ViewStyle } from 'react-native-web';
+
+type WebViewStyle = ViewStyle & { boxShadow?: string };
 
 interface Props {
     padding: number;
     color: ColorValue;
-    children: React.ReactNode | (() => React.ReactNode);
+    children: React.ReactNode;
     style?: StyleProp<ViewStyle>;
     shadowed?: boolean;
 }
 
 const RoundCard = (props: Props) => {
-
-    const {
-        padding,
-        color,
-        style,
-        children,
-        shadowed
-    } = props;
+    const { padding, color, style, children, shadowed } = props;
+    const shadowStyle: StyleProp<ViewStyle | WebViewStyle> = {
+        boxShadow: '0 5px 12px rgba(0, 0, 0, 0.12)',
+    };
 
     return (
         <View
             style={[
-                { backgroundColor: color, padding: padding, borderRadius: 14, borderWidth: 1, borderColor: '#ffffff12' },
+                {
+                    backgroundColor: color,
+                    padding: padding,
+                    borderRadius: 14,
+                    borderWidth: 1,
+                    borderColor: '#ffffff12',
+                },
                 style,
-                shadowed ? {
-                    shadowColor: "#000",
-                    shadowOffset: { width: 0, height: 5 },
-                    shadowOpacity: 0.12, shadowRadius: 12,
-                } : {}]}
+                shadowed ? shadowStyle : {},
+            ]}
         >
             {children}
         </View>
     );
-
-}
+};
 
 export default React.memo(RoundCard);

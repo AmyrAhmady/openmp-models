@@ -1,168 +1,168 @@
-import React, { Component } from 'react';
-import { View, StyleSheet, Platform, StyleProp, ViewStyle, Image, Pressable, Linking, Switch, TouchableOpacity, Text, Modal as RNModal, TextInput } from 'react-native';
+import React, { useState } from 'react';
+import { View, TouchableOpacity, Text } from 'react-native-web';
 import Row from '../../Row';
 import ModelList from './ModelList';
-import { request } from 'src/utils/api';
-import { ObjectInfo, SkinInfo, VehicleInfo } from 'src/types';
+import type { CatalogListItem, InfoRow } from 'src/domain/catalog';
+import type { UseCatalogQueryResult } from 'src/hooks/useCatalogQuery';
 import ModalInfoMobile from './ModelInfoMobile';
-import { themeSelect } from 'src/resources/theme';
+import { useTheme } from 'src/theme/ThemeContext';
 import BGColorPicker from './BGColorPicker';
 
 interface Props {
-    modelType: "vehicle" | "object" | "skin";
-    onSelectItem: (model: any) => void;
+    selectedItemId: number;
+    onSelectItem: (model: CatalogListItem) => void;
     onSelectColor: (color: string) => void;
-    modelData: any[];
+    selectedColor: string;
+    modelData: InfoRow[];
+    catalogQuery: UseCatalogQueryResult;
 }
 
-interface States {
-    listVisible: boolean;
-    bgColorModalVisible: boolean;
-    modelInfoModalVisible: boolean;
-    list: any[];
-}
+const MenuMobile = ({
+    selectedItemId,
+    onSelectItem,
+    onSelectColor,
+    selectedColor,
+    modelData,
+    catalogQuery,
+}: Props) => {
+    const [listVisible, setListVisible] = useState(false);
+    const [bgColorModalVisible, setBgColorModalVisible] = useState(false);
+    const [modelInfoModalVisible, setModelInfoModalVisible] = useState(false);
+    const { theme } = useTheme();
 
-export default class MenuMobile extends Component<Props, States> {
-
-    fullList: VehicleInfo[] | ObjectInfo[] | SkinInfo[] = [];
-
-    constructor(props: Props) {
-        super(props);
-
-        this.state = {
-            listVisible: false,
-            bgColorModalVisible: false,
-            modelInfoModalVisible: false,
-            list: []
-        }
-    }
-
-    fetchModelList() {
-        request<{ type: string }, { list: any[] }>('GET', 'api/list', {
-            type: this.props.modelType
-        })
-            .then(response => {
-                this.fullList = response.list;
-                this.setState({ list: response.list });
-            })
-            .catch(error => {
-                console.log(error);
-            });
-    }
-
-    searchInModelList(query: string) {
-        request<{ type: string, q: string }, { results: any[] }>('GET', 'api/search', {
-            type: this.props.modelType,
-            q: query
-        })
-            .then(response => {
-                this.setState({ list: response.results });
-            })
-            .catch(error => {
-                console.log(error);
-            });
-    }
-
-    componentDidMount() {
-        this.fetchModelList();
-    }
-
-    componentDidUpdate(prevProps: Props, prevState) {
-        if (prevProps.modelType !== this.props.modelType) {
-            this.fetchModelList();
-        }
-    }
-
-    render() {
-
-        const theme = themeSelect();
-
-        const {
-            listVisible,
-            bgColorModalVisible,
-            modelInfoModalVisible,
-            list
-        } = this.state;
-
-        const {
-            onSelectItem,
-            onSelectColor,
-            modelData
-        } = this.props;
-
-        return (
-            <>
-                <Row
-                    style={{ height: '4rem', width: '100%', paddingHorizontal: 20, justifyContent: 'flex-start', backgroundColor: theme.mainBg }}
-                    leftContainerStyle={{ height: '100%', flex: undefined, marginRight: '0.5rem' }}
-                    leftComponent={
+    return (
+        <>
+            <Row
+                style={{
+                    height: '4rem',
+                    width: '100%',
+                    paddingHorizontal: 8,
+                    justifyContent: 'flex-start',
+                    backgroundColor: theme.mainBg,
+                }}
+                leftContainerStyle={{ height: '100%', flex: undefined, marginRight: 4 }}
+                leftComponent={
+                    <TouchableOpacity
+                        style={{
+                            width: '3rem',
+                            height: '3rem',
+                            borderRadius: 100,
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                        }}
+                        onPress={() => setListVisible(true)}
+                        accessibilityRole="button"
+                        accessibilityLabel="Open model selector"
+                    >
+                        <View accessibilityElementsHidden style={{ width: 22 }}>
+                            <View
+                                style={{ backgroundColor: theme.button, height: 2, width: '100%' }}
+                            />
+                            <View
+                                style={{
+                                    backgroundColor: theme.button,
+                                    height: 2,
+                                    marginTop: 4,
+                                    width: '100%',
+                                }}
+                            />
+                            <View
+                                style={{
+                                    backgroundColor: theme.button,
+                                    height: 2,
+                                    marginTop: 4,
+                                    width: '100%',
+                                }}
+                            />
+                        </View>
+                    </TouchableOpacity>
+                }
+                centerContainerStyle={{
+                    height: '100%',
+                    flex: undefined,
+                    flexShrink: 1,
+                    minWidth: 0,
+                    marginRight: 4,
+                }}
+                centerComponent={
+                    <View style={{ height: '3rem', paddingVertical: 3, flexShrink: 1 }}>
                         <TouchableOpacity
                             style={{
-                                width: '3rem', height: '3rem', borderRadius: 100
+                                borderWidth: 1.8,
+                                borderColor: theme.button,
+                                borderRadius: 100,
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                height: '100%',
+                                paddingHorizontal: 8,
                             }}
-                            onPress={() => {
-                                this.setState({ listVisible: true });
-                            }}
+                            onPress={() => setBgColorModalVisible(true)}
+                            accessibilityRole="button"
+                            accessibilityLabel="Open background color selector"
                         >
-                            <Image source={{ uri: '/img/menu.png' }} style={{ width: '100%', height: '100%', tintColor: '#999' }} />
+                            <Text style={{ color: theme.button }}>Background color</Text>
                         </TouchableOpacity>
-                    }
-                    centerContainerStyle={{ height: '100%', flex: undefined, marginRight: '0.5rem' }}
-                    centerComponent={
-                        <View style={{ height: '3rem', paddingVertical: 3 }}>
-                            <TouchableOpacity
-                                style={{
-                                    borderWidth: 1.8, borderColor: theme.button, borderRadius: 100,
-                                    justifyContent: 'center', alignItems: 'center', height: '100%',
-                                    paddingHorizontal: '1rem'
-                                }}
-                                onPress={() => this.setState({ bgColorModalVisible: true })}
-                            >
-                                <Text style={{ color: theme.button }}>Background color</Text>
-                            </TouchableOpacity>
-                        </View>
-                    }
-                    rightContainerStyle={{ height: '100%', flex: undefined }}
-                    rightComponent={
-                        <View style={{ height: '3rem', paddingVertical: 3 }}>
-                            <TouchableOpacity
-                                style={{
-                                    borderWidth: 1.8, borderColor: theme.button, borderRadius: 100,
-                                    justifyContent: 'center', alignItems: 'center', height: '100%',
-                                    paddingHorizontal: '1rem'
-                                }}
-                                onPress={() => this.setState({ modelInfoModalVisible: true })}
-                            >
-                                <Text style={{ color: theme.button }}>Model info</Text>
-                            </TouchableOpacity>
-                        </View>
-                    }
-                />
-                <ModelList
-                    visible={listVisible}
-                    onRequestClose={() => this.setState({ listVisible: false })}
-                    data={list}
-                    onSelect={(item) => {
-                        onSelectItem(item);
-                        this.setState({ listVisible: false });
-                    }}
-                    onSearch={(query) => this.searchInModelList(query)}
-                    onSearchEnd={() => {
-                        this.setState({ list: this.fullList });
-                    }}
-                />
-                <BGColorPicker
-                    isMobileView={true}
-                    visible={bgColorModalVisible}
-                    onRequestClose={() => this.setState({ bgColorModalVisible: false })}
-                    onSelect={(color) => onSelectColor(color)}
-                />
-                <ModalInfoMobile
-                    data={modelData}
-                    visible={modelInfoModalVisible}
-                    onRequestClose={() => this.setState({ modelInfoModalVisible: false })}
-                />
-            </>
-        );
-    }
-}
+                    </View>
+                }
+                rightContainerStyle={{
+                    height: '100%',
+                    flex: undefined,
+                    flexShrink: 1,
+                    minWidth: 0,
+                }}
+                rightComponent={
+                    <View style={{ height: '3rem', paddingVertical: 3, flexShrink: 1 }}>
+                        <TouchableOpacity
+                            style={{
+                                borderWidth: 1.8,
+                                borderColor: theme.button,
+                                borderRadius: 100,
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                height: '100%',
+                                paddingHorizontal: 8,
+                            }}
+                            onPress={() => setModelInfoModalVisible(true)}
+                            accessibilityRole="button"
+                            accessibilityLabel="Open model information"
+                        >
+                            <Text style={{ color: theme.button }}>Model info</Text>
+                        </TouchableOpacity>
+                    </View>
+                }
+            />
+            <ModelList
+                visible={listVisible}
+                onRequestClose={() => setListVisible(false)}
+                data={catalogQuery.list}
+                searchInput={catalogQuery.searchInput}
+                selectedItemId={selectedItemId}
+                status={catalogQuery.status}
+                error={catalogQuery.error}
+                loadMoreError={catalogQuery.loadMoreError}
+                onRetry={catalogQuery.retry}
+                onLoadMore={catalogQuery.loadMore}
+                onSelect={(item) => {
+                    onSelectItem(item);
+                    setListVisible(false);
+                }}
+                onSearch={catalogQuery.search}
+                onSearchEnd={catalogQuery.clearSearch}
+            />
+            <BGColorPicker
+                isMobileView={true}
+                visible={bgColorModalVisible}
+                onRequestClose={() => setBgColorModalVisible(false)}
+                onSelect={onSelectColor}
+                selectedColor={selectedColor}
+            />
+            <ModalInfoMobile
+                data={modelData}
+                visible={modelInfoModalVisible}
+                onRequestClose={() => setModelInfoModalVisible(false)}
+            />
+        </>
+    );
+};
+
+export default React.memo(MenuMobile);

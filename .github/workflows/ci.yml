@@ -1,0 +1,49 @@
+name: CI
+
+on:
+    push:
+    pull_request:
+
+jobs:
+    verify:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Check out repository
+              uses: actions/checkout@v4
+
+            - name: Set up Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 20
+                  cache: yarn
+
+            - name: Install dependencies
+              run: yarn install --frozen-lockfile
+
+            - name: Run catalog tests
+              run: yarn test
+
+            - name: Validate catalog source
+              run: yarn validate:catalog
+
+            - name: Typecheck
+              run: yarn typecheck
+
+            - name: Lint
+              run: yarn lint
+
+            - name: Check formatting
+              run: yarn format:check
+
+            - name: Build
+              run: yarn build
+
+            - name: Check bundle budget
+              run: yarn check:bundle
+
+            - name: Smoke-test production APIs
+              run: yarn test:api
+
+            - name: Smoke-test a model asset
+              run: yarn test:asset

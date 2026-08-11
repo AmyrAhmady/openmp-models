@@ -1,5 +1,6 @@
 import React from 'react';
-import { ColorValue, StyleProp, StyleSheet, Text, TouchableOpacity, ViewStyle } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity } from 'react-native-web';
+import type { ColorValue, StyleProp, ViewStyle } from 'react-native-web';
 
 interface Props {
     onPress: () => void;

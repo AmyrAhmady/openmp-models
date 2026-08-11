@@ -1,164 +1,159 @@
-import React, { Component } from 'react';
-import { View, TouchableOpacity, Text, FlatList, TextInput } from 'react-native';
-import { themeSelect } from 'src/resources/theme';
-import { ObjectInfo, SkinInfo, VehicleInfo } from 'src/types';
-import { request } from 'src/utils/api';
+import React from 'react';
+import { View, TouchableOpacity, Text, FlatList, TextInput } from 'react-native-web';
+import { useTheme } from 'src/theme/ThemeContext';
+import type { CatalogListItem } from 'src/domain/catalog';
+import type { UseCatalogQueryResult } from 'src/hooks/useCatalogQuery';
+import CatalogStatus from '../CatalogStatus';
 import Row from '../Row';
 
 interface Props {
-    modelType: "vehicle" | "object" | "skin";
-    onSelectItem: (model: any) => void;
+    selectedItemId: number;
+    onSelectItem: (model: CatalogListItem) => void;
+    catalogQuery: UseCatalogQueryResult;
 }
 
-interface States {
-    list: any[],
-    searchInputValue: string
+interface CatalogRowProps {
+    item: CatalogListItem;
+    selected: boolean;
+    onSelect: (item: CatalogListItem) => void;
 }
 
-export default class MenuDesktop extends Component<Props, States> {
+const CatalogRow = React.memo(({ item, selected, onSelect }: CatalogRowProps) => {
+    const { theme } = useTheme();
 
-    fullList: VehicleInfo[] | ObjectInfo[] | SkinInfo[] = [];
-
-    constructor(props: Props) {
-        super(props);
-
-        this.state = {
-            list: [],
-            searchInputValue: ''
-        }
-    }
-
-    fetchModelList() {
-        request<{ type: string }, { list: any[] }>('GET', 'api/list', {
-            type: this.props.modelType
-        })
-            .then(response => {
-                this.fullList = response.list;
-                this.setState({ list: response.list });
-            })
-            .catch(error => {
-                console.log(error);
-            });
-    }
-
-    searchInModelList(query: string) {
-        request<{ type: string, q: string }, { results: any[] }>('GET', 'api/search', {
-            type: this.props.modelType,
-            q: query
-        })
-            .then(response => {
-                this.setState({ list: response.results });
-            })
-            .catch(error => {
-                console.log(error);
-            });
-    }
-
-    componentDidMount() {
-        this.fetchModelList();
-    }
-
-    componentDidUpdate(prevProps: Props, prevState) {
-        if (prevProps.modelType !== this.props.modelType) {
-            this.fetchModelList();
-        }
-    }
-
-    render() {
-
-        const theme = themeSelect();
-
-        const {
-            onSelectItem
-        } = this.props;
-
-        const {
-            list,
-            searchInputValue
-        } = this.state;
-
-        return (
+    return (
+        <TouchableOpacity
+            accessibilityRole="button"
+            accessibilityLabel={`Select ${item.name}`}
+            accessibilityState={{ selected }}
+            style={{ paddingHorizontal: 6, marginBottom: 4 }}
+            onPress={() => onSelect(item)}
+        >
             <View
                 style={{
-                    width: '100%', height: '100%', backgroundColor: theme.elementBg,
-                    borderRightWidth: 1, borderColor: theme.lines,
+                    width: '100%',
+                    alignItems: 'center',
+                    paddingVertical: 13,
+                    paddingHorizontal: 12,
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    borderRadius: 9,
+                    backgroundColor: selected ? theme.accentSoft : 'transparent',
                 }}
             >
-                <View style={{ paddingHorizontal: 22, paddingTop: 22, paddingBottom: 14 }}>
-                    <Text style={{ color: theme.title, fontSize: 19, fontWeight: '800' }}>Browse models</Text>
-                    <Text style={{ color: theme.mutedText, fontSize: 13, marginTop: 5 }}>Choose a model to preview</Text>
-                </View>
-                <Row
-                    style={{
-                        height: 48, width: 'auto', marginHorizontal: 18, backgroundColor: theme.textBox,
-                        direction: 'ltr', borderWidth: 1, borderColor: theme.lines, borderRadius: 10,
-                        paddingHorizontal: 12,
-                    }}
-                    centerContainerStyle={{ flex: undefined }}
-                    leftContainerStyle={{ height: '100%', flex: 1 }}
-                    leftComponent={
-                        <View style={{ width: '100%', paddingRight: 10 }}>
-                            <TextInput
-                                value={searchInputValue}
-                                style={{
-                                    height: 44, width: '100%', paddingHorizontal: 0, fontSize: 14, color: theme.normalText
-                                }}
-                                placeholder={"Search for a model by name or id"}
-                                placeholderTextColor={theme.textBoxPlaceholder}
-                                onChangeText={(text) => {
-                                    this.setState({ searchInputValue: text })
-                                    if (text.length) {
-                                        this.searchInModelList(text);
-                                    }
-                                    else {
-                                        this.setState({ list: this.fullList })
-                                    }
-                                }}
-                            />
-                        </View>
-                    }
-                    rightContainerStyle={{ height: '100%', flex: undefined }}
-                    rightComponent={
-                        <TouchableOpacity
-                            onPress={() => {
-                                this.setState({ searchInputValue: '' });
-                                this.setState({ list: this.fullList });
+                <Text style={{ color: theme.normalText, fontSize: 14, fontWeight: '600' }}>
+                    {item.name}
+                </Text>
+                <Text style={{ color: theme.mutedText, fontSize: 12, fontWeight: '700' }}>
+                    {item.id}
+                </Text>
+            </View>
+        </TouchableOpacity>
+    );
+});
+
+const MenuDesktop = ({ selectedItemId, onSelectItem, catalogQuery }: Props) => {
+    const { theme } = useTheme();
+    const { list, searchInput, status, error, search, clearSearch, retry } = catalogQuery;
+
+    return (
+        <View
+            style={{
+                width: '100%',
+                height: '100%',
+                backgroundColor: theme.elementBg,
+                borderRightWidth: 1,
+                borderColor: theme.lines,
+            }}
+        >
+            <View style={{ paddingHorizontal: 22, paddingTop: 22, paddingBottom: 14 }}>
+                <Text style={{ color: theme.title, fontSize: 19, fontWeight: '800' }}>
+                    Browse models
+                </Text>
+                <Text style={{ color: theme.mutedText, fontSize: 13, marginTop: 5 }}>
+                    Choose a model to preview
+                </Text>
+            </View>
+            <Row
+                style={{
+                    height: 48,
+                    width: 'auto',
+                    marginHorizontal: 18,
+                    backgroundColor: theme.textBox,
+                    direction: 'ltr',
+                    borderWidth: 1,
+                    borderColor: theme.lines,
+                    borderRadius: 10,
+                    paddingHorizontal: 12,
+                }}
+                centerContainerStyle={{ flex: undefined }}
+                leftContainerStyle={{ height: '100%', flex: 1 }}
+                leftComponent={
+                    <View style={{ width: '100%', paddingRight: 10 }}>
+                        <TextInput
+                            value={searchInput}
+                            style={{
+                                height: 44,
+                                width: '100%',
+                                paddingHorizontal: 0,
+                                fontSize: 14,
+                                color: theme.normalText,
                             }}
-                        >
-                            <Text style={{ fontSize: 22, color: theme.mutedText }}>×</Text>
-                        </TouchableOpacity>
-                    }
-                />
-                <FlatList
-                    style={{ height: '100%', marginTop: 14 }}
-                    contentContainerStyle={{ paddingHorizontal: 14, paddingBottom: 20, direction: 'ltr' }}
-                    data={list}
-                    renderItem={({ item, index }) => {
-                        return (
-                            <TouchableOpacity
-                                key={index}
-                                style={{ paddingHorizontal: 6, marginBottom: 4 }}
-                                onPress={() => {
-                                    if (onSelectItem) {
-                                        onSelectItem(item);
-                                    }
-                                }}
-                            >
-                                <View
-                                    style={{
-                                        width: '100%', alignItems: 'center',
-                                        paddingVertical: 13, paddingHorizontal: 12, flexDirection: 'row', justifyContent: 'space-between',
-                                        borderRadius: 9,
-                                    }}
-                                >
-                                    <Text style={{ color: theme.normalText, fontSize: 14, fontWeight: '600' }}>{item.name}</Text>
-                                    <Text style={{ color: theme.mutedText, fontSize: 12, fontWeight: '700' }}>{item.id}</Text>
-                                </View>
-                            </TouchableOpacity>
-                        )
-                    }}
-                />
-            </View >
-        );
-    }
-}
+                            placeholder="Search for a model by name or id"
+                            placeholderTextColor={theme.textBoxPlaceholder}
+                            accessibilityLabel="Search for a model by name or id"
+                            onChangeText={search}
+                        />
+                    </View>
+                }
+                rightContainerStyle={{ height: '100%', flex: undefined }}
+                rightComponent={
+                    <TouchableOpacity
+                        accessibilityRole="button"
+                        accessibilityLabel="Clear model search"
+                        onPress={clearSearch}
+                    >
+                        <Text style={{ fontSize: 22, color: theme.mutedText }}>×</Text>
+                    </TouchableOpacity>
+                }
+            />
+            <CatalogStatus
+                status={status}
+                hasItems={list.length > 0}
+                error={error}
+                onRetry={retry}
+            />
+            <FlatList
+                style={{ flex: 1, minHeight: 0, marginTop: 14 }}
+                contentContainerStyle={{
+                    paddingHorizontal: 14,
+                    paddingBottom: 20,
+                    direction: 'ltr',
+                }}
+                data={list}
+                keyExtractor={(item) => String(item.id)}
+                onEndReached={catalogQuery.loadMore}
+                onEndReachedThreshold={0.5}
+                ListFooterComponent={
+                    <CatalogStatus
+                        status={status}
+                        hasItems={list.length > 0}
+                        error={error}
+                        onRetry={retry}
+                        isLoadingMore={status === 'loading' && list.length > 0}
+                        loadMoreError={catalogQuery.loadMoreError}
+                    />
+                }
+                renderItem={({ item }) => (
+                    <CatalogRow
+                        item={item}
+                        selected={item.id === selectedItemId}
+                        onSelect={onSelectItem}
+                    />
+                )}
+            />
+        </View>
+    );
+};
+
+export default React.memo(MenuDesktop);

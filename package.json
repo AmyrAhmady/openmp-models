@@ -1,30 +1,40 @@
 {
-  "name": "open.mp-models",
-  "scripts": {
-    "dev": "next",
-    "build": "next build",
-    "start": "next start"
-  },
-  "dependencies": {
-    "@types/react-native": "0.64.38",
-    "next": "12.3.7",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
-    "react-native-web": "0.21.2",
-    "three": "0.185.1",
-    "universal-cookie": "8.1.2"
-  },
-  "devDependencies": {
-    "@types/node": "20.19.43",
-    "@types/react": "17.0.66",
-    "babel-plugin-react-native-web": "0.21.2",
-    "babel-preset-react-native": "^4.0.1",
-    "eslint": "9.39.5",
-    "eslint-plugin-react": "^7.37.5",
-    "typescript": "^4.9.5"
-  },
-  "resolutions": {
-    "@types/react": "17.0.66"
-  },
-  "license": "MIT"
+    "name": "open.mp-models",
+    "scripts": {
+        "dev": "next",
+        "build": "next build",
+        "check:bundle": "node scripts/bundle-budget.mjs",
+        "lint": "eslint src",
+        "format": "prettier --write \"src/**/*.{ts,tsx}\" \"scripts/**/*.mjs\" \"*.{json,mjs,js}\" \".github/**/*.yml\" \"docs/**/*.md\"",
+        "format:check": "prettier --check \"src/**/*.{ts,tsx}\" \"scripts/**/*.mjs\" \"*.{json,mjs,js}\" \".github/**/*.yml\" \"docs/**/*.md\"",
+        "test": "node --test scripts/validate-catalog.test.mjs scripts/model-asset-client.test.mjs scripts/geometry-builder.test.mjs scripts/texture-lookup.test.mjs scripts/catalog-list-cache.test.mjs scripts/render-scheduler.test.mjs scripts/catalog-query.test.mjs scripts/catalog-response.test.mjs scripts/scene-lifecycle.test.mjs scripts/shared-catalog-query.test.mjs scripts/catalog-client-boundary.test.mjs scripts/catalog-info.test.mjs scripts/catalog-row-rendering.test.mjs scripts/model-type-switching.test.mjs scripts/modal-shell.test.mjs scripts/renderer-lookup-ownership.test.mjs scripts/theme.test.mjs scripts/responsive-boundary.test.mjs",
+        "typecheck": "tsc --noEmit --incremental false --strict",
+        "validate:catalog": "node scripts/validate-catalog.mjs",
+        "start": "next start",
+        "test:asset": "node scripts/asset-smoke.mjs",
+        "test:api": "node scripts/api-smoke.mjs"
+    },
+    "dependencies": {
+        "next": "12.3.7",
+        "react": "18.2.0",
+        "react-dom": "18.2.0",
+        "react-native-web": "0.21.2",
+        "three": "0.185.1",
+        "universal-cookie": "8.1.2"
+    },
+    "devDependencies": {
+        "@types/react-native": "0.64.38",
+        "@types/node": "20.19.43",
+        "@types/react": "18.2.0",
+        "@types/three": "0.185.0",
+        "@typescript-eslint/parser": "8.67.0",
+        "eslint": "9.39.5",
+        "eslint-plugin-react": "^7.37.5",
+        "prettier": "3.9.6",
+        "typescript": "5.9.3"
+    },
+    "resolutions": {
+        "@types/react": "18.2.0"
+    },
+    "license": "MIT"
 }

@@ -1,30 +1,26 @@
 import React from 'react';
-import { View, StyleSheet, Platform, StyleProp, ViewStyle, TouchableOpacity } from 'react-native';
+import { View, StyleSheet } from 'react-native-web';
+import type { StyleProp, ViewStyle } from 'react-native-web';
 
 const Row = ({
     style = {},
-    onPress = undefined,
     leftComponent = <View />,
     leftContainerStyle = {},
     centerComponent = <View />,
     centerContainerStyle = {},
     rightComponent = <View />,
-    rightContainerStyle = {}
+    rightContainerStyle = {},
 }: {
     style?: StyleProp<ViewStyle>;
-    onPress?: () => void;
-    leftComponent?: React.ReactElement,
-    leftContainerStyle?: StyleProp<ViewStyle>
-    centerComponent?: React.ReactElement,
-    centerContainerStyle?: StyleProp<ViewStyle>,
-    rightComponent?: React.ReactElement,
-    rightContainerStyle?: StyleProp<ViewStyle>
+    leftComponent?: React.ReactElement;
+    leftContainerStyle?: StyleProp<ViewStyle>;
+    centerComponent?: React.ReactElement;
+    centerContainerStyle?: StyleProp<ViewStyle>;
+    rightComponent?: React.ReactElement;
+    rightContainerStyle?: StyleProp<ViewStyle>;
 }) => {
-
-    const Component: React.ElementType = onPress ? TouchableOpacity : View;
-
     return (
-        <Component onPress={onPress} style={StyleSheet.flatten([styles.container, style])} >
+        <View style={StyleSheet.flatten([styles.container, style])}>
             <View style={StyleSheet.flatten([styles.side, leftContainerStyle])}>
                 {leftComponent}
             </View>
@@ -34,9 +30,9 @@ const Row = ({
             <View style={StyleSheet.flatten([styles.side, rightContainerStyle])}>
                 {rightComponent}
             </View>
-        </Component>
+        </View>
     );
-}
+};
 
 const styles = StyleSheet.create({
     container: {

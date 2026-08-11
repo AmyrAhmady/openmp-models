@@ -1,315 +1,137 @@
-import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import React, { useCallback, useMemo, useState } from 'react';
+import type { NextPage } from 'next';
+import { StyleSheet, View } from 'react-native-web';
 import ColorPicker from 'src/components/ColorPicker';
-import Header from 'src/components/Header'
+import Header from 'src/components/Header';
 import MenuDesktop from 'src/components/Menu/Desktop';
 import MenuMobile from 'src/components/Menu/Mobile';
-import ModelViewer from 'src/components/ModelViewer';
-import { ModelData } from 'src/components/ModelViewer/types';
-import SideBar from 'src/components/SideBar'
-import ModelInfo from 'src/container/ModelInfo';
-import realNames from 'src/resources/realNames';
-import { themeSelect } from 'src/resources/theme';
-import store from 'src/state/store';
+import ModelInfo from 'src/components/ModelInfo';
+import ModelStage from 'src/components/ModelStage';
+import { ThemeProvider } from 'src/theme/ThemeContext';
+import type { ModelType } from 'src/domain/catalog';
+import { getCatalogInfoRows } from 'src/domain/catalogInfo';
+import { backgroundColors } from 'src/theme/colorPalette';
+import { useCatalogQuery } from 'src/hooks/useCatalogQuery';
+import { useResponsiveView } from 'src/hooks/useResponsiveView';
+import { useModelSelection } from 'src/hooks/useModelSelection';
+import { useThemeController } from 'src/hooks/useThemeController';
 
-interface Props {
-    isMobileView: boolean;
-}
+const Main: NextPage = () => {
+    const isMobileView = useResponsiveView();
+    const [modelType, setModelType] = useState<ModelType>('vehicle');
+    const { themeMode, theme, backgroundSelection, onThemeModeChange, onSelectColor } =
+        useThemeController();
+    const catalogQuery = useCatalogQuery(modelType);
+    const {
+        info,
+        selectedModelType,
+        models,
+        modelStatus,
+        modelError,
+        onModelTypeChange,
+        onSelectItem,
+        retryModel,
+    } = useModelSelection(modelType);
 
-export default class Main extends React.Component<Props, any> {
+    const handleModelTypeChange = useCallback(
+        (type: { value: ModelType }): void => {
+            onModelTypeChange(type);
+            setModelType(type.value);
+        },
+        [onModelTypeChange]
+    );
+    const infoRows = useMemo(() => (info ? getCatalogInfoRows(info) : []), [info]);
 
-    userHasABGSelected: boolean = false;
-
-    constructor(props: Props) {
-        super(props);
-
-        this.state = {
-            isMobileView: props.isMobileView,
-            modelType: 'vehicle',
-            info: {
-                "id": 400,
-                "name": "Landstalker",
-                "cat": "Off Road",
-                "mods": "Transfender",
-                "model": "landstal"
-            },
-            models: [] as ModelData[],
-            viewBgColor: '#FFFFFF'
-        }
-
-        this.updateSize = this.updateSize.bind(this);
-    }
-
-    async loadModel(name: string, type: string) {
-        let models: ModelData[] = [];
-        this.setState({ models: [] });
-        await fetch(`https://assets.open.mp/models/exports/${name}.json`)
-            .then((r) => r.json())
-            .then(data => {
-                let texArr: any[] = [];
-                data.forEach((frame: any) => {
-
-                    if (frame.geometry && frame.geometry.textures) {
-                        frame.geometry.textures.forEach((texture: any) => {
-
-                            let tempArr = texArr.filter((item: any) => item.name === texture.name);
-
-                            if (!tempArr.length) {
-                                if (texture.name) {
-                                    let obj = {
-                                        name: texture.name,
-                                        url: "https://assets.open.mp/models/exports/" + texture.name.toLowerCase() + ".png"
-                                    };
-                                    texArr.push(obj);
-                                }
-                            }
-
-                        });
-                    }
-
-                });
-
-                let modelData = {
-                    type: type,
-                    name: name.toLowerCase(),
-                    obj: data,
-                    textures: texArr,
-                    color: {
-                        primary: Math.floor(Math.random() * 255),
-                        secondary: Math.floor(Math.random() * 255),
-                    },
-                    modifications: [1077, 1008]
-                };
-
-                models.push(modelData);
-            })
-            .catch(error => {
-                console.log(error);
-            });
-
-        this.setState({ models: models, isReady: true })
-    }
-
-    componentDidMount() {
-        window.addEventListener('resize', this.updateSize);
-        this.updateSize();
-
-        store.events.subscribe('stateChange', prevState => {
-            console.log("prevState", prevState, "newState", store.state);
-
-            const customTheme = themeSelect(store.state.themeMode);
-
-            if (this.state.viewBgColor !== customTheme.mainBg) {
-                this.setState({ viewBgColor: customTheme.mainBg });
-            }
-            if (prevState.themeMode === store.state.themeMode) {
-                this.forceUpdate();
-            }
-        });
-
-        this.loadModel(this.state.info.model, 'vehicle');
-    }
-
-    static async getInitialProps({ req }) {
-        let isMobileView = (req
-            ? req.headers['user-agent']
-            : '').match(
-                /Android|BlackBerry|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i
-            );
-
-        return { isMobileView: Boolean(isMobileView) }
-    }
-
-    updateSize() {
-        if (window.innerWidth < 1200) {
-            if (!this.state.isMobileView)
-                this.setState({ isMobileView: true });
-        }
-        else {
-            if (this.state.isMobileView)
-                this.setState({ isMobileView: false });
-        }
-    }
-
-    componentDidUpdate() {
-        const customTheme = themeSelect(store.state.themeMode);
-        if (!this.userHasABGSelected && this.state.viewBgColor !== customTheme.mainBg) {
-            this.setState({ viewBgColor: customTheme.mainBg });
-        }
-    }
-
-    render() {
-
-        const theme = themeSelect();
-
-        const {
-            modelType,
-            info,
-            isMobileView
-        } = this.state;
-
-        return (
+    return (
+        <ThemeProvider mode={themeMode}>
             <View style={[styles.container, { backgroundColor: theme.mainBg }]}>
                 <Header
                     isMobile={isMobileView}
                     modelType={modelType}
-                    onThemeModeChange={(mode) => {
-                        store.dispatch('setThemeMode', mode);
-                        const customTheme = themeSelect(mode);
-                        if (mode === "dark") {
-                            this.setState({ viewBgColor: customTheme.mainBg })
-                        }
-                        else {
-                            this.setState({ viewBgColor: customTheme.mainBg })
-                        }
-                    }}
-                    onModelTypeChange={(type) => {
-                        this.setState({ modelType: type.value });
-                    }}
+                    themeMode={themeMode}
+                    onThemeModeChange={onThemeModeChange}
+                    onModelTypeChange={handleModelTypeChange}
                 />
-                <View style={{ flexDirection: isMobileView ? 'column' : 'row', flex: 1, minHeight: 0, minWidth: 0, width: '100%', backgroundColor: theme.mainBg }}>
-                    <SideBar isMobile={isMobileView} style={isMobileView ? {} : { width: 300, flexShrink: 0 }}>
-                        {isMobileView ? (
-                            <MenuMobile
-                                modelType={modelType}
-                                onSelectColor={(color) => {
-                                    this.userHasABGSelected = true;
-                                    this.setState({ viewBgColor: color })
-                                }}
-                                modelData={Object.entries(info).map((item) => {
-                                    const itemName = realNames[item[0]];
-                                    return {
-                                        label: itemName ? itemName : "Unknown info",
-                                        value: item[1].toString()
-                                    }
-                                })}
-                                onSelectItem={(model) => {
-                                    this.setState({ info: model }, () => {
-                                        const {
-                                            info
-                                        } = this.state;
-                                        this.loadModel(info.model || info.name, modelType);
-                                    });
-                                }}
-                            />
-                        ) : (
+                <View
+                    style={{
+                        flexDirection: isMobileView ? 'column' : 'row',
+                        flex: 1,
+                        minHeight: 0,
+                        minWidth: 0,
+                        width: '100%',
+                        backgroundColor: theme.mainBg,
+                    }}
+                >
+                    {isMobileView ? (
+                        <MenuMobile
+                            selectedItemId={selectedModelType === modelType && info ? info.id : -1}
+                            onSelectColor={onSelectColor}
+                            selectedColor={backgroundSelection.color}
+                            modelData={infoRows}
+                            onSelectItem={onSelectItem}
+                            catalogQuery={catalogQuery}
+                        />
+                    ) : (
+                        <View style={styles.desktopMenuColumn}>
                             <MenuDesktop
-                                modelType={modelType}
-                                onSelectItem={(model) => {
-                                    this.setState({ info: model }, () => {
-                                        const {
-                                            info
-                                        } = this.state;
-                                        this.loadModel(info.model || info.name, modelType);
-                                    });
-                                }}
+                                selectedItemId={
+                                    selectedModelType === modelType && info ? info.id : -1
+                                }
+                                onSelectItem={onSelectItem}
+                                catalogQuery={catalogQuery}
                             />
-                        )}
-                    </SideBar>
-                    <View style={[styles.stage, isMobileView && styles.mobileStage, { backgroundColor: this.state.viewBgColor }]}>
-                        <View style={styles.stageHeader}>
-                            <View>
-                                <Text style={[styles.stageEyebrow, { color: theme.mutedText }]}>{modelType === 'vehicle' ? 'VEHICLE' : modelType.toUpperCase()}</Text>
-                                <Text style={[styles.stageTitle, { color: theme.title }]}>{info.name}</Text>
-                            </View>
-                            <View style={[styles.stageBadge, { backgroundColor: theme.accentSoft }]}>
-                                <Text style={{ color: theme.accent, fontSize: 12, fontWeight: '800' }}>ID {info.id}</Text>
-                            </View>
                         </View>
-                        <View style={styles.viewer}>
-                            {this.state.models.length ? (
-                                <ModelViewer
-                                    models={this.state.models === undefined ? [] : this.state.models}
-                                    autoSpin={false}
-                                />
-                            ) : null}
-                        </View>
-                        <Text style={[styles.stageHint, { color: theme.mutedText }]}>Drag to rotate · Scroll to zoom</Text>
-                    </View>
+                    )}
+                    <ModelStage
+                        modelType={modelType}
+                        info={info}
+                        models={models}
+                        modelStatus={modelStatus}
+                        modelError={modelError}
+                        backgroundColor={backgroundSelection.color}
+                        retryModel={retryModel}
+                        isMobileView={isMobileView}
+                    />
                     {isMobileView ? null : (
-                        <SideBar isMobile={isMobileView} style={{ width: 320, flexShrink: 0, padding: 18 }}>
+                        <View style={styles.desktopDetailsColumn}>
                             <ColorPicker
                                 isMobileView={isMobileView}
                                 title="Background color"
                                 style={{ marginBottom: 14 }}
-                                colors={[
-                                    '#e6194b', '#3cb44b', '#ffe119', '#4363d8', '#f58231',
-                                    '#f032e6', '#bcf60c', '#fabebe', '#008080', '#e6beff',
-                                    '#9a6324', '#fffac8', '#800000', '#aaffc3', '#808000',
-                                    '#ffd8b1', '#000075', '#808080', '#ffffff', '#000000'
-                                ]}
+                                colors={backgroundColors}
+                                selectedColor={backgroundSelection.color}
                                 rows={2}
-                                onSelect={color => {
-                                    this.userHasABGSelected = true;
-                                    this.setState({ viewBgColor: color })
-                                }}
+                                onSelect={onSelectColor}
                             />
                             <ModelInfo
                                 title="Model info"
                                 style={{ marginBottom: 14 }}
-                                data={Object.entries(info).map((item) => {
-                                    const itemName = realNames[item[0]];
-                                    return {
-                                        label: itemName ? itemName : "Unknown info",
-                                        value: item[1].toString()
-                                    }
-                                })}
+                                data={infoRows}
                             />
-                        </SideBar>
+                        </View>
                     )}
                 </View>
-            </View >
-        );
-    }
-}
+            </View>
+        </ThemeProvider>
+    );
+};
+
+export default Main;
 
 const styles = StyleSheet.create({
     container: {
         flexGrow: 1,
-        height: '100%'
+        height: '100%',
     },
-    stage: {
-        flex: 1,
-        position: 'relative',
-        minWidth: 0,
-        minHeight: 0,
+    desktopMenuColumn: {
+        width: 300,
+        flexShrink: 0,
+        height: '100%',
     },
-    mobileStage: {
-        width: '100%',
+    desktopDetailsColumn: {
+        width: 320,
+        flexShrink: 0,
+        height: '100%',
+        padding: 18,
     },
-    stageHeader: {
-        position: 'absolute',
-        top: 24,
-        left: 28,
-        right: 28,
-        zIndex: 2,
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'flex-start',
-    },
-    stageEyebrow: {
-        fontSize: 11,
-        fontWeight: '800',
-        letterSpacing: 1.4,
-    },
-    stageTitle: {
-        fontSize: 25,
-        fontWeight: '800',
-        marginTop: 5,
-    },
-    stageBadge: {
-        paddingHorizontal: 11,
-        paddingVertical: 7,
-        borderRadius: 8,
-    },
-    viewer: {
-        flex: 1,
-        minHeight: 0,
-    },
-    stageHint: {
-        position: 'absolute',
-        bottom: 22,
-        left: 28,
-        fontSize: 12,
-    },
-})
+});
