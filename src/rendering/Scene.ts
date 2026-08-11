@@ -760,7 +760,18 @@ export default class Scene implements SceneController {
 
             parentObject.add(object3d);
 
-            if (model.wheelIndex !== -1 && Scene.wheelDummies.has(objectData.name)) {
+            const isWheelDummy = model.wheelIndex !== -1 && Scene.wheelDummies.has(objectData.name);
+            const isWheelGeometryChild =
+                model.wheelIndex !== -1 &&
+                objectData.name === 'wheel' &&
+                Scene.wheelDummies.has(parentObject.name);
+
+            if (isWheelGeometryChild) {
+                this.createHierarchy(object3d, objectData.frame, model, childrenByParent);
+                continue;
+            }
+
+            if (isWheelDummy) {
                 if (objectData.name.includes('wheel_r')) {
                     const herr_euler = new THREE.Euler().setFromRotationMatrix(object3d.matrix);
 
