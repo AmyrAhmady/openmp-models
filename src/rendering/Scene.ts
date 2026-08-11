@@ -772,15 +772,13 @@ export default class Scene implements SceneController {
             }
 
             if (isWheelDummy) {
-                if (objectData.name.includes('wheel_r')) {
-                    const herr_euler = new THREE.Euler().setFromRotationMatrix(object3d.matrix);
-
-                    herr_euler.y = Math.PI;
-
-                    object3d.matrix.makeRotationFromEuler(herr_euler).copyPosition(matrix);
+                const isLeftWheel = matrix.elements[12] < 0;
+                object3d.matrix.copy(matrix);
+                if (isLeftWheel) {
+                    object3d.matrix.multiply(new THREE.Matrix4().makeRotationY(Math.PI));
                 }
 
-                this.createObjectMesh(model.object, model.wheelIndex, object3d, model.color);
+                this.createObjectMesh(model.object, model.wheelIndex, object3d, model.color, true);
             } else {
                 this.createObjectMesh(model.object, index, object3d, model.color);
             }
@@ -817,7 +815,8 @@ export default class Scene implements SceneController {
         modelExport: ModelExport,
         frameIndex: number,
         object: THREE.Object3D,
-        color: ModelData['color']
+        color: ModelData['color'],
+        doubleSided = false
     ) {
         const frame = modelExport[frameIndex];
         if (frame === undefined || frame.geometry === null) {
@@ -850,12 +849,12 @@ export default class Scene implements SceneController {
                 curColor = this.sceneService.getVehicleColor(color.secondary);
             }
 
-            const materialKey = `${textureUrl ?? 'basic'}:${curColor >>> 0}:${alpha}`;
+            const materialKey = `${textureUrl ?? 'basic'}:${curColor >>> 0}:${alpha}:${doubleSided}`;
             let material = this.materialCache.get(materialKey);
             if (!material) {
                 material = new THREE.MeshPhongMaterial({
                     shininess: 25,
-                    side: THREE.FrontSide,
+                    side: doubleSided ? THREE.DoubleSide : THREE.FrontSide,
                     flatShading: true,
                 });
                 if (textureUrl) {

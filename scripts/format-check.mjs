@@ -1,5 +1,4 @@
 import { execFileSync } from 'node:child_process';
-import { existsSync } from 'node:fs';
 import { resolve } from 'node:path';
 
 const patterns = ['src/**/*.{ts,tsx}', 'scripts/**/*.mjs', '*.{json,mjs,js}', '.github/**/*.yml'];
