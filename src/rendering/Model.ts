@@ -126,9 +126,9 @@ export default class Model {
                             : mergeComponentGeometry(this.object[index].geometry, part.geometry);
                     if (info.type === 'wheel') {
                         this.object[index].scaleDown = {
-                            x: 1,
-                            y: 0.8,
-                            z: 0.8,
+                            x: 0.768,
+                            y: 0.768,
+                            z: 0.768,
                         };
                     }
                 }
