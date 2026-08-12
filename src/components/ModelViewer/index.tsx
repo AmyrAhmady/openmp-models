@@ -8,6 +8,7 @@ interface ModelViewerProps {
     models: ModelData[];
     autoSpin: boolean;
     backgroundColor?: string;
+    showWheelSpinTest?: boolean;
 }
 
 interface LatestSceneProps {
@@ -30,6 +31,7 @@ export default function ModelViewer({
     models,
     autoSpin,
     backgroundColor = 'transparent',
+    showWheelSpinTest = false,
 }: ModelViewerProps) {
     const rootElementRef = useRef<HTMLDivElement | null>(null);
     const sceneRef = useRef<SceneController | null>(null);
@@ -37,6 +39,7 @@ export default function ModelViewer({
     const latestPropsRef = useRef<LatestSceneProps>({ models, autoSpin });
     const [mountAttempt, setMountAttempt] = useState(0);
     const [sceneError, setSceneError] = useState<string | null>(null);
+    const [wheelSpin, setWheelSpin] = useState(false);
     latestPropsRef.current = { models, autoSpin };
 
     useEffect(() => {
@@ -128,6 +131,11 @@ export default function ModelViewer({
         sceneRef.current?.setBackground(backgroundColor);
     }, [backgroundColor]);
 
+    useEffect(() => {
+        sceneRef.current?.setWheelSpin(wheelSpin);
+        return () => sceneRef.current?.setWheelSpin(false);
+    }, [wheelSpin]);
+
     return (
         <div
             ref={rootElementRef}
@@ -179,6 +187,36 @@ export default function ModelViewer({
                         </Text>
                     </TouchableOpacity>
                 </View>
+            ) : null}
+            {showWheelSpinTest && !sceneError ? (
+                <TouchableOpacity
+                    accessibilityRole="button"
+                    accessibilityLabel={
+                        wheelSpin ? 'Stop wheel spin test' : 'Start wheel spin test'
+                    }
+                    onPress={() => setWheelSpin((current) => !current)}
+                    style={{
+                        backgroundColor: wheelSpin ? '#635bff' : 'rgba(255, 255, 255, 0.85)',
+                        borderColor: '#635bff',
+                        borderRadius: 8,
+                        borderWidth: 1,
+                        bottom: 18,
+                        right: 18,
+                        paddingHorizontal: 12,
+                        paddingVertical: 8,
+                        position: 'absolute',
+                    }}
+                >
+                    <Text
+                        style={{
+                            color: wheelSpin ? '#ffffff' : '#635bff',
+                            fontSize: 12,
+                            fontWeight: '800',
+                        }}
+                    >
+                        {wheelSpin ? 'Stop wheel spin' : 'Test wheel spin'}
+                    </Text>
+                </TouchableOpacity>
             ) : null}
         </div>
     );

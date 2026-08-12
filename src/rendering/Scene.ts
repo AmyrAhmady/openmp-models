@@ -146,8 +146,10 @@ export default class Scene implements SceneController {
     needUpdate: boolean = true;
     options: {
         spin: boolean;
+        wheelSpin: boolean;
     } = {
         spin: true,
+        wheelSpin: false,
     };
 
     ortho: boolean = false;
@@ -160,6 +162,10 @@ export default class Scene implements SceneController {
         'wheel_lf_dummy',
         'wheel_lb_dummy',
         'wheel_rb_dummy',
+    ]);
+
+    private static readonly doubleSidedTextures: ReadonlySet<string> = new Set([
+        'vehiclesteering128',
     ]);
 
     private static readonly specialColors: Readonly<SpecialColorTable> = {
@@ -448,7 +454,19 @@ export default class Scene implements SceneController {
         }
 
         this.needUpdate = true;
-        this.renderScheduler.setSpinning(autoSpin);
+        this.renderScheduler.setSpinning(autoSpin || this.options.wheelSpin);
+    }
+
+    setWheelSpin(spinning: boolean): void {
+        this.options.wheelSpin = spinning;
+        this.needUpdate = true;
+        if (spinning) {
+            this.renderScheduler.setSpinning(true);
+            return;
+        }
+
+        this.renderScheduler.setSpinning(this.options.spin);
+        this.render();
     }
 
     render(): void {
@@ -579,12 +597,29 @@ export default class Scene implements SceneController {
         }
 
         if (spinning) {
-            this.scene.rotation.y += 0.01;
+            if (this.options.spin) {
+                this.scene.rotation.y += 0.01;
+            }
+            if (this.options.wheelSpin && this.sceneData[0]?.type === 'vehicle') {
+                this.rotateWheels(0.12);
+            }
             this.renderOnce();
         } else if (this.needUpdate) {
             this.renderOnce();
             this.needUpdate = false;
         }
+    }
+
+    private rotateWheels(angle: number): void {
+        this.scene?.traverse((object) => {
+            if (
+                object instanceof THREE.Mesh &&
+                object.parent instanceof THREE.Object3D &&
+                Scene.wheelDummies.has(object.parent.name)
+            ) {
+                object.rotation.x += angle;
+            }
+        });
     }
 
     async setupSkinOrObject(
@@ -900,6 +935,8 @@ export default class Scene implements SceneController {
 
             const normalizedTextureName = normalizeTextureName(texture.name);
             const textureUrl = this.textureUrlLookup.get(normalizedTextureName);
+            const materialIsDoubleSided =
+                doubleSided || Scene.doubleSidedTextures.has(normalizedTextureName);
             const canApplyVehicleColor =
                 modelType === 'vehicle' && !normalizedTextureName.includes('lights');
 
@@ -918,17 +955,17 @@ export default class Scene implements SceneController {
                 curColor = this.sceneService.getVehicleColor(color.secondary);
             }
 
-            const materialKey = `${textureUrl ?? 'basic'}:${curColor >>> 0}:${alpha}:${doubleSided}:${useLighting ? 'lit' : 'unlit'}`;
+            const materialKey = `${textureUrl ?? 'basic'}:${curColor >>> 0}:${alpha}:${materialIsDoubleSided}:${useLighting ? 'lit' : 'unlit'}`;
             let material = this.materialCache.get(materialKey);
             if (!material) {
                 material = useLighting
                     ? new THREE.MeshPhongMaterial({
                           shininess: 25,
-                          side: doubleSided ? THREE.DoubleSide : THREE.FrontSide,
+                          side: materialIsDoubleSided ? THREE.DoubleSide : THREE.FrontSide,
                           flatShading: true,
                       })
                     : new THREE.MeshBasicMaterial({
-                          side: doubleSided ? THREE.DoubleSide : THREE.FrontSide,
+                          side: materialIsDoubleSided ? THREE.DoubleSide : THREE.FrontSide,
                       });
                 if (textureUrl) {
                     material.map = this.getOrLoadTexture(textureUrl);

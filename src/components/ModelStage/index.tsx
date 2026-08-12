@@ -80,7 +80,11 @@ const ModelStage = ({
                         </TouchableOpacity>
                     </View>
                 ) : modelStatus === 'ready' && models.length ? (
-                    <ModelViewer models={models} autoSpin={false} />
+                    <ModelViewer
+                        models={models}
+                        autoSpin={false}
+                        showWheelSpinTest={modelType === 'vehicle'}
+                    />
                 ) : modelStatus === 'idle' ? (
                     <View style={styles.stageMessage}>
                         <Text style={[styles.stageMessageTitle, { color: theme.title }]}>

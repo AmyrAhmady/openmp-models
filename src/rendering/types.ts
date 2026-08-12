@@ -13,6 +13,7 @@ export interface SceneController {
     setModel(models: ModelData[], autoSpin?: boolean): Promise<void>;
     setBackground(color: string): void;
     setSpin(autoSpin: boolean): void;
+    setWheelSpin(spinning: boolean): void;
     render(): void;
     dispose(): void;
 }
