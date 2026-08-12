@@ -898,7 +898,11 @@ export default class Scene implements SceneController {
                 alpha = 0;
             }
 
-            const textureUrl = this.textureUrlLookup.get(normalizeTextureName(texture.name));
+            const normalizedTextureName = normalizeTextureName(texture.name);
+            const textureUrl = this.textureUrlLookup.get(normalizedTextureName);
+            const canApplyVehicleColor =
+                modelType === 'vehicle' && !normalizedTextureName.includes('lights');
+
             let curColor =
                 texture.color[2] |
                 (texture.color[1] << 8) |
@@ -930,11 +934,13 @@ export default class Scene implements SceneController {
                     material.map = this.getOrLoadTexture(textureUrl);
                 }
 
-                material.color.fromArray([
-                    ((curColor >> 16) & 0xff) * (1 / 255),
-                    ((curColor >> 8) & 0xff) * (1 / 255),
-                    (curColor & 0xff) * (1 / 255),
-                ]);
+                if (canApplyVehicleColor) {
+                    material.color.fromArray([
+                        ((curColor >> 16) & 0xff) * (1 / 255),
+                        ((curColor >> 8) & 0xff) * (1 / 255),
+                        (curColor & 0xff) * (1 / 255),
+                    ]);
+                }
 
                 material.alphaTest = 0.5;
                 material.transparent = alpha !== 1;
