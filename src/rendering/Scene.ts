@@ -735,7 +735,7 @@ export default class Scene implements SceneController {
         const modelSize = box.getSize(new THREE.Vector3());
 
         if (!this.ortho && model) {
-            this.camera.position.set(-modelSize.x * 0.8, modelSize.y / 0.78, -modelSize.z);
+            this.camera.position.set(-modelSize.x * 1.0, modelSize.y / 3.0, -modelSize.z / 0.4);
             this.camera.lookAt(0, 0, 0);
             this.camera.updateProjectionMatrix();
         }
