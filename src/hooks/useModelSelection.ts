@@ -9,6 +9,7 @@ import { isModelAssetAbortError, ModelAssetError } from 'src/domain/modelAssetCl
 import { reportError } from 'src/monitoring/reportError';
 import { getVehicleModification, vehicleModifications } from 'src/domain/vehicleModifications';
 import type { VehicleModification } from 'src/domain/vehicleModifications';
+import { getValidVehicleModifications } from 'src/domain/vehicleComponentCompatibility';
 
 export type ModelLoadStatus = 'idle' | 'loading' | 'ready' | 'error';
 
@@ -63,8 +64,8 @@ export function useModelSelection(modelType: ModelType): UseModelSelectionResult
 
     const currentModel = models[0];
     const availableModifications =
-        modelType === 'vehicle' && currentModel
-            ? vehicleModifications.filter((modification) =>
+        modelType === 'vehicle' && currentModel && info?.id !== undefined
+            ? getValidVehicleModifications(info.id, vehicleModifications).filter((modification) =>
                   currentModel.obj.some((frame) => frame.name === modification.type)
               )
             : [];
