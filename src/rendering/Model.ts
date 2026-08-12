@@ -2,11 +2,47 @@ import type { ModelData } from './types';
 import Service from './Service';
 import * as THREE from 'three';
 import type { ModelExport } from 'src/domain/modelAssets';
+import type { ModelGeometry, ModelTexcoord } from 'src/domain/modelAssets';
 import type { ModelAssetLoader } from 'src/domain/modelAssetClient';
 import type { VehicleColorSelection } from 'src/domain/modelPreview';
 
 function cloneModelExport(modelExport: ModelExport): ModelExport {
     return modelExport.map((frame) => ({ ...frame }));
+}
+
+function defaultTexcoords(count: number): ModelTexcoord[] {
+    return Array.from({ length: count }, () => ({ uvx: 0, uvy: 0 }));
+}
+
+function mergeComponentGeometry(
+    baseGeometry: ModelGeometry | null,
+    componentGeometry: ModelGeometry
+): ModelGeometry {
+    if (!baseGeometry) {
+        return componentGeometry;
+    }
+
+    const baseVertexCount = baseGeometry.vertices.length;
+    const hasTexcoords = baseGeometry.texcoords !== undefined || componentGeometry.texcoords;
+    const baseTexcoords = baseGeometry.texcoords ?? defaultTexcoords(baseVertexCount);
+    const componentTexcoords =
+        componentGeometry.texcoords ?? defaultTexcoords(componentGeometry.vertices.length);
+
+    const mergedGeometry = {
+        facetype: baseGeometry.facetype,
+        vertices: [...baseGeometry.vertices, ...componentGeometry.vertices],
+        textures: [
+            ...baseGeometry.textures,
+            ...componentGeometry.textures.map((texture) => ({
+                ...texture,
+                indices: texture.indices.map((index) => index + baseVertexCount),
+            })),
+        ],
+    };
+
+    return hasTexcoords
+        ? { ...mergedGeometry, texcoords: [...baseTexcoords, ...componentTexcoords] }
+        : mergedGeometry;
 }
 
 export default class Model {
@@ -84,7 +120,10 @@ export default class Model {
 
             for (const part of mod.object) {
                 if (part.geometry) {
-                    this.object[index].geometry = part.geometry;
+                    this.object[index].geometry =
+                        info.type === 'wheel'
+                            ? part.geometry
+                            : mergeComponentGeometry(this.object[index].geometry, part.geometry);
                     if (info.type === 'wheel') {
                         this.object[index].scaleDown = {
                             x: 1,
