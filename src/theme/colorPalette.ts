@@ -1,5 +1,7 @@
+export const CLEAR_BACKGROUND_COLOR = 'transparent';
+
 export const backgroundColors = [
-    '#e6194b',
+    CLEAR_BACKGROUND_COLOR,
     '#3cb44b',
     '#ffe119',
     '#4363d8',

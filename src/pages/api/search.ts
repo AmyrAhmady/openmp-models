@@ -2,6 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { isModelType, queryValue } from 'src/domain/catalog';
 import type { ApiErrorResponse, CatalogSearchResponse } from 'src/domain/catalog';
 import { searchCatalog } from 'src/catalog/catalogSearch';
+import { normalizeSearchText } from 'src/domain/search';
 
 type SearchResponse = CatalogSearchResponse | ApiErrorResponse;
 
@@ -20,8 +21,8 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<Search
         });
     }
 
-    const query = queryValue(req.query.q)?.trim().toLowerCase();
-    if (!query) {
+    const query = queryValue(req.query.q)?.trim();
+    if (!query || !normalizeSearchText(query)) {
         return res.status(200).json({ results: [] });
     }
 

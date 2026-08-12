@@ -265,7 +265,7 @@ test('model preview data normalizes names, deduplicates textures, and preserves 
                 url: 'https://assets.open.mp/models/exports/glass.png',
             },
         ]);
-        assert.deepEqual(model.color, { primary: 127, secondary: 127 });
+        assert.deepEqual(model.color, { primary: 128, secondary: 128 });
         assert.equal(model.modifications, undefined);
 
         const skin = preview.createModelPreviewData('CJ', 'skin', modelExport, () => 0.5);

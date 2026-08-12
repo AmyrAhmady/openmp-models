@@ -1,5 +1,6 @@
 import { catalogByType } from 'src/catalog/catalogRegistry';
 import type { CatalogItem, CatalogListItem, ModelType } from 'src/domain/catalog';
+import { normalizeSearchText } from 'src/domain/search';
 
 interface CatalogSearchEntry {
     item: CatalogListItem;
@@ -19,7 +20,7 @@ function createSearchIndex(items: CatalogItem[]): CatalogSearchEntry[] {
     return items.map((item) => ({
         item: toListItem(item),
         normalizedId: String(item.id),
-        normalizedName: item.name.toLowerCase(),
+        normalizedName: normalizeSearchText(item.name),
     }));
 }
 
@@ -30,7 +31,7 @@ const searchIndex: Record<ModelType, CatalogSearchEntry[]> = {
 };
 
 export function searchCatalog(type: ModelType, query: string): CatalogListItem[] {
-    const normalizedQuery = query.trim().toLowerCase();
+    const normalizedQuery = normalizeSearchText(query.trim());
     if (!normalizedQuery) {
         return [];
     }

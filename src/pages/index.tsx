@@ -8,10 +8,12 @@ import MenuMobile from 'src/components/Menu/Mobile';
 import ModelInfo from 'src/components/ModelInfo';
 import ModelStage from 'src/components/ModelStage';
 import VehicleModPicker from 'src/components/VehicleModPicker';
+import VehicleColorPicker from 'src/components/VehicleColorPicker';
 import { ThemeProvider } from 'src/theme/ThemeContext';
 import type { ModelType } from 'src/domain/catalog';
 import { getCatalogInfoRows } from 'src/domain/catalogInfo';
 import { backgroundColors } from 'src/theme/colorPalette';
+import { vehicleColorOptions } from 'src/domain/vehicleColors';
 import { useCatalogQuery } from 'src/hooks/useCatalogQuery';
 import { useResponsiveView } from 'src/hooks/useResponsiveView';
 import { useModelSelection } from 'src/hooks/useModelSelection';
@@ -35,6 +37,8 @@ const Main: NextPage = () => {
         availableModifications,
         selectedModificationIds,
         onToggleModification,
+        vehicleColor,
+        onSelectVehicleColor,
     } = useModelSelection(modelType);
 
     const handleModelTypeChange = useCallback(
@@ -78,6 +82,9 @@ const Main: NextPage = () => {
                             modifications={availableModifications}
                             selectedModificationIds={selectedModificationIds}
                             onToggleModification={onToggleModification}
+                            primaryVehicleColorId={vehicleColor?.primary ?? 0}
+                            secondaryVehicleColorId={vehicleColor?.secondary ?? 0}
+                            onSelectVehicleColor={onSelectVehicleColor}
                         />
                     ) : (
                         <View style={styles.desktopMenuColumn}>
@@ -108,6 +115,17 @@ const Main: NextPage = () => {
                                     modifications={availableModifications}
                                     selectedIds={selectedModificationIds}
                                     onToggle={onToggleModification}
+                                    collapsible
+                                    initiallyExpanded={false}
+                                />
+                            )}
+                            {modelType === 'vehicle' && (
+                                <VehicleColorPicker
+                                    style={{ marginBottom: 14 }}
+                                    colors={vehicleColorOptions}
+                                    primaryColorId={vehicleColor?.primary ?? 0}
+                                    secondaryColorId={vehicleColor?.secondary ?? 0}
+                                    onSelect={onSelectVehicleColor}
                                     collapsible
                                     initiallyExpanded={false}
                                 />

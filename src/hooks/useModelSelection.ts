@@ -4,7 +4,7 @@ import type { ModelTypeSelection } from 'src/domain/modelType';
 import { catalogClient } from 'src/catalog/catalogClient';
 import { isAbortError } from 'src/catalog/catalogQuery';
 import { getModelPreview } from 'src/domain/modelPreview';
-import type { ModelPreviewData } from 'src/domain/modelPreview';
+import type { ModelPreviewData, VehicleColorSelection } from 'src/domain/modelPreview';
 import { isModelAssetAbortError, ModelAssetError } from 'src/domain/modelAssetClient';
 import { reportError } from 'src/monitoring/reportError';
 import { getVehicleModification, vehicleModifications } from 'src/domain/vehicleModifications';
@@ -24,6 +24,8 @@ export interface UseModelSelectionResult {
     availableModifications: readonly VehicleModification[];
     selectedModificationIds: readonly number[];
     onToggleModification: (modification: VehicleModification) => void;
+    vehicleColor: VehicleColorSelection | null;
+    onSelectVehicleColor: (slot: 'primary' | 'secondary', colorId: number) => void;
 }
 
 const initialInfo: VehicleInfo = {
@@ -68,6 +70,7 @@ export function useModelSelection(modelType: ModelType): UseModelSelectionResult
             : [];
 
     const selectedModificationIds = models[0]?.modifications ?? [];
+    const vehicleColor = currentModel?.type === 'vehicle' ? (currentModel.color ?? null) : null;
 
     const loadModel = useCallback(async (name: string, type: ModelType): Promise<void> => {
         modelLoadAbortController.current?.abort();
@@ -235,6 +238,26 @@ export function useModelSelection(modelType: ModelType): UseModelSelectionResult
         });
     }, []);
 
+    const onSelectVehicleColor = useCallback(
+        (slot: 'primary' | 'secondary', colorId: number): void => {
+            setModels((currentModels) => {
+                const currentModel = currentModels[0];
+                if (!currentModel || currentModel.type !== 'vehicle') {
+                    return currentModels;
+                }
+
+                const currentColor = currentModel.color ?? { primary: 0, secondary: 0 };
+                const nextColor =
+                    slot === 'primary'
+                        ? { primary: colorId, secondary: currentColor.secondary }
+                        : { primary: currentColor.primary, secondary: colorId };
+
+                return [{ ...currentModel, color: nextColor }];
+            });
+        },
+        []
+    );
+
     return {
         info,
         selectedModelType,
@@ -247,5 +270,7 @@ export function useModelSelection(modelType: ModelType): UseModelSelectionResult
         availableModifications,
         selectedModificationIds,
         onToggleModification,
+        vehicleColor,
+        onSelectVehicleColor,
     };
 }

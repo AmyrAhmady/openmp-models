@@ -2,6 +2,7 @@ import { getModelExport } from './modelAssetClient';
 import type { ModelAssetRequestOptions } from './modelAssetClient';
 import type { ModelExport } from './modelAssets';
 import type { ModelType } from './modelType';
+import { vehicleColorValues } from './vehicleColors';
 
 const MODEL_TEXTURE_BASE_URL = 'https://assets.open.mp/models/exports/';
 
@@ -48,7 +49,10 @@ function getTextureData(modelExport: ModelExport): ModelPreviewTexture[] {
 }
 
 function getRandomColor(random: RandomNumber): number {
-    return Math.floor(random() * 255);
+    return Math.min(
+        vehicleColorValues.length - 1,
+        Math.floor(random() * vehicleColorValues.length)
+    );
 }
 
 export function createModelPreviewData(

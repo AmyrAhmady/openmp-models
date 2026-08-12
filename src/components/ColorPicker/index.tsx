@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Pressable, ScrollView, Text, View } from 'react-native-web';
 import type { StyleProp, ViewStyle } from 'react-native-web';
 import { useTheme } from 'src/theme/ThemeContext';
+import { CLEAR_BACKGROUND_COLOR } from 'src/theme/colorPalette';
 import RoundCard from '../RoundCard';
 import ModalCloseButton from '../ModalCloseButton';
 
@@ -98,26 +99,46 @@ const ColorPicker = (props: Props) => {
                 >
                     {parentWidth > 0 &&
                         colors.map((color) => {
+                            const isClearColor = color === CLEAR_BACKGROUND_COLOR;
+
                             return (
                                 <Pressable
                                     style={{
                                         width: swatchSize,
                                         height: swatchSize,
-                                        backgroundColor: color,
+                                        backgroundColor: isClearColor ? theme.elementBg : color,
                                         marginBottom: 6,
                                         borderWidth: 1,
                                         borderColor: theme.lines,
                                         borderRadius: 4,
                                         marginLeft: isMobileView ? 0 : 5,
+                                        borderStyle: isClearColor ? 'dashed' : 'solid',
                                     }}
                                     key={color}
                                     accessibilityRole="button"
-                                    accessibilityLabel={`Select background color ${color}`}
+                                    accessibilityLabel={
+                                        isClearColor
+                                            ? 'Clear background color'
+                                            : `Select background color ${color}`
+                                    }
                                     accessibilityState={{ selected: color === selectedColor }}
                                     onPress={() => {
                                         onSelect(color);
                                     }}
-                                />
+                                >
+                                    {isClearColor && (
+                                        <Text
+                                            style={{
+                                                color: theme.mutedText,
+                                                fontSize: 16,
+                                                fontWeight: '800',
+                                                textAlign: 'center',
+                                            }}
+                                        >
+                                            ×
+                                        </Text>
+                                    )}
+                                </Pressable>
                             );
                         })}
                 </ScrollView>

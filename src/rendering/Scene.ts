@@ -198,7 +198,7 @@ export default class Scene implements SceneController {
     private textureLoader: THREE.TextureLoader;
     private textureCache = new Map<string, THREE.Texture>();
     private textureUrlLookup = new Map<string, string>();
-    private materialCache = new Map<string, THREE.MeshPhongMaterial>();
+    private materialCache = new Map<string, THREE.MeshPhongMaterial | THREE.MeshBasicMaterial>();
     private readonly loadModelExport: ModelAssetLoader;
     private modelLoadAbortController: AbortController | null = null;
     private backgroundColor = 'transparent';
@@ -618,12 +618,14 @@ export default class Scene implements SceneController {
             return;
         }
 
-        const keyLight = new THREE.DirectionalLight(0xffffff, 2.5);
-        keyLight.position.set(4, 8, 10);
-        configureShadowLight(keyLight);
+        if (modelData.type !== 'skin') {
+            const keyLight = new THREE.DirectionalLight(0xffffff, 2.5);
+            keyLight.position.set(4, 8, 10);
+            configureShadowLight(keyLight);
 
-        this.scene.add(keyLight);
-        this.scene.add(new THREE.HemisphereLight(0xffffff, 0x666666, 1.1));
+            this.scene.add(keyLight);
+            this.scene.add(new THREE.HemisphereLight(0xffffff, 0x666666, 1.1));
+        }
 
         await this.addModelToScene(model);
         if (
@@ -832,9 +834,16 @@ export default class Scene implements SceneController {
                     object3d.matrix.multiply(new THREE.Matrix4().makeRotationY(Math.PI));
                 }
 
-                this.createObjectMesh(model.object, model.wheelIndex, object3d, model.color, true);
+                this.createObjectMesh(
+                    model.object,
+                    model.wheelIndex,
+                    object3d,
+                    model.color,
+                    model.data.type,
+                    true
+                );
             } else {
-                this.createObjectMesh(model.object, index, object3d, model.color);
+                this.createObjectMesh(model.object, index, object3d, model.color, model.data.type);
             }
 
             this.createHierarchy(object3d, objectData.frame, model, childrenByParent);
@@ -870,6 +879,7 @@ export default class Scene implements SceneController {
         frameIndex: number,
         object: THREE.Object3D,
         color: ModelData['color'],
+        modelType: ModelData['type'],
         doubleSided = false
     ) {
         const frame = modelExport[frameIndex];
@@ -877,8 +887,9 @@ export default class Scene implements SceneController {
             return;
         }
 
-        const matsByName: THREE.MeshPhongMaterial[] = [];
+        const matsByName: (THREE.MeshPhongMaterial | THREE.MeshBasicMaterial)[] = [];
         const geometry = frame.geometry;
+        const useLighting = modelType !== 'skin';
 
         geometry.textures.forEach((texture, msplit) => {
             let alpha = texture.color[3] * (1 / 255);
@@ -903,14 +914,18 @@ export default class Scene implements SceneController {
                 curColor = this.sceneService.getVehicleColor(color.secondary);
             }
 
-            const materialKey = `${textureUrl ?? 'basic'}:${curColor >>> 0}:${alpha}:${doubleSided}`;
+            const materialKey = `${textureUrl ?? 'basic'}:${curColor >>> 0}:${alpha}:${doubleSided}:${useLighting ? 'lit' : 'unlit'}`;
             let material = this.materialCache.get(materialKey);
             if (!material) {
-                material = new THREE.MeshPhongMaterial({
-                    shininess: 25,
-                    side: doubleSided ? THREE.DoubleSide : THREE.FrontSide,
-                    flatShading: true,
-                });
+                material = useLighting
+                    ? new THREE.MeshPhongMaterial({
+                          shininess: 25,
+                          side: doubleSided ? THREE.DoubleSide : THREE.FrontSide,
+                          flatShading: true,
+                      })
+                    : new THREE.MeshBasicMaterial({
+                          side: doubleSided ? THREE.DoubleSide : THREE.FrontSide,
+                      });
                 if (textureUrl) {
                     material.map = this.getOrLoadTexture(textureUrl);
                 }
@@ -920,6 +935,7 @@ export default class Scene implements SceneController {
                     ((curColor >> 8) & 0xff) * (1 / 255),
                     (curColor & 0xff) * (1 / 255),
                 ]);
+
                 material.alphaTest = 0.5;
                 material.transparent = alpha !== 1;
                 if (alpha !== 1) {

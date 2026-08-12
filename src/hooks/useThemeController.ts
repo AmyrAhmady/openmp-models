@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { backgroundForTheme, themeSelect } from 'src/theme/themeTokens';
 import type { BackgroundSelection, ThemeMode, ThemeTokens } from 'src/theme/themeTokens';
 import { readThemeMode, writeThemeMode } from 'src/theme/themeStorage';
+import { CLEAR_BACKGROUND_COLOR } from 'src/theme/colorPalette';
 
 export interface UseThemeControllerResult {
     themeMode: ThemeMode;
@@ -33,9 +34,17 @@ export function useThemeController(): UseThemeControllerResult {
         }
     }, [onThemeModeChange]);
 
-    const onSelectColor = useCallback((color: string): void => {
-        setBackgroundSelection({ color, source: 'custom' });
-    }, []);
+    const onSelectColor = useCallback(
+        (color: string): void => {
+            if (color === CLEAR_BACKGROUND_COLOR) {
+                setBackgroundSelection({ color: themeSelect(themeMode).mainBg, source: 'theme' });
+                return;
+            }
+
+            setBackgroundSelection({ color, source: 'custom' });
+        },
+        [themeMode]
+    );
     const theme = useMemo(() => themeSelect(themeMode), [themeMode]);
 
     return { themeMode, theme, backgroundSelection, onThemeModeChange, onSelectColor };

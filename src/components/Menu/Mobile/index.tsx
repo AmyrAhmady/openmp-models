@@ -7,7 +7,9 @@ import ModalInfoMobile from './ModelInfoMobile';
 import { useTheme } from 'src/theme/ThemeContext';
 import BGColorPicker from './BGColorPicker';
 import VehicleModPickerMobile from './VehicleModPickerMobile';
+import VehicleColorPickerMobile from './VehicleColorPickerMobile';
 import type { VehicleModification } from 'src/domain/vehicleModifications';
+import { vehicleColorOptions } from 'src/domain/vehicleColors';
 
 interface Props {
     selectedItemId: number;
@@ -20,6 +22,9 @@ interface Props {
     modifications: readonly VehicleModification[];
     selectedModificationIds: readonly number[];
     onToggleModification: (modification: VehicleModification) => void;
+    primaryVehicleColorId: number;
+    secondaryVehicleColorId: number;
+    onSelectVehicleColor: (slot: 'primary' | 'secondary', colorId: number) => void;
 }
 
 const MenuMobile = ({
@@ -33,11 +38,15 @@ const MenuMobile = ({
     modifications,
     selectedModificationIds,
     onToggleModification,
+    primaryVehicleColorId,
+    secondaryVehicleColorId,
+    onSelectVehicleColor,
 }: Props) => {
     const [listVisible, setListVisible] = useState(false);
     const [bgColorModalVisible, setBgColorModalVisible] = useState(false);
     const [modelInfoModalVisible, setModelInfoModalVisible] = useState(false);
     const [vehicleModModalVisible, setVehicleModModalVisible] = useState(false);
+    const [vehicleColorModalVisible, setVehicleColorModalVisible] = useState(false);
     const { theme } = useTheme();
 
     return (
@@ -87,29 +96,49 @@ const MenuMobile = ({
                     </View>
                 </TouchableOpacity>
                 {modelType === 'vehicle' && (
-                    <TouchableOpacity
-                        style={{
-                            alignItems: 'center',
-                            borderColor: theme.button,
-                            borderRadius: 100,
-                            borderWidth: 1.8,
-                            height: '2.5rem',
-                            justifyContent: 'center',
-                            marginBottom: 4,
-                            marginRight: 4,
-                            paddingHorizontal: 8,
-                        }}
-                        onPress={() => setVehicleModModalVisible(true)}
-                        accessibilityRole="button"
-                        accessibilityLabel="Open vehicle modifications selector"
-                    >
-                        <Text style={{ color: theme.button }}>
-                            Vehicle modifications
-                            {selectedModificationIds.length
-                                ? ` (${selectedModificationIds.length})`
-                                : ''}
-                        </Text>
-                    </TouchableOpacity>
+                    <>
+                        <TouchableOpacity
+                            style={{
+                                alignItems: 'center',
+                                borderColor: theme.button,
+                                borderRadius: 100,
+                                borderWidth: 1.8,
+                                height: '2.5rem',
+                                justifyContent: 'center',
+                                marginBottom: 4,
+                                marginRight: 4,
+                                paddingHorizontal: 8,
+                            }}
+                            onPress={() => setVehicleModModalVisible(true)}
+                            accessibilityRole="button"
+                            accessibilityLabel="Open vehicle modifications selector"
+                        >
+                            <Text style={{ color: theme.button }}>
+                                Vehicle modifications
+                                {selectedModificationIds.length
+                                    ? ` (${selectedModificationIds.length})`
+                                    : ''}
+                            </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={{
+                                alignItems: 'center',
+                                borderColor: theme.button,
+                                borderRadius: 100,
+                                borderWidth: 1.8,
+                                height: '2.5rem',
+                                justifyContent: 'center',
+                                marginBottom: 4,
+                                marginRight: 4,
+                                paddingHorizontal: 8,
+                            }}
+                            onPress={() => setVehicleColorModalVisible(true)}
+                            accessibilityRole="button"
+                            accessibilityLabel="Open vehicle color selector"
+                        >
+                            <Text style={{ color: theme.button }}>Vehicle colors</Text>
+                        </TouchableOpacity>
+                    </>
                 )}
                 <TouchableOpacity
                     style={{
@@ -183,6 +212,14 @@ const MenuMobile = ({
                 modifications={modifications}
                 selectedIds={selectedModificationIds}
                 onToggle={onToggleModification}
+            />
+            <VehicleColorPickerMobile
+                visible={vehicleColorModalVisible}
+                onRequestClose={() => setVehicleColorModalVisible(false)}
+                colors={vehicleColorOptions}
+                primaryColorId={primaryVehicleColorId}
+                secondaryColorId={secondaryVehicleColorId}
+                onSelect={onSelectVehicleColor}
             />
         </>
     );
