@@ -116,6 +116,53 @@ function createFrameChildrenLookup(modelExport: ModelExport): Map<number, ModelF
     return childrenByParent;
 }
 
+function hasAlternateSkinOrientation(modelExport: ModelExport): boolean {
+    const childrenByParent = createFrameChildrenLookup(modelExport);
+    const bounds = new THREE.Box3();
+    const vertex = new THREE.Vector3();
+    let hasVertices = false;
+
+    const visit = (parentFrame: number, parentMatrix: THREE.Matrix4): void => {
+        const children = childrenByParent.get(parentFrame) ?? [];
+
+        for (const { frame } of children) {
+            const frameMatrix =
+                parentFrame === -1
+                    ? parentMatrix
+                    : parentMatrix.clone().multiply(Service.computeMatrix(frame));
+
+            if (frame.geometry) {
+                for (const modelVertex of frame.geometry.vertices) {
+                    vertex
+                        .set(modelVertex.x, modelVertex.y, modelVertex.z)
+                        .applyMatrix4(frameMatrix);
+                    bounds.expandByPoint(vertex);
+                    hasVertices = true;
+                }
+            }
+
+            visit(frame.frame, frameMatrix);
+        }
+    };
+
+    visit(-1, new THREE.Matrix4());
+
+    if (!hasVertices) {
+        return false;
+    }
+
+    const size = bounds.getSize(new THREE.Vector3());
+
+    // Normal skin exports are vertical along the transformed Z axis. A small
+    // group of exports has its mesh geometry rotated around the Y axis while
+    // retaining the same frame hierarchy, making X the dominant body axis.
+    return size.x > size.z;
+}
+
+const alternateSkinRotation = new THREE.Quaternion().setFromRotationMatrix(
+    new THREE.Matrix4().set(0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1)
+);
+
 interface SceneDependencies {
     createRenderer: (parameters: THREE.WebGLRendererParameters) => THREE.WebGLRenderer;
     createTextureLoader: () => THREE.TextureLoader;
@@ -696,6 +743,10 @@ export default class Scene implements SceneController {
             return;
         }
         model.instance.rotation.set(rotation.x, rotation.y, rotation.z);
+
+        if (modelData.type === 'skin' && hasAlternateSkinOrientation(model.object)) {
+            model.instance.quaternion.multiply(alternateSkinRotation);
+        }
 
         this.needUpdate = true;
     }
