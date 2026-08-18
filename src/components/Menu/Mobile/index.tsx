@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, TouchableOpacity, Text } from 'react-native-web';
 import ModelList from './ModelList';
 import type { CatalogListItem, InfoRow, ModelType } from 'src/domain/catalog';
@@ -8,6 +8,7 @@ import { useTheme } from 'src/theme/ThemeContext';
 import BGColorPicker from './BGColorPicker';
 import VehicleModPickerMobile from './VehicleModPickerMobile';
 import VehicleColorPickerMobile from './VehicleColorPickerMobile';
+import AnimationBrowserMobile from './AnimationBrowserMobile';
 import type { VehicleModification } from 'src/domain/vehicleModifications';
 import { vehicleColorOptions } from 'src/domain/vehicleColors';
 
@@ -47,7 +48,14 @@ const MenuMobile = ({
     const [modelInfoModalVisible, setModelInfoModalVisible] = useState(false);
     const [vehicleModModalVisible, setVehicleModModalVisible] = useState(false);
     const [vehicleColorModalVisible, setVehicleColorModalVisible] = useState(false);
+    const [animationBrowserVisible, setAnimationBrowserVisible] = useState(false);
     const { theme } = useTheme();
+
+    useEffect(() => {
+        if (modelType !== 'skin') {
+            setAnimationBrowserVisible(false);
+        }
+    }, [modelType]);
 
     return (
         <>
@@ -95,6 +103,26 @@ const MenuMobile = ({
                         />
                     </View>
                 </TouchableOpacity>
+                {modelType === 'skin' && (
+                    <TouchableOpacity
+                        style={{
+                            alignItems: 'center',
+                            borderColor: theme.button,
+                            borderRadius: 100,
+                            borderWidth: 1.8,
+                            height: '2.5rem',
+                            justifyContent: 'center',
+                            marginBottom: 4,
+                            marginRight: 4,
+                            paddingHorizontal: 8,
+                        }}
+                        onPress={() => setAnimationBrowserVisible(true)}
+                        accessibilityRole="button"
+                        accessibilityLabel="Open animation browser"
+                    >
+                        <Text style={{ color: theme.button }}>Animations</Text>
+                    </TouchableOpacity>
+                )}
                 {modelType === 'vehicle' && (
                     <>
                         <TouchableOpacity
@@ -220,6 +248,10 @@ const MenuMobile = ({
                 primaryColorId={primaryVehicleColorId}
                 secondaryColorId={secondaryVehicleColorId}
                 onSelect={onSelectVehicleColor}
+            />
+            <AnimationBrowserMobile
+                visible={animationBrowserVisible}
+                onRequestClose={() => setAnimationBrowserVisible(false)}
             />
         </>
     );

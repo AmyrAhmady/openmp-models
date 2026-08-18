@@ -9,6 +9,7 @@ import ModelInfo from 'src/components/ModelInfo';
 import ModelStage from 'src/components/ModelStage';
 import VehicleModPicker from 'src/components/VehicleModPicker';
 import VehicleColorPicker from 'src/components/VehicleColorPicker';
+import AnimationBrowser from 'src/components/AnimationBrowser';
 import { ThemeProvider } from 'src/theme/ThemeContext';
 import type { ModelType } from 'src/domain/catalog';
 import { getCatalogInfoRows } from 'src/domain/catalogInfo';
@@ -109,26 +110,33 @@ const Main: NextPage = () => {
                     />
                     {isMobileView ? null : (
                         <View style={styles.desktopDetailsColumn}>
-                            {modelType === 'vehicle' && (
-                                <VehicleModPicker
+                            {modelType === 'skin' && (
+                                <AnimationBrowser
                                     style={{ marginBottom: 14 }}
-                                    modifications={availableModifications}
-                                    selectedIds={selectedModificationIds}
-                                    onToggle={onToggleModification}
                                     collapsible
-                                    initiallyExpanded={false}
+                                    initiallyExpanded={true}
                                 />
                             )}
                             {modelType === 'vehicle' && (
-                                <VehicleColorPicker
-                                    style={{ marginBottom: 14 }}
-                                    colors={vehicleColorOptions}
-                                    primaryColorId={vehicleColor?.primary ?? 0}
-                                    secondaryColorId={vehicleColor?.secondary ?? 0}
-                                    onSelect={onSelectVehicleColor}
-                                    collapsible
-                                    initiallyExpanded={false}
-                                />
+                                <>
+                                    <VehicleModPicker
+                                        style={{ marginBottom: 14 }}
+                                        modifications={availableModifications}
+                                        selectedIds={selectedModificationIds}
+                                        onToggle={onToggleModification}
+                                        collapsible
+                                        initiallyExpanded={false}
+                                    />
+                                    <VehicleColorPicker
+                                        style={{ marginBottom: 14 }}
+                                        colors={vehicleColorOptions}
+                                        primaryColorId={vehicleColor?.primary ?? 0}
+                                        secondaryColorId={vehicleColor?.secondary ?? 0}
+                                        onSelect={onSelectVehicleColor}
+                                        collapsible
+                                        initiallyExpanded={false}
+                                    />
+                                </>
                             )}
                             <ColorPicker
                                 isMobileView={isMobileView}

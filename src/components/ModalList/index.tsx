@@ -17,6 +17,8 @@ interface Props<TItem extends ModalListItem> {
     buttonComponent?: React.ReactElement;
     style?: StyleProp<ViewStyle>;
     isMobile?: boolean;
+    disabled?: boolean;
+    accessibilityLabel?: string;
 }
 
 const ModalList = <TItem extends ModalListItem>({
@@ -27,6 +29,8 @@ const ModalList = <TItem extends ModalListItem>({
     onPress = () => {},
     onClose = () => {},
     isMobile = false,
+    disabled = false,
+    accessibilityLabel = 'Open model type menu',
 }: Props<TItem>) => {
     const [visible, setVisible] = useState(false);
     const { theme } = useTheme();
@@ -41,9 +45,10 @@ const ModalList = <TItem extends ModalListItem>({
         <View>
             <TouchableOpacity
                 accessibilityRole="button"
-                accessibilityLabel="Open model type menu"
-                accessibilityState={{ expanded: visible }}
-                style={style}
+                accessibilityLabel={accessibilityLabel}
+                accessibilityState={{ expanded: visible, disabled }}
+                disabled={disabled}
+                style={[style, disabled ? { opacity: 0.5 } : undefined]}
                 onPress={() => {
                     setVisible(true);
                 }}
