@@ -68,6 +68,7 @@ export default class MyDocument extends Document {
         return (
             <Html style={{ height: '100%' }}>
                 <Head>
+                    <link rel="icon" href="/favicon.ico" />
                     <link rel="preconnect" href="https://rsms.me" />
                     <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
                 </Head>
