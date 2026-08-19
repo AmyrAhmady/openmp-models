@@ -20,6 +20,14 @@ export interface ModelTexture {
     name: string;
 }
 
+export interface ModelSkinData {
+    boneCount: number;
+    boneFrameIndices?: number[];
+    boneIndices: [number, number, number, number][];
+    inverseMatrices: number[][];
+    weights: [number, number, number, number][];
+}
+
 export type ModelFaceType = 'Triangles' | 'Triangle_Strip';
 
 export interface ModelGeometry {
@@ -27,6 +35,7 @@ export interface ModelGeometry {
     texcoords?: ModelTexcoord[];
     textures: ModelTexture[];
     vertices: ModelVertex[];
+    skin?: ModelSkinData;
 }
 
 export interface ModelScale {
@@ -127,6 +136,28 @@ function findInvalidModelExportPath(value: unknown): string | null {
 
             if (!Array.isArray(geometry.vertices)) {
                 return `${geometryPath}.vertices`;
+            }
+
+            if (geometry.skin !== undefined) {
+                const skinPath = `${geometryPath}.skin`;
+                if (!isRecord(geometry.skin)) {
+                    return skinPath;
+                }
+                if (!isFiniteNumber(geometry.skin.boneCount)) {
+                    return `${skinPath}.boneCount`;
+                }
+                if (!Array.isArray(geometry.skin.boneIndices) || geometry.skin.boneIndices.length !== geometry.vertices.length) {
+                    return `${skinPath}.boneIndices`;
+                }
+                if (!Array.isArray(geometry.skin.weights) || geometry.skin.weights.length !== geometry.vertices.length) {
+                    return `${skinPath}.weights`;
+                }
+                if (!Array.isArray(geometry.skin.inverseMatrices)) {
+                    return `${skinPath}.inverseMatrices`;
+                }
+                if (geometry.skin.boneFrameIndices !== undefined && !isFiniteNumberArray(geometry.skin.boneFrameIndices)) {
+                    return `${skinPath}.boneFrameIndices`;
+                }
             }
             for (let vertexIndex = 0; vertexIndex < geometry.vertices.length; vertexIndex += 1) {
                 const vertexPath = `${geometryPath}.vertices[${vertexIndex}]`;

@@ -19,10 +19,13 @@ import { useCatalogQuery } from 'src/hooks/useCatalogQuery';
 import { useResponsiveView } from 'src/hooks/useResponsiveView';
 import { useModelSelection } from 'src/hooks/useModelSelection';
 import { useThemeController } from 'src/hooks/useThemeController';
+import type { CatalogListItem } from 'src/domain/catalog';
+import type { ParsedAnimation } from 'src/animation/ifpParser';
 
 const Main: NextPage = () => {
     const isMobileView = useResponsiveView();
     const [modelType, setModelType] = useState<ModelType>('vehicle');
+    const [selectedAnimation, setSelectedAnimation] = useState<ParsedAnimation | null>(null);
     const { themeMode, theme, backgroundSelection, onThemeModeChange, onSelectColor } =
         useThemeController();
     const catalogQuery = useCatalogQuery(modelType);
@@ -44,10 +47,18 @@ const Main: NextPage = () => {
 
     const handleModelTypeChange = useCallback(
         (type: { value: ModelType }): void => {
+            setSelectedAnimation(null);
             onModelTypeChange(type);
             setModelType(type.value);
         },
         [onModelTypeChange]
+    );
+    const handleSelectItem = useCallback(
+        (item: CatalogListItem): void => {
+            setSelectedAnimation(null);
+            onSelectItem(item);
+        },
+        [onSelectItem]
     );
     const infoRows = useMemo(() => (info ? getCatalogInfoRows(info) : []), [info]);
 
@@ -77,7 +88,7 @@ const Main: NextPage = () => {
                             onSelectColor={onSelectColor}
                             selectedColor={backgroundSelection.color}
                             modelData={infoRows}
-                            onSelectItem={onSelectItem}
+                            onSelectItem={handleSelectItem}
                             catalogQuery={catalogQuery}
                             modelType={modelType}
                             modifications={availableModifications}
@@ -86,6 +97,7 @@ const Main: NextPage = () => {
                             primaryVehicleColorId={vehicleColor?.primary ?? 0}
                             secondaryVehicleColorId={vehicleColor?.secondary ?? 0}
                             onSelectVehicleColor={onSelectVehicleColor}
+                            onSelectAnimation={setSelectedAnimation}
                         />
                     ) : (
                         <View style={styles.desktopMenuColumn}>
@@ -93,7 +105,7 @@ const Main: NextPage = () => {
                                 selectedItemId={
                                     selectedModelType === modelType && info ? info.id : -1
                                 }
-                                onSelectItem={onSelectItem}
+                                onSelectItem={handleSelectItem}
                                 catalogQuery={catalogQuery}
                             />
                         </View>
@@ -102,6 +114,7 @@ const Main: NextPage = () => {
                         modelType={modelType}
                         info={info}
                         models={models}
+                        animation={selectedAnimation}
                         modelStatus={modelStatus}
                         modelError={modelError}
                         backgroundColor={backgroundSelection.color}
@@ -112,9 +125,11 @@ const Main: NextPage = () => {
                         <View style={styles.desktopDetailsColumn}>
                             {modelType === 'skin' && (
                                 <AnimationBrowser
+                                    key={`animation-browser-${info?.id ?? 'none'}`}
                                     style={{ marginBottom: 14 }}
                                     collapsible
                                     initiallyExpanded={true}
+                                    onSelectAnimation={setSelectedAnimation}
                                 />
                             )}
                             {modelType === 'vehicle' && (

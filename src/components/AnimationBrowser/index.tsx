@@ -3,7 +3,7 @@ import { Pressable, Text, View } from 'react-native-web';
 import type { StyleProp, ViewStyle } from 'react-native-web';
 import { animationLibraries } from 'src/domain/animationCatalog';
 import { getAnimationLibrary } from 'src/animation/animationLibraryClient';
-import type { ParsedAnimationLibrary } from 'src/animation/ifpParser';
+import type { ParsedAnimation, ParsedAnimationLibrary } from 'src/animation/ifpParser';
 import { useTheme } from 'src/theme/ThemeContext';
 import ModalCloseButton from '../ModalCloseButton';
 import RoundCard from '../RoundCard';
@@ -11,6 +11,7 @@ import RoundCard from '../RoundCard';
 interface Props {
     style?: StyleProp<ViewStyle>;
     onClose?: () => void;
+    onSelectAnimation?: (animation: ParsedAnimation | null) => void;
     collapsible?: boolean;
     initiallyExpanded?: boolean;
 }
@@ -85,6 +86,7 @@ const NativePicker = ({
 const AnimationBrowser = ({
     style,
     onClose,
+    onSelectAnimation,
     collapsible = false,
     initiallyExpanded = true,
 }: Props) => {
@@ -104,6 +106,19 @@ const AnimationBrowser = ({
         () => libraryData?.animations.map(({ name }) => ({ label: name, value: name })) ?? [],
         [libraryData]
     );
+
+    const handleLibraryChange = (value: string): void => {
+        setSelectedLibraryId(value);
+        setSelectedAnimationName('');
+        onSelectAnimation?.(null);
+    };
+
+    const handleAnimationChange = (value: string): void => {
+        setSelectedAnimationName(value);
+        onSelectAnimation?.(
+            libraryData?.animations.find((animation) => animation.name === value) ?? null
+        );
+    };
 
     useEffect(() => {
         if (!selectedLibrary) {
@@ -199,7 +214,7 @@ const AnimationBrowser = ({
                             }))}
                             placeholder="Select a library"
                             selectedValue={selectedLibraryId}
-                            onChange={setSelectedLibraryId}
+                            onChange={handleLibraryChange}
                         />
                     </View>
                     <Text style={{ color: theme.mutedText, fontSize: 12, marginBottom: 6 }}>
@@ -213,7 +228,7 @@ const AnimationBrowser = ({
                             status === 'loading' ? 'Loading animations...' : 'Select an animation'
                         }
                         selectedValue={selectedAnimationName}
-                        onChange={setSelectedAnimationName}
+                        onChange={handleAnimationChange}
                     />
                     {status === 'error' && (
                         <Text style={{ color: theme.mutedText, fontSize: 12, marginTop: 8 }}>

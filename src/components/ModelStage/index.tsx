@@ -4,6 +4,7 @@ import { ActivityIndicator, StyleSheet, Text, TouchableOpacity, View } from 'rea
 import type { CatalogItem, ModelType } from 'src/domain/catalog';
 import type { ModelLoadStatus } from 'src/hooks/useModelSelection';
 import type { ModelPreviewData } from 'src/domain/modelPreview';
+import type { ParsedAnimation } from 'src/animation/ifpParser';
 import { useTheme } from 'src/theme/ThemeContext';
 
 const ModelViewer = dynamic(() => import('src/components/ModelViewer'), { ssr: false });
@@ -12,6 +13,7 @@ interface Props {
     modelType: ModelType;
     info: CatalogItem | null;
     models: ModelPreviewData[];
+    animation: ParsedAnimation | null;
     modelStatus: ModelLoadStatus;
     modelError: string | null;
     backgroundColor: string;
@@ -23,6 +25,7 @@ const ModelStage = ({
     modelType,
     info,
     models,
+    animation,
     modelStatus,
     modelError,
     backgroundColor,
@@ -83,6 +86,7 @@ const ModelStage = ({
                     <ModelViewer
                         models={models}
                         autoSpin={false}
+                        animation={animation}
                         showWheelSpinTest={modelType === 'vehicle'}
                     />
                 ) : modelStatus === 'idle' ? (

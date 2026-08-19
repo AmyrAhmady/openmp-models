@@ -11,6 +11,8 @@ export interface IndexedGeometryData {
     uvs: number[];
     indices: number[];
     groups: GeometryGroup[];
+    skinIndices: number[];
+    skinWeights: number[];
 }
 
 function getIndexedVertex(
@@ -18,6 +20,8 @@ function getIndexedVertex(
     vertexIndex: number | undefined,
     positions: number[],
     uvs: number[],
+    skinIndices: number[],
+    skinWeights: number[],
     vertexMap: Map<string, number>
 ): number | null {
     if (vertexIndex === undefined) {
@@ -40,6 +44,11 @@ function getIndexedVertex(
         vertexMap.set(key, indexedVertex);
         positions.push(vertex.x, vertex.y, vertex.z);
         uvs.push(uvx, uvy);
+        const skin = geometry.skin;
+        const indices = skin?.boneIndices[vertexIndex] ?? [0, 0, 0, 0];
+        const weights = skin?.weights[vertexIndex] ?? [0, 0, 0, 0];
+        skinIndices.push(...indices);
+        skinWeights.push(...weights);
     }
 
     return indexedVertex;
@@ -52,12 +61,14 @@ function appendIndexedFace(
     thirdVertexIndex: number | undefined,
     positions: number[],
     uvs: number[],
+    skinIndices: number[],
+    skinWeights: number[],
     indices: number[],
     vertexMap: Map<string, number>
 ): void {
-    const firstVertex = getIndexedVertex(geometry, firstVertexIndex, positions, uvs, vertexMap);
-    const secondVertex = getIndexedVertex(geometry, secondVertexIndex, positions, uvs, vertexMap);
-    const thirdVertex = getIndexedVertex(geometry, thirdVertexIndex, positions, uvs, vertexMap);
+    const firstVertex = getIndexedVertex(geometry, firstVertexIndex, positions, uvs, skinIndices, skinWeights, vertexMap);
+    const secondVertex = getIndexedVertex(geometry, secondVertexIndex, positions, uvs, skinIndices, skinWeights, vertexMap);
+    const thirdVertex = getIndexedVertex(geometry, thirdVertexIndex, positions, uvs, skinIndices, skinWeights, vertexMap);
     if (firstVertex !== null && secondVertex !== null && thirdVertex !== null) {
         indices.push(firstVertex, secondVertex, thirdVertex);
     }
@@ -66,6 +77,8 @@ function appendIndexedFace(
 export function buildIndexedGeometry(geometry: ModelGeometry): IndexedGeometryData {
     const positions: number[] = [];
     const uvs: number[] = [];
+    const skinIndices: number[] = [];
+    const skinWeights: number[] = [];
     const indices: number[] = [];
     const groups: GeometryGroup[] = [];
     const vertexMap = new Map<string, number>();
@@ -82,6 +95,8 @@ export function buildIndexedGeometry(geometry: ModelGeometry): IndexedGeometryDa
                     texture.indices[index + 2],
                     positions,
                     uvs,
+                    skinIndices,
+                    skinWeights,
                     indices,
                     vertexMap
                 );
@@ -99,6 +114,8 @@ export function buildIndexedGeometry(geometry: ModelGeometry): IndexedGeometryDa
                     thirdVertexIndex,
                     positions,
                     uvs,
+                    skinIndices,
+                    skinWeights,
                     indices,
                     vertexMap
                 );
@@ -111,5 +128,5 @@ export function buildIndexedGeometry(geometry: ModelGeometry): IndexedGeometryDa
         }
     });
 
-    return { positions, uvs, indices, groups };
+    return { positions, uvs, indices, groups, skinIndices, skinWeights };
 }

@@ -1,7 +1,7 @@
-import { parseModelExport } from './modelAssets';
+import { parseDff } from './dffParser';
 import type { ModelExport } from './modelAssets';
 
-const MODEL_EXPORT_BASE_URL = 'https://assets.open.mp/models/exports/';
+const MODEL_BASE_URL = 'https://assets.open.mp/models/models/';
 const MODEL_EXPORT_CACHE_LIMIT = 32;
 
 interface ModelExportCacheEntry {
@@ -177,7 +177,7 @@ export function getModelExport(
     requestInit.signal = controller.signal;
 
     const request = fetch(
-        `${MODEL_EXPORT_BASE_URL}${encodeURIComponent(normalizedName)}.json`,
+        `${MODEL_BASE_URL}${encodeURIComponent(normalizedName)}.dff`,
         requestInit
     ).then(async (response) => {
         if (!response.ok) {
@@ -188,16 +188,13 @@ export function getModelExport(
         }
 
         try {
-            return parseModelExport((await response.json()) as unknown);
+            return parseDff(await response.arrayBuffer());
         } catch (error) {
-            if (
-                error instanceof Error &&
-                error.message.startsWith('Invalid model export payload')
-            ) {
-                throw new Error(`Model "${normalizedName}": ${error.message}`);
-            }
-
-            throw error;
+            throw new Error(
+                `Model "${normalizedName}" could not be parsed as a RenderWare DFF: ${
+                    error instanceof Error ? error.message : 'unknown parser error'
+                }`
+            );
         }
     });
 

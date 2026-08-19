@@ -6,6 +6,23 @@ export interface ParsedAnimation {
     name: string;
     objectCount: number;
     frameDataSize: number;
+    tracks: AnimationTrack[];
+}
+
+export type AnimationQuaternion = [number, number, number, number];
+export type AnimationTranslation = [number, number, number];
+
+export interface AnimationKeyframe {
+    time: number;
+    rotation: AnimationQuaternion;
+    translation?: AnimationTranslation;
+}
+
+export interface AnimationTrack {
+    name: string;
+    type: 3 | 4;
+    boneId: number;
+    frames: AnimationKeyframe[];
 }
 
 export interface ParsedAnimationLibrary {
@@ -13,7 +30,12 @@ export interface ParsedAnimationLibrary {
     animations: ParsedAnimation[];
 }
 
-function readFixedString(bytes: Uint8Array, offset: number, length: number): string {
+function readFixedString(
+    bytes: Uint8Array,
+    offset: number,
+    length: number,
+    trim = true
+): string {
     let end = offset;
     const limit = offset + length;
 
@@ -26,7 +48,7 @@ function readFixedString(bytes: Uint8Array, offset: number, length: number): str
         value += String.fromCharCode(bytes[index] ?? 0);
     }
 
-    return value.trim();
+    return trim ? value.trim() : value;
 }
 
 function ensureRange(offset: number, length: number, total: number): void {
@@ -72,7 +94,62 @@ export function parseIfp(buffer: ArrayBuffer): ParsedAnimationLibrary {
             bytes.length
         );
 
-        animations.push({ name, objectCount, frameDataSize });
+        const tracks: AnimationTrack[] = [];
+        let frameOffset = offset + IFP_ANIMATION_HEADER_SIZE;
+        let parsedFrameDataSize = 0;
+
+        for (let objectIndex = 0; objectIndex < objectCount; objectIndex += 1) {
+            ensureRange(frameOffset, IFP_OBJECT_HEADER_SIZE, bytes.length);
+
+            const objectName = readFixedString(bytes, frameOffset, 24, false);
+            const type = view.getInt32(frameOffset + 24, true);
+            const frameCount = view.getInt32(frameOffset + 28, true);
+            const boneId = view.getInt32(frameOffset + 32, true);
+            const frameSize = type === 4 ? 16 : type === 3 ? 10 : 0;
+
+            if ((type !== 3 && type !== 4) || frameCount < 0) {
+                throw new Error('The IFP file contains an unsupported animation track.');
+            }
+
+            frameOffset += IFP_OBJECT_HEADER_SIZE;
+            ensureRange(frameOffset, frameCount * frameSize, bytes.length);
+
+            const frames: AnimationKeyframe[] = [];
+            for (let frameIndex = 0; frameIndex < frameCount; frameIndex += 1) {
+                const rotation: AnimationQuaternion = [
+                    view.getInt16(frameOffset, true) / 4096,
+                    view.getInt16(frameOffset + 2, true) / 4096,
+                    view.getInt16(frameOffset + 4, true) / 4096,
+                    view.getInt16(frameOffset + 6, true) / 4096,
+                ];
+                const time = view.getInt16(frameOffset + 8, true) / 60;
+
+                if (type === 4) {
+                    frames.push({
+                        rotation,
+                        time,
+                        translation: [
+                            view.getInt16(frameOffset + 10, true) / 1024,
+                            view.getInt16(frameOffset + 12, true) / 1024,
+                            view.getInt16(frameOffset + 14, true) / 1024,
+                        ],
+                    });
+                } else {
+                    frames.push({ rotation, time });
+                }
+
+                frameOffset += frameSize;
+            }
+
+            parsedFrameDataSize += frameCount * frameSize;
+            tracks.push({ boneId, frames, name: objectName, type });
+        }
+
+        if (parsedFrameDataSize !== frameDataSize || frameOffset !== nextOffset) {
+            throw new Error('The IFP animation frame data is malformed.');
+        }
+
+        animations.push({ name, objectCount, frameDataSize, tracks });
         offset = nextOffset;
     }
 

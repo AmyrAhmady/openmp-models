@@ -9,6 +9,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { buildIndexedGeometry } from './geometryBuilder';
 import RenderScheduler from './renderScheduler';
 import { createTextureUrlLookup, normalizeTextureName } from './textureLookup';
+import type { AnimationKeyframe, ParsedAnimation } from 'src/animation/ifpParser';
 
 function disposeMaterial(material: THREE.Material, disposedTextures: Set<THREE.Texture>): void {
     const materialWithMaps = material as THREE.Material & {
@@ -78,6 +79,13 @@ interface SceneViewState {
     sceneRotation: THREE.Euler;
     target: THREE.Vector3 | null;
     zoom: number;
+}
+
+interface AnimationTarget {
+    object: THREE.Object3D;
+    bindMatrix: THREE.Matrix4;
+    bindPosition: THREE.Vector3;
+    bindScale: THREE.Vector3;
 }
 
 type SpecialColorType = 'primary' | 'secondary';
@@ -258,6 +266,9 @@ export default class Scene implements SceneController {
     private visibilityHandler = () => this.onVisibilityChange();
     private readonly renderScheduler: RenderScheduler;
     private readonly dependencies: SceneDependencies;
+    private activeAnimation: ParsedAnimation | null = null;
+    private animationStartTime = 0;
+    private animationTargets = new Map<string, AnimationTarget>();
 
     constructor(
         models: ModelData[],
@@ -299,6 +310,8 @@ export default class Scene implements SceneController {
         }
 
         this.renderScheduler.setSpinning(autoSpin, false);
+        this.activeAnimation = null;
+        this.animationTargets.clear();
         this.clearSceneResources();
         this.scene = new THREE.Scene();
         this.lightHolder = null;
@@ -444,6 +457,8 @@ export default class Scene implements SceneController {
         this.scene = null;
         this.rootElement = null;
         this.models = [];
+        this.activeAnimation = null;
+        this.animationTargets.clear();
         this.textureCache.clear();
         this.materialCache.clear();
     }
@@ -494,6 +509,23 @@ export default class Scene implements SceneController {
         this.render();
     }
 
+    setAnimation(animation: ParsedAnimation | null): void {
+        this.restoreAnimationTargets();
+        this.activeAnimation = null;
+        this.animationTargets.clear();
+
+        if (animation && this.sceneData[0]?.type === 'skin' && this.models[0]?.instance) {
+            this.captureAnimationTargets(this.models[0].instance);
+            this.activeAnimation = animation;
+            this.animationStartTime = this.getAnimationClock();
+        }
+
+        this.needUpdate = true;
+        this.renderScheduler.setSpinning(
+            this.options.spin || this.options.wheelSpin || Boolean(this.activeAnimation)
+        );
+    }
+
     setSpin(autoSpin: boolean): void {
         this.options.spin = autoSpin;
         if (!this.renderer || !this.scene || !this.camera) {
@@ -501,7 +533,9 @@ export default class Scene implements SceneController {
         }
 
         this.needUpdate = true;
-        this.renderScheduler.setSpinning(autoSpin || this.options.wheelSpin);
+        this.renderScheduler.setSpinning(
+            autoSpin || this.options.wheelSpin || Boolean(this.activeAnimation)
+        );
     }
 
     setWheelSpin(spinning: boolean): void {
@@ -512,7 +546,9 @@ export default class Scene implements SceneController {
             return;
         }
 
-        this.renderScheduler.setSpinning(this.options.spin);
+        this.renderScheduler.setSpinning(
+            this.options.spin || Boolean(this.activeAnimation)
+        );
         this.render();
     }
 
@@ -644,6 +680,9 @@ export default class Scene implements SceneController {
         }
 
         if (spinning) {
+            if (this.activeAnimation) {
+                this.applyAnimationFrame(this.getAnimationClock());
+            }
             if (this.options.spin) {
                 this.scene.rotation.y += 0.01;
             }
@@ -655,6 +694,164 @@ export default class Scene implements SceneController {
             this.renderOnce();
             this.needUpdate = false;
         }
+    }
+
+    private getAnimationClock(): number {
+        return typeof performance !== 'undefined' ? performance.now() : Date.now();
+    }
+
+    private captureAnimationTargets(root: THREE.Object3D): void {
+        root.traverse((object) => {
+            if (!object.name || object === root) {
+                return;
+            }
+
+            const bindPosition = new THREE.Vector3();
+            const bindScale = new THREE.Vector3();
+            object.matrix.decompose(bindPosition, new THREE.Quaternion(), bindScale);
+
+            const target: AnimationTarget = {
+                object,
+                bindMatrix: object.matrix.clone(),
+                bindPosition,
+                bindScale,
+            };
+
+            this.animationTargets.set(object.name, target);
+            const trimmedName = object.name.trim();
+            if (trimmedName && !this.animationTargets.has(trimmedName)) {
+                this.animationTargets.set(trimmedName, target);
+            }
+        });
+    }
+
+    private restoreAnimationTargets(): void {
+        this.animationTargets.forEach((target) => {
+            target.object.matrixAutoUpdate = false;
+            target.object.matrix.copy(target.bindMatrix);
+            target.object.matrixWorldNeedsUpdate = true;
+        });
+    }
+
+    private getAnimationDuration(animation: ParsedAnimation): number {
+        return Math.max(
+            animation.tracks.reduce(
+                (duration, track) => Math.max(duration, track.frames.at(-1)?.time ?? 0),
+                0
+            ),
+            1 / 60
+        );
+    }
+
+    private sampleAnimationTrack(
+        frames: AnimationKeyframe[],
+        time: number,
+        duration: number
+    ): { rotation: THREE.Quaternion; translation: THREE.Vector3 | null } | null {
+        if (!frames.length) {
+            return null;
+        }
+
+        const firstFrame = frames[0];
+        if (!firstFrame) {
+            return null;
+        }
+
+        if (frames.length === 1) {
+            return {
+                rotation: new THREE.Quaternion(...firstFrame.rotation).normalize(),
+                translation: firstFrame.translation
+                    ? new THREE.Vector3(...firstFrame.translation)
+                    : null,
+            };
+        }
+
+        const wrappedTime = time % duration;
+        const secondFrame = frames[1];
+        if (!secondFrame) {
+            return null;
+        }
+
+        let first: AnimationKeyframe = firstFrame;
+        let second: AnimationKeyframe = secondFrame;
+        let progress = 0;
+        const lastFrame = frames[frames.length - 1];
+        if (!lastFrame) {
+            return null;
+        }
+
+        if (wrappedTime >= lastFrame.time) {
+            first = lastFrame;
+            second = firstFrame;
+            const span = Math.max(duration - first.time + second.time, 1 / 60);
+            progress = Math.min(1, (wrappedTime - first.time) / span);
+        } else {
+            for (let index = 1; index < frames.length; index += 1) {
+                const previousFrame = frames[index - 1];
+                const nextFrame = frames[index];
+                if (previousFrame && nextFrame && wrappedTime <= nextFrame.time) {
+                    first = previousFrame;
+                    second = nextFrame;
+                    const span = Math.max(second.time - first.time, 1 / 60);
+                    progress = Math.min(1, Math.max(0, (wrappedTime - first.time) / span));
+                    break;
+                }
+            }
+        }
+
+        const rotation = new THREE.Quaternion(...first.rotation)
+            .normalize()
+            .slerp(new THREE.Quaternion(...second.rotation).normalize(), progress);
+        const translation =
+            first.translation && second.translation
+                ? new THREE.Vector3(...first.translation).lerp(
+                      new THREE.Vector3(...second.translation),
+                      progress
+                  )
+                : first.translation
+                  ? new THREE.Vector3(...first.translation)
+                  : second.translation
+                    ? new THREE.Vector3(...second.translation)
+                    : null;
+
+        return { rotation, translation };
+    }
+
+    private applyAnimationFrame(now: number): void {
+        if (!this.activeAnimation || !this.models[0]?.instance) {
+            return;
+        }
+
+        const duration = this.getAnimationDuration(this.activeAnimation);
+        const time = Math.max(0, (now - this.animationStartTime) / 1000);
+
+        for (const track of this.activeAnimation.tracks) {
+            if (track.boneId === 0) {
+                continue;
+            }
+
+            const target =
+                this.animationTargets.get(track.name) ??
+                this.animationTargets.get(track.name.trim());
+            if (!target) {
+                continue;
+            }
+
+            const frame = this.sampleAnimationTrack(track.frames, time, duration);
+            if (!frame) {
+                continue;
+            }
+
+            target.object.matrixAutoUpdate = false;
+            target.object.matrix.compose(
+                frame.translation ?? target.bindPosition,
+                frame.rotation,
+                target.bindScale
+            );
+            target.object.matrixWorldNeedsUpdate = true;
+        }
+
+        this.models[0].instance.updateMatrixWorld(true);
     }
 
     private rotateWheels(angle: number): void {
@@ -734,7 +931,7 @@ export default class Scene implements SceneController {
 
         let rotation = { x: 0, y: 0, z: 0 };
         if (modelData.type === 'skin') {
-            rotation = this.defaultRotation || { x: -1.55, y: 0, z: -1.55 };
+            rotation = this.defaultRotation || { x: 0, y: Math.PI / 2, z: Math.PI / 2 };
         } else {
             rotation = this.defaultRotation || { x: 0, y: 0, z: 0 };
         }
@@ -747,6 +944,8 @@ export default class Scene implements SceneController {
         if (modelData.type === 'skin' && hasAlternateSkinOrientation(model.object)) {
             model.instance.quaternion.multiply(alternateSkinRotation);
         }
+
+        this.createSkinnedMeshes(model);
 
         this.needUpdate = true;
     }
@@ -880,6 +1079,41 @@ export default class Scene implements SceneController {
         return model;
     }
 
+    private createSkinnedMeshes(model: Model): void {
+        if (model.data.type !== 'skin' || !model.instance) {
+            return;
+        }
+
+        const root = model.instance;
+        const objectsByFrame = new Map<number, THREE.Bone>();
+        root.traverse((object) => {
+            if (object instanceof THREE.Bone && typeof object.userData.modelFrameIndex === 'number') {
+                objectsByFrame.set(object.userData.modelFrameIndex, object);
+            }
+        });
+        root.updateMatrixWorld(true);
+
+        model.object.forEach((frame, frameIndex) => {
+            if (!frame.geometry?.skin) {
+                return;
+            }
+            const geometryBone = objectsByFrame.get(frameIndex);
+            if (geometryBone) {
+                this.createObjectMesh(
+                    model.object,
+                    frameIndex,
+                    geometryBone,
+                    model.color,
+                    model.data.type,
+                    false,
+                    true,
+                    objectsByFrame,
+                    geometryBone.matrixWorld.clone()
+                );
+            }
+        });
+    }
+
     private createHierarchy(
         parentObject: THREE.Object3D,
         parentFrame: number,
@@ -888,9 +1122,10 @@ export default class Scene implements SceneController {
     ) {
         const children = childrenByParent.get(parentFrame) ?? [];
         for (const { index, frame: objectData } of children) {
-            const object3d = new THREE.Object3D();
+            const object3d = model.data.type === 'skin' ? new THREE.Bone() : new THREE.Object3D();
 
             object3d.name = objectData.name;
+            object3d.userData.modelFrameIndex = index;
 
             const matrix = Service.computeMatrix(objectData);
             object3d.matrixAutoUpdate = false;
@@ -928,7 +1163,7 @@ export default class Scene implements SceneController {
                     model.data.type,
                     true
                 );
-            } else {
+            } else if (!objectData.geometry?.skin) {
                 this.createObjectMesh(model.object, index, object3d, model.color, model.data.type);
             }
 
@@ -966,7 +1201,10 @@ export default class Scene implements SceneController {
         object: THREE.Object3D,
         color: ModelData['color'],
         modelType: ModelData['type'],
-        doubleSided = false
+        doubleSided = false,
+        skinned = false,
+        bonesByFrame = new Map<number, THREE.Bone>(),
+        skinBindMatrix?: THREE.Matrix4
     ) {
         const frame = modelExport[frameIndex];
         if (frame === undefined || frame.geometry === null) {
@@ -1050,12 +1288,49 @@ export default class Scene implements SceneController {
         );
         geometryMesh.setAttribute('uv', new THREE.Float32BufferAttribute(indexedGeometry.uvs, 2));
         geometryMesh.setIndex(indexedGeometry.indices);
+        if (skinned && geometry.skin) {
+            geometryMesh.setAttribute(
+                'skinIndex',
+                new THREE.Uint16BufferAttribute(indexedGeometry.skinIndices, 4)
+            );
+            geometryMesh.setAttribute(
+                'skinWeight',
+                new THREE.Float32BufferAttribute(indexedGeometry.skinWeights, 4)
+            );
+        }
         indexedGeometry.groups.forEach((group) =>
             geometryMesh.addGroup(group.start, group.count, group.materialIndex)
         );
         geometryMesh.computeVertexNormals();
 
-        const newMesh = new THREE.Mesh(geometryMesh, matsByName);
+        let newMesh: THREE.Mesh;
+        if (skinned && geometry.skin) {
+            const bones = (geometry.skin.boneFrameIndices ?? []).map((frameIndex) =>
+                bonesByFrame.get(frameIndex)
+            );
+            if (bones.length !== geometry.skin.boneCount || bones.some((bone) => !bone)) {
+                return;
+            }
+
+            const skinnedMesh = new THREE.SkinnedMesh(
+                geometryMesh,
+                matsByName
+            );
+            const bindMatrix = skinBindMatrix ?? object.matrixWorld.clone();
+            const bindMatrixInverse = bindMatrix.clone().invert();
+            const boneInverses = geometry.skin.inverseMatrices.map((inverseMatrix) =>
+                new THREE.Matrix4().fromArray(inverseMatrix).multiply(bindMatrixInverse)
+            );
+            const skeleton =
+                boneInverses.length === bones.length
+                    ? new THREE.Skeleton(bones as THREE.Bone[], boneInverses)
+                    : new THREE.Skeleton(bones as THREE.Bone[]);
+            skinnedMesh.bind(skeleton, bindMatrix);
+            skinnedMesh.normalizeSkinWeights();
+            newMesh = skinnedMesh;
+        } else {
+            newMesh = new THREE.Mesh(geometryMesh, matsByName);
+        }
         newMesh.castShadow = true;
         newMesh.receiveShadow = true;
 
@@ -1063,6 +1338,11 @@ export default class Scene implements SceneController {
             newMesh.scale.set(frame.scaleDown.x, frame.scaleDown.y, frame.scaleDown.z);
         }
 
+        if (skinned && skinBindMatrix) {
+            object.updateMatrixWorld(true);
+            newMesh.matrixAutoUpdate = false;
+            newMesh.matrix.copy(object.matrixWorld.clone().invert().multiply(skinBindMatrix));
+        }
         object.add(newMesh);
     }
 }

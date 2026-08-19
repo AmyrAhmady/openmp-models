@@ -25,6 +25,35 @@ const validModelExport = [
     },
 ];
 
+function createValidDff() {
+    const chunks = [];
+    const chunk = (type, payload) => {
+        const bytes = new Uint8Array(12 + payload.length);
+        const view = new DataView(bytes.buffer);
+        view.setUint32(0, type, true);
+        view.setUint32(4, payload.length, true);
+        view.setUint32(8, 0x1803ffff, true);
+        bytes.set(payload, 12);
+        return bytes;
+    };
+    const frameStruct = new Uint8Array(56);
+    const frameView = new DataView(frameStruct.buffer);
+    frameView.setUint32(48, 0xffffffff, true);
+    const frameList = chunk(
+        0x0e,
+        Uint8Array.from([
+            ...chunk(0x01, Uint8Array.from([1, 0, 0, 0, ...frameStruct])),
+            ...chunk(0x03, new Uint8Array()),
+        ])
+    );
+    const geometryList = chunk(0x1a, chunk(0x01, Uint8Array.from([0, 0, 0, 0])));
+    const clumpStruct = new Uint8Array(12);
+    const payload = Uint8Array.from([...chunk(0x01, clumpStruct), ...frameList, ...geometryList]);
+    return chunk(0x10, payload).buffer;
+}
+
+const validDff = createValidDff();
+
 function compileDomainModules(outputDirectory) {
     return new Promise((resolve, reject) => {
         const compiler = spawn(
@@ -98,11 +127,11 @@ test('model asset client caches normalized requests and returns parsed exports',
     let fetchCount = 0;
     globalThis.fetch = async (input) => {
         fetchCount += 1;
-        assert.equal(input, 'https://assets.open.mp/models/exports/landstal.json');
+        assert.equal(input, 'https://assets.open.mp/models/models/landstal.dff');
         return {
             ok: true,
             status: 200,
-            json: async () => validModelExport,
+            arrayBuffer: async () => validDff,
         };
     };
 
@@ -112,7 +141,7 @@ test('model asset client caches normalized requests and returns parsed exports',
         const second = client.getModelExport('landstal');
 
         assert.strictEqual(first, second);
-        assert.deepEqual(await first, validModelExport);
+        assert.equal((await first).length, 1);
         assert.equal(fetchCount, 1);
     } finally {
         globalThis.fetch = originalFetch;
@@ -139,9 +168,9 @@ test('model asset client aborts an individual consumer without poisoning the sha
         resolveFetch({
             ok: true,
             status: 200,
-            json: async () => validModelExport,
+            arrayBuffer: async () => validDff,
         });
-        assert.deepEqual(await client.getModelExport('slow'), validModelExport);
+        assert.equal((await client.getModelExport('slow')).length, 1);
     } finally {
         globalThis.fetch = originalFetch;
         await cleanup();
@@ -156,7 +185,7 @@ test('model asset cache evicts the oldest resolved exports at its memory bound',
         return {
             ok: true,
             status: 200,
-            json: async () => validModelExport,
+            arrayBuffer: async () => validDff,
         };
     };
 
@@ -183,19 +212,8 @@ test('model asset client rejects invalid payloads and allows a retry', async () 
         return {
             ok: true,
             status: 200,
-            json: async () =>
-                fetchCount === 1
-                    ? [
-                          {
-                              ...validModelExport[0],
-                              geometry: {
-                                  facetype: 'Triangles',
-                                  textures: [],
-                                  vertices: [{ x: 'invalid', y: 0, z: 0 }],
-                              },
-                          },
-                      ]
-                    : validModelExport,
+            arrayBuffer: async () =>
+                fetchCount === 1 ? new ArrayBuffer(1) : validDff,
         };
     };
 
@@ -203,9 +221,9 @@ test('model asset client rejects invalid payloads and allows a retry', async () 
     try {
         await assert.rejects(
             client.getModelExport('broken'),
-            /Model "broken": Invalid model export payload at frames\[0\]\.geometry\.vertices\[0\]\.x/
+            /Model "broken" could not be parsed as a RenderWare DFF/
         );
-        assert.deepEqual(await client.getModelExport('broken'), validModelExport);
+        assert.equal((await client.getModelExport('broken')).length, 1);
         assert.equal(fetchCount, 2);
     } finally {
         globalThis.fetch = originalFetch;

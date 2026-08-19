@@ -3,10 +3,12 @@ import { Text, TouchableOpacity, View } from 'react-native-web';
 import type { ModelData, SceneController } from 'src/rendering/types';
 import Scene from 'src/rendering/Scene';
 import { reportError } from 'src/monitoring/reportError';
+import type { ParsedAnimation } from 'src/animation/ifpParser';
 
 interface ModelViewerProps {
     models: ModelData[];
     autoSpin: boolean;
+    animation?: ParsedAnimation | null;
     backgroundColor?: string;
     showWheelSpinTest?: boolean;
 }
@@ -14,6 +16,7 @@ interface ModelViewerProps {
 interface LatestSceneProps {
     models: ModelData[];
     autoSpin: boolean;
+    animation: ParsedAnimation | null;
 }
 
 function getSceneErrorMessage(error: unknown, fallback: string): string {
@@ -30,17 +33,18 @@ function reportSceneError(error: unknown, operation: string): void {
 export default function ModelViewer({
     models,
     autoSpin,
+    animation = null,
     backgroundColor = 'transparent',
     showWheelSpinTest = false,
 }: ModelViewerProps) {
     const rootElementRef = useRef<HTMLDivElement | null>(null);
     const sceneRef = useRef<SceneController | null>(null);
     const sceneInitializedRef = useRef(false);
-    const latestPropsRef = useRef<LatestSceneProps>({ models, autoSpin });
+    const latestPropsRef = useRef<LatestSceneProps>({ models, autoSpin, animation });
     const [mountAttempt, setMountAttempt] = useState(0);
     const [sceneError, setSceneError] = useState<string | null>(null);
     const [wheelSpin, setWheelSpin] = useState(false);
-    latestPropsRef.current = { models, autoSpin };
+    latestPropsRef.current = { models, autoSpin, animation };
 
     useEffect(() => {
         setSceneError(null);
@@ -60,6 +64,7 @@ export default function ModelViewer({
                 if (latestProps.models !== models || latestProps.autoSpin !== autoSpin) {
                     void scene
                         .setModel(latestProps.models, latestProps.autoSpin)
+                        .then(() => scene.setAnimation(latestProps.animation))
                         .catch((error: unknown) => {
                             if (!active) {
                                 return;
@@ -73,6 +78,8 @@ export default function ModelViewer({
                                 )
                             );
                         });
+                } else {
+                    scene.setAnimation(latestProps.animation);
                 }
             })
             .catch((error: unknown) => {
@@ -113,19 +120,32 @@ export default function ModelViewer({
 
         let active = true;
         setSceneError(null);
-        void scene.setModel(models, autoSpin).catch((error: unknown) => {
-            if (!active) {
-                return;
-            }
+        void scene
+            .setModel(models, autoSpin)
+            .then(() => scene.setAnimation(latestPropsRef.current.animation))
+            .catch((error: unknown) => {
+                if (!active) {
+                    return;
+                }
 
-            reportSceneError(error, 'load selected 3D model');
-            setSceneError(getSceneErrorMessage(error, 'The 3D preview could not load this model.'));
-        });
+                reportSceneError(error, 'load selected 3D model');
+                setSceneError(
+                    getSceneErrorMessage(error, 'The 3D preview could not load this model.')
+                );
+            });
 
         return () => {
             active = false;
         };
     }, [models, autoSpin]);
+
+    useEffect(() => {
+        if (!sceneInitializedRef.current) {
+            return;
+        }
+
+        sceneRef.current?.setAnimation(animation);
+    }, [animation]);
 
     useEffect(() => {
         sceneRef.current?.setBackground(backgroundColor);
