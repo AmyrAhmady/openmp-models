@@ -88,6 +88,11 @@ interface AnimationTarget {
     bindScale: THREE.Vector3;
 }
 
+interface AnimationModelTarget {
+    object: THREE.Object3D;
+    bindMatrix: THREE.Matrix4;
+}
+
 type SpecialColorType = 'primary' | 'secondary';
 
 interface SpecialColorTable {
@@ -170,6 +175,8 @@ function hasAlternateSkinOrientation(modelExport: ModelExport): boolean {
 const alternateSkinRotation = new THREE.Quaternion().setFromRotationMatrix(
     new THREE.Matrix4().set(0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1)
 );
+
+const animationGroundRotation = new THREE.Matrix4().makeRotationY(-Math.PI / 2);
 
 interface SceneDependencies {
     createRenderer: (parameters: THREE.WebGLRendererParameters) => THREE.WebGLRenderer;
@@ -269,6 +276,7 @@ export default class Scene implements SceneController {
     private activeAnimation: ParsedAnimation | null = null;
     private animationStartTime = 0;
     private animationTargets = new Map<string, AnimationTarget>();
+    private animationModelTarget: AnimationModelTarget | null = null;
 
     constructor(
         models: ModelData[],
@@ -310,8 +318,10 @@ export default class Scene implements SceneController {
         }
 
         this.renderScheduler.setSpinning(autoSpin, false);
+        this.restoreAnimationModelTarget();
         this.activeAnimation = null;
         this.animationTargets.clear();
+        this.animationModelTarget = null;
         this.clearSceneResources();
         this.scene = new THREE.Scene();
         this.lightHolder = null;
@@ -459,6 +469,7 @@ export default class Scene implements SceneController {
         this.models = [];
         this.activeAnimation = null;
         this.animationTargets.clear();
+        this.animationModelTarget = null;
         this.textureCache.clear();
         this.materialCache.clear();
     }
@@ -511,11 +522,14 @@ export default class Scene implements SceneController {
 
     setAnimation(animation: ParsedAnimation | null): void {
         this.restoreAnimationTargets();
+        this.restoreAnimationModelTarget();
         this.activeAnimation = null;
         this.animationTargets.clear();
+        this.animationModelTarget = null;
 
         if (animation && this.sceneData[0]?.type === 'skin' && this.models[0]?.instance) {
             this.captureAnimationTargets(this.models[0].instance);
+            this.captureAnimationModelTarget(this.models[0].instance);
             this.activeAnimation = animation;
             this.animationStartTime = this.getAnimationClock();
         }
@@ -733,6 +747,28 @@ export default class Scene implements SceneController {
         });
     }
 
+    private captureAnimationModelTarget(root: THREE.Object3D): void {
+        root.updateMatrix();
+        this.animationModelTarget = {
+            object: root,
+            bindMatrix: root.matrix.clone(),
+        };
+
+        root.matrixAutoUpdate = false;
+        root.matrix.copy(this.animationModelTarget.bindMatrix).premultiply(animationGroundRotation);
+        root.matrixWorldNeedsUpdate = true;
+    }
+
+    private restoreAnimationModelTarget(): void {
+        if (!this.animationModelTarget) {
+            return;
+        }
+
+        this.animationModelTarget.object.matrixAutoUpdate = true;
+        this.animationModelTarget.object.matrix.copy(this.animationModelTarget.bindMatrix);
+        this.animationModelTarget.object.matrixWorldNeedsUpdate = true;
+    }
+
     private getAnimationDuration(animation: ParsedAnimation): number {
         return Math.max(
             animation.tracks.reduce(
@@ -826,13 +862,10 @@ export default class Scene implements SceneController {
         const time = Math.max(0, (now - this.animationStartTime) / 1000);
 
         for (const track of this.activeAnimation.tracks) {
-            if (track.boneId === 0) {
-                continue;
-            }
-
             const target =
                 this.animationTargets.get(track.name) ??
-                this.animationTargets.get(track.name.trim());
+                this.animationTargets.get(track.name.trim()) ??
+                (track.boneId === 0 ? this.animationTargets.get('Root') : undefined);
             if (!target) {
                 continue;
             }
@@ -843,11 +876,23 @@ export default class Scene implements SceneController {
             }
 
             target.object.matrixAutoUpdate = false;
-            target.object.matrix.compose(
-                frame.translation ?? target.bindPosition,
-                frame.rotation,
-                target.bindScale
-            );
+            if (track.boneId === 0) {
+                target.object.matrix
+                    .copy(target.bindMatrix)
+                    .multiply(
+                        new THREE.Matrix4().compose(
+                            frame.translation ?? target.bindPosition,
+                            frame.rotation,
+                            target.bindScale
+                        )
+                    );
+            } else {
+                target.object.matrix.compose(
+                    frame.translation ?? target.bindPosition,
+                    frame.rotation,
+                    target.bindScale
+                );
+            }
             target.object.matrixWorldNeedsUpdate = true;
         }
 
