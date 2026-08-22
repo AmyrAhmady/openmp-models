@@ -70,6 +70,11 @@
     "file": "bikev.ifp"
   },
   {
+    "id": "blowjobz",
+    "name": "BLOWJOBZ",
+    "file": "blowjobz.ifp"
+  },
+  {
     "id": "bmx",
     "name": "BMX",
     "file": "bmx.ifp"
@@ -430,6 +435,11 @@
     "file": "paulnmac.ifp"
   },
   {
+    "id": "ped",
+    "name": "ped",
+    "file": "ped.ifp"
+  },
+  {
     "id": "player_dvbys",
     "name": "PLAYER_DVBYS",
     "file": "player_dvbys.ifp"
@@ -510,6 +520,11 @@
     "file": "ryder.ifp"
   },
   {
+    "id": "samp",
+    "name": "SAMP",
+    "file": "samp.ifp"
+  },
+  {
     "id": "scratching",
     "name": "SCRATCHING",
     "file": "scratching.ifp"
@@ -548,6 +563,11 @@
     "id": "sniper",
     "name": "SNIPER",
     "file": "sniper.ifp"
+  },
+  {
+    "id": "snm",
+    "name": "SnM",
+    "file": "snm.ifp"
   },
   {
     "id": "spraycan",
