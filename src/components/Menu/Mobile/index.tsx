@@ -12,6 +12,7 @@ import AnimationBrowserMobile from './AnimationBrowserMobile';
 import type { VehicleModification } from 'src/domain/vehicleModifications';
 import { vehicleColorOptions } from 'src/domain/vehicleColors';
 import type { ParsedAnimation } from 'src/animation/ifpParser';
+import type { AnimationSelection } from 'src/components/AnimationBrowser';
 
 interface Props {
     selectedItemId: number;
@@ -28,6 +29,9 @@ interface Props {
     secondaryVehicleColorId: number;
     onSelectVehicleColor: (slot: 'primary' | 'secondary', colorId: number) => void;
     onSelectAnimation: (animation: ParsedAnimation | null) => void;
+    onSelectionChange?: ((selection: AnimationSelection) => void) | undefined;
+    initialAnimationLibraryId?: string | null | undefined;
+    initialAnimationName?: string | null | undefined;
 }
 
 const MenuMobile = ({
@@ -45,6 +49,9 @@ const MenuMobile = ({
     secondaryVehicleColorId,
     onSelectVehicleColor,
     onSelectAnimation,
+    onSelectionChange,
+    initialAnimationLibraryId,
+    initialAnimationName,
 }: Props) => {
     const [listVisible, setListVisible] = useState(false);
     const [bgColorModalVisible, setBgColorModalVisible] = useState(false);
@@ -257,6 +264,9 @@ const MenuMobile = ({
                 visible={animationBrowserVisible}
                 onRequestClose={() => setAnimationBrowserVisible(false)}
                 onSelectAnimation={onSelectAnimation}
+                onSelectionChange={onSelectionChange}
+                initialLibraryId={initialAnimationLibraryId}
+                initialAnimationName={initialAnimationName}
             />
         </>
     );

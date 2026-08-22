@@ -29,7 +29,7 @@ test('model type changes cancel stale loads and avoid cross-catalog selection', 
     );
     assert.match(selectionHookSource, /useState<CatalogItem \| null>\(initialInfo\)/);
     assert.match(selectionHookSource, /setInfo\(null\);/);
-    assert.match(pageSource, /useModelSelection\(modelType\)/);
+    assert.match(pageSource, /useModelSelection\(modelType(?:,|\))/);
     assert.match(pageSource, /setModelType\(type\.value\);/);
     assert.match(pageSource, /info \? getCatalogInfoRows\(info\) : \[\]/);
     assert.match(modelStageSource, /info\?\.name \?\? 'Choose a model'/);

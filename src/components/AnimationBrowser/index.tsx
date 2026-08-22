@@ -12,8 +12,17 @@ interface Props {
     style?: StyleProp<ViewStyle>;
     onClose?: () => void;
     onSelectAnimation?: (animation: ParsedAnimation | null) => void;
+    onSelectionChange?: ((selection: AnimationSelection) => void) | undefined;
+    initialLibraryId?: string | null | undefined;
+    initialAnimationName?: string | null | undefined;
     collapsible?: boolean;
     initiallyExpanded?: boolean;
+}
+
+export interface AnimationSelection {
+    libraryId: string | null;
+    animationName: string | null;
+    animation: ParsedAnimation | null;
 }
 
 interface PickerOption {
@@ -87,12 +96,15 @@ const AnimationBrowser = ({
     style,
     onClose,
     onSelectAnimation,
+    onSelectionChange,
+    initialLibraryId = null,
+    initialAnimationName = null,
     collapsible = false,
     initiallyExpanded = true,
 }: Props) => {
     const { theme } = useTheme();
     const [expanded, setExpanded] = useState(initiallyExpanded);
-    const [selectedLibraryId, setSelectedLibraryId] = useState('');
+    const [selectedLibraryId, setSelectedLibraryId] = useState(initialLibraryId ?? '');
     const [selectedAnimationName, setSelectedAnimationName] = useState('');
     const [libraryData, setLibraryData] = useState<ParsedAnimationLibrary | null>(null);
     const [status, setStatus] = useState<LibraryStatus>('idle');
@@ -111,14 +123,24 @@ const AnimationBrowser = ({
         setSelectedLibraryId(value);
         setSelectedAnimationName('');
         onSelectAnimation?.(null);
+        onSelectionChange?.({ libraryId: value || null, animationName: null, animation: null });
     };
 
     const handleAnimationChange = (value: string): void => {
         setSelectedAnimationName(value);
-        onSelectAnimation?.(
-            libraryData?.animations.find((animation) => animation.name === value) ?? null
-        );
+        const animation = libraryData?.animations.find(({ name }) => name === value) ?? null;
+        onSelectAnimation?.(animation);
+        onSelectionChange?.({
+            libraryId: selectedLibraryId || null,
+            animationName: value || null,
+            animation,
+        });
     };
+
+    useEffect(() => {
+        setSelectedLibraryId(initialLibraryId ?? '');
+        setSelectedAnimationName(initialAnimationName ?? '');
+    }, [initialAnimationName, initialLibraryId]);
 
     useEffect(() => {
         if (!selectedLibrary) {
@@ -155,6 +177,37 @@ const AnimationBrowser = ({
 
         return () => controller.abort();
     }, [selectedLibrary]);
+
+    useEffect(() => {
+        if (
+            !libraryData ||
+            !initialLibraryId ||
+            selectedLibraryId !== initialLibraryId ||
+            !initialAnimationName
+        ) {
+            return;
+        }
+
+        const animation = libraryData.animations.find(({ name }) => name === initialAnimationName);
+        if (!animation) {
+            return;
+        }
+
+        setSelectedAnimationName(animation.name);
+        onSelectAnimation?.(animation);
+        onSelectionChange?.({
+            libraryId: initialLibraryId,
+            animationName: animation.name,
+            animation,
+        });
+    }, [
+        initialAnimationName,
+        initialLibraryId,
+        libraryData,
+        onSelectAnimation,
+        onSelectionChange,
+        selectedLibraryId,
+    ]);
 
     return (
         <RoundCard

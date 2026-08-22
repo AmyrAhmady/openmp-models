@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { NextPage } from 'next';
 import { StyleSheet, View } from 'react-native-web';
 import ColorPicker from 'src/components/ColorPicker';
@@ -21,11 +21,30 @@ import { useModelSelection } from 'src/hooks/useModelSelection';
 import { useThemeController } from 'src/hooks/useThemeController';
 import type { CatalogListItem } from 'src/domain/catalog';
 import type { ParsedAnimation } from 'src/animation/ifpParser';
+import type { AnimationSelection } from 'src/components/AnimationBrowser';
+import { useShareableUrl } from 'src/hooks/useShareableUrl';
+import { serializeShareableUrl, type ShareableUrlState } from 'src/domain/shareableUrl';
 
 const Main: NextPage = () => {
     const isMobileView = useResponsiveView();
     const [modelType, setModelType] = useState<ModelType>('vehicle');
     const [selectedAnimation, setSelectedAnimation] = useState<ParsedAnimation | null>(null);
+    const [animationSelection, setAnimationSelection] = useState<AnimationSelection>({
+        libraryId: null,
+        animationName: null,
+        animation: null,
+    });
+    const [vehicleColorsChanged, setVehicleColorsChanged] = useState(false);
+    const syncUrlEnabled = useRef(false);
+    const restoringUrl = useRef(true);
+    const seenUrlKey = useRef<string | null>(null);
+    const pendingUrlState = useRef<ShareableUrlState | null>(null);
+    const {
+        ready: shareableUrlReady,
+        hasQuery: shareableUrlHasQuery,
+        state: shareableUrlState,
+        pushState,
+    } = useShareableUrl();
     const { themeMode, theme, backgroundSelection, onThemeModeChange, onSelectColor } =
         useThemeController();
     const catalogQuery = useCatalogQuery(modelType);
@@ -41,25 +60,240 @@ const Main: NextPage = () => {
         availableModifications,
         selectedModificationIds,
         onToggleModification,
+        onSetModificationIds,
         vehicleColor,
         onSelectVehicleColor,
-    } = useModelSelection(modelType);
+        onSelectModelId,
+    } = useModelSelection(modelType, {
+        ready: shareableUrlReady,
+        type: shareableUrlState.modelType,
+        modelId: shareableUrlState.modelId,
+    });
+
+    const handleAnimationSelection = useCallback((selection: AnimationSelection): void => {
+        setSelectedAnimation(selection.animation);
+        setAnimationSelection(selection);
+        syncUrlEnabled.current = true;
+    }, []);
+
+    const handleVehicleModification = useCallback(
+        (modification: Parameters<typeof onToggleModification>[0]): void => {
+            syncUrlEnabled.current = true;
+            onToggleModification(modification);
+        },
+        [onToggleModification]
+    );
+
+    const handleBackgroundColor = useCallback(
+        (color: string): void => {
+            syncUrlEnabled.current = true;
+            onSelectColor(color);
+        },
+        [onSelectColor]
+    );
+
+    const handleVehicleColor = useCallback(
+        (slot: 'primary' | 'secondary', colorId: number): void => {
+            setVehicleColorsChanged(true);
+            syncUrlEnabled.current = true;
+            onSelectVehicleColor(slot, colorId);
+        },
+        [onSelectVehicleColor]
+    );
 
     const handleModelTypeChange = useCallback(
         (type: { value: ModelType }): void => {
             setSelectedAnimation(null);
+            setAnimationSelection({ libraryId: null, animationName: null, animation: null });
+            setVehicleColorsChanged(false);
             onModelTypeChange(type);
             setModelType(type.value);
+            restoringUrl.current = false;
+            syncUrlEnabled.current = true;
+            pushState({
+                modelType: type.value,
+                modelId: null,
+                animationLibraryId: null,
+                animationName: null,
+                modificationIds: [],
+                primaryColorId: null,
+                secondaryColorId: null,
+                backgroundColor:
+                    backgroundSelection.source === 'custom' ? backgroundSelection.color : null,
+            });
         },
-        [onModelTypeChange]
+        [backgroundSelection, onModelTypeChange, pushState]
     );
     const handleSelectItem = useCallback(
         (item: CatalogListItem): void => {
             setSelectedAnimation(null);
+            setAnimationSelection({ libraryId: null, animationName: null, animation: null });
+            setVehicleColorsChanged(false);
             onSelectItem(item);
+            restoringUrl.current = false;
+            syncUrlEnabled.current = true;
+            pushState({
+                modelType,
+                modelId: item.id,
+                animationLibraryId: null,
+                animationName: null,
+                modificationIds: [],
+                primaryColorId: null,
+                secondaryColorId: null,
+                backgroundColor:
+                    backgroundSelection.source === 'custom' ? backgroundSelection.color : null,
+            });
         },
-        [onSelectItem]
+        [backgroundSelection, modelType, onSelectItem, pushState]
     );
+
+    useEffect(() => {
+        if (!shareableUrlReady) {
+            return;
+        }
+
+        const urlKey = serializeShareableUrl(shareableUrlState);
+        if (seenUrlKey.current === urlKey) {
+            return;
+        }
+
+        const isInitialUrl = seenUrlKey.current === null;
+        seenUrlKey.current = urlKey;
+        restoringUrl.current = true;
+        syncUrlEnabled.current = shareableUrlHasQuery;
+        pendingUrlState.current = shareableUrlState;
+        setSelectedAnimation(null);
+        setAnimationSelection({ libraryId: null, animationName: null, animation: null });
+        setVehicleColorsChanged(
+            shareableUrlState.primaryColorId !== null || shareableUrlState.secondaryColorId !== null
+        );
+
+        if (modelType !== shareableUrlState.modelType) {
+            onModelTypeChange({ value: shareableUrlState.modelType });
+            setModelType(shareableUrlState.modelType);
+        } else if (!isInitialUrl && shareableUrlState.modelId !== null) {
+            onSelectModelId(shareableUrlState.modelId);
+        }
+    }, [
+        modelType,
+        onModelTypeChange,
+        onSelectModelId,
+        shareableUrlReady,
+        shareableUrlHasQuery,
+        shareableUrlState,
+    ]);
+
+    useEffect(() => {
+        const pending = pendingUrlState.current;
+        if (!shareableUrlReady || !pending || modelType !== pending.modelType) {
+            return;
+        }
+        if (
+            pending.modelId !== null &&
+            (info?.id !== pending.modelId || modelStatus === 'loading')
+        ) {
+            return;
+        }
+        if (pending.modelId === null && modelStatus === 'loading') {
+            return;
+        }
+
+        if (modelType === 'vehicle') {
+            const validIds = pending.modificationIds.filter((id) =>
+                availableModifications.some((modification) => Number(modification.id) === id)
+            );
+            const selectedIds = [...selectedModificationIds].sort((left, right) => left - right);
+            const requestedIds = [...validIds].sort((left, right) => left - right);
+            if (selectedIds.join(',') !== requestedIds.join(',')) {
+                onSetModificationIds(validIds);
+                return;
+            }
+            if (
+                pending.primaryColorId !== null &&
+                vehicleColor?.primary !== pending.primaryColorId
+            ) {
+                onSelectVehicleColor('primary', pending.primaryColorId);
+                return;
+            }
+            if (
+                pending.secondaryColorId !== null &&
+                vehicleColor?.secondary !== pending.secondaryColorId
+            ) {
+                onSelectVehicleColor('secondary', pending.secondaryColorId);
+                return;
+            }
+        }
+
+        if (pending.backgroundColor && backgroundSelection.color !== pending.backgroundColor) {
+            onSelectColor(pending.backgroundColor);
+            return;
+        }
+
+        if (
+            modelType === 'skin' &&
+            pending.animationLibraryId &&
+            pending.animationName &&
+            (animationSelection.libraryId !== pending.animationLibraryId ||
+                animationSelection.animationName !== pending.animationName)
+        ) {
+            return;
+        }
+
+        restoringUrl.current = false;
+        pendingUrlState.current = null;
+    }, [
+        animationSelection,
+        availableModifications,
+        backgroundSelection,
+        info,
+        modelStatus,
+        modelType,
+        onSelectColor,
+        onSelectVehicleColor,
+        onSetModificationIds,
+        pendingUrlState,
+        selectedModificationIds,
+        shareableUrlReady,
+        vehicleColor,
+    ]);
+
+    const shareableState = useMemo<ShareableUrlState>(
+        () => ({
+            modelType,
+            modelId: selectedModelType === modelType && info ? info.id : null,
+            animationLibraryId: modelType === 'skin' ? animationSelection.libraryId : null,
+            animationName: modelType === 'skin' ? animationSelection.animationName : null,
+            modificationIds: modelType === 'vehicle' ? [...selectedModificationIds] : [],
+            primaryColorId:
+                modelType === 'vehicle' && vehicleColorsChanged
+                    ? (vehicleColor?.primary ?? null)
+                    : null,
+            secondaryColorId:
+                modelType === 'vehicle' && vehicleColorsChanged
+                    ? (vehicleColor?.secondary ?? null)
+                    : null,
+            backgroundColor:
+                backgroundSelection.source === 'custom' ? backgroundSelection.color : null,
+        }),
+        [
+            animationSelection,
+            backgroundSelection,
+            info,
+            modelType,
+            selectedModelType,
+            selectedModificationIds,
+            vehicleColor,
+            vehicleColorsChanged,
+        ]
+    );
+
+    useEffect(() => {
+        if (!shareableUrlReady || !syncUrlEnabled.current || restoringUrl.current || !info) {
+            return;
+        }
+
+        pushState(shareableState);
+    }, [info, pushState, shareableState, shareableUrlReady]);
     const infoRows = useMemo(() => (info ? getCatalogInfoRows(info) : []), [info]);
 
     return (
@@ -85,7 +319,7 @@ const Main: NextPage = () => {
                     {isMobileView ? (
                         <MenuMobile
                             selectedItemId={selectedModelType === modelType && info ? info.id : -1}
-                            onSelectColor={onSelectColor}
+                            onSelectColor={handleBackgroundColor}
                             selectedColor={backgroundSelection.color}
                             modelData={infoRows}
                             onSelectItem={handleSelectItem}
@@ -93,11 +327,14 @@ const Main: NextPage = () => {
                             modelType={modelType}
                             modifications={availableModifications}
                             selectedModificationIds={selectedModificationIds}
-                            onToggleModification={onToggleModification}
+                            onToggleModification={handleVehicleModification}
                             primaryVehicleColorId={vehicleColor?.primary ?? 0}
                             secondaryVehicleColorId={vehicleColor?.secondary ?? 0}
-                            onSelectVehicleColor={onSelectVehicleColor}
+                            onSelectVehicleColor={handleVehicleColor}
                             onSelectAnimation={setSelectedAnimation}
+                            onSelectionChange={handleAnimationSelection}
+                            initialAnimationLibraryId={shareableUrlState.animationLibraryId}
+                            initialAnimationName={shareableUrlState.animationName}
                         />
                     ) : (
                         <View style={styles.desktopMenuColumn}>
@@ -130,6 +367,9 @@ const Main: NextPage = () => {
                                     collapsible
                                     initiallyExpanded={true}
                                     onSelectAnimation={setSelectedAnimation}
+                                    onSelectionChange={handleAnimationSelection}
+                                    initialLibraryId={shareableUrlState.animationLibraryId}
+                                    initialAnimationName={shareableUrlState.animationName}
                                 />
                             )}
                             {modelType === 'vehicle' && (
@@ -138,7 +378,7 @@ const Main: NextPage = () => {
                                         style={{ marginBottom: 14 }}
                                         modifications={availableModifications}
                                         selectedIds={selectedModificationIds}
-                                        onToggle={onToggleModification}
+                                        onToggle={handleVehicleModification}
                                         collapsible
                                         initiallyExpanded={false}
                                     />
@@ -147,7 +387,7 @@ const Main: NextPage = () => {
                                         colors={vehicleColorOptions}
                                         primaryColorId={vehicleColor?.primary ?? 0}
                                         secondaryColorId={vehicleColor?.secondary ?? 0}
-                                        onSelect={onSelectVehicleColor}
+                                        onSelect={handleVehicleColor}
                                         collapsible
                                         initiallyExpanded={false}
                                     />
@@ -160,7 +400,7 @@ const Main: NextPage = () => {
                                 colors={backgroundColors}
                                 selectedColor={backgroundSelection.color}
                                 rows={2}
-                                onSelect={onSelectColor}
+                                onSelect={handleBackgroundColor}
                                 collapsible
                                 initiallyExpanded={false}
                             />

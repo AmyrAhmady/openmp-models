@@ -21,12 +21,20 @@ export interface UseModelSelectionResult {
     modelError: string | null;
     onModelTypeChange: (type: ModelTypeSelection) => void;
     onSelectItem: (model: CatalogListItem) => void;
+    onSelectModelId: (modelId: number) => void;
     retryModel: () => void;
     availableModifications: readonly VehicleModification[];
     selectedModificationIds: readonly number[];
     onToggleModification: (modification: VehicleModification) => void;
+    onSetModificationIds: (modificationIds: readonly number[]) => void;
     vehicleColor: VehicleColorSelection | null;
     onSelectVehicleColor: (slot: 'primary' | 'secondary', colorId: number) => void;
+}
+
+export interface InitialModelSelection {
+    ready: boolean;
+    type: ModelType;
+    modelId: number | null;
 }
 
 const initialInfo: VehicleInfo = {
@@ -51,7 +59,10 @@ function getModelErrorMessage(error: unknown, selected: boolean): string {
         : 'The model could not be loaded. Check your connection and try again.';
 }
 
-export function useModelSelection(modelType: ModelType): UseModelSelectionResult {
+export function useModelSelection(
+    modelType: ModelType,
+    initialSelection?: InitialModelSelection
+): UseModelSelectionResult {
     const [info, setInfo] = useState<CatalogItem | null>(initialInfo);
     const [selectedModelType, setSelectedModelType] = useState<ModelType | null>('vehicle');
     const [models, setModels] = useState<ModelPreviewData[]>([]);
@@ -117,7 +128,7 @@ export function useModelSelection(modelType: ModelType): UseModelSelectionResult
     }, []);
 
     const loadSelectedItem = useCallback(
-        async (summary: CatalogListItem): Promise<void> => {
+        async (modelId: number): Promise<void> => {
             selectedItemAbortController.current?.abort();
             modelLoadAbortController.current?.abort();
             modelLoadGeneration.current++;
@@ -134,7 +145,7 @@ export function useModelSelection(modelType: ModelType): UseModelSelectionResult
             try {
                 const response = await catalogClient.getItem(
                     modelType,
-                    summary.id,
+                    modelId,
                     abortController.signal
                 );
                 if (generation !== selectedItemGeneration.current) {
@@ -169,8 +180,30 @@ export function useModelSelection(modelType: ModelType): UseModelSelectionResult
         [loadModel, modelType]
     );
 
+    const initialLoadHandled = useRef(false);
+
     useEffect(() => {
-        void loadModel(getAssetName(initialInfo), 'vehicle');
+        if (
+            !initialSelection?.ready ||
+            initialLoadHandled.current ||
+            initialSelection.type !== modelType
+        ) {
+            return;
+        }
+
+        initialLoadHandled.current = true;
+        if (initialSelection.modelId !== null) {
+            void loadSelectedItem(initialSelection.modelId);
+        } else if (modelType === 'vehicle') {
+            setInfo(initialInfo);
+            setSelectedModelType('vehicle');
+            void loadModel(getAssetName(initialInfo), 'vehicle');
+        } else {
+            setInfo(null);
+            setSelectedModelType(null);
+            setModels([]);
+            setModelStatus('idle');
+        }
 
         return () => {
             selectedItemAbortController.current?.abort();
@@ -178,7 +211,14 @@ export function useModelSelection(modelType: ModelType): UseModelSelectionResult
             modelLoadAbortController.current?.abort();
             modelLoadGeneration.current++;
         };
-    }, [loadModel]);
+    }, [
+        initialSelection?.modelId,
+        initialSelection?.ready,
+        initialSelection?.type,
+        loadModel,
+        loadSelectedItem,
+        modelType,
+    ]);
 
     const retryModel = useCallback((): void => {
         if (!info || selectedModelType !== modelType) {
@@ -209,7 +249,14 @@ export function useModelSelection(modelType: ModelType): UseModelSelectionResult
 
     const onSelectItem = useCallback(
         (model: CatalogListItem): void => {
-            void loadSelectedItem(model);
+            void loadSelectedItem(model.id);
+        },
+        [loadSelectedItem]
+    );
+
+    const onSelectModelId = useCallback(
+        (modelId: number): void => {
+            void loadSelectedItem(modelId);
         },
         [loadSelectedItem]
     );
@@ -239,6 +286,45 @@ export function useModelSelection(modelType: ModelType): UseModelSelectionResult
         });
     }, []);
 
+    const onSetModificationIds = useCallback(
+        (modificationIds: readonly number[]): void => {
+            const validModifications = new Map(
+                availableModifications.map((modification) => [
+                    Number(modification.id),
+                    modification,
+                ])
+            );
+
+            setModels((currentModels) => {
+                const currentModel = currentModels[0];
+                if (!currentModel || currentModel.type !== 'vehicle') {
+                    return currentModels;
+                }
+
+                const nextModifications: number[] = [];
+                for (const modificationId of modificationIds) {
+                    const modification = validModifications.get(modificationId);
+                    if (!modification) {
+                        continue;
+                    }
+
+                    const sameType = (id: number): boolean =>
+                        getVehicleModification(id)?.type.toLowerCase() ===
+                        modification.type.toLowerCase();
+                    for (let index = nextModifications.length - 1; index >= 0; index -= 1) {
+                        if (sameType(nextModifications[index] ?? -1)) {
+                            nextModifications.splice(index, 1);
+                        }
+                    }
+                    nextModifications.push(modificationId);
+                }
+
+                return [{ ...currentModel, modifications: nextModifications }];
+            });
+        },
+        [availableModifications]
+    );
+
     const onSelectVehicleColor = useCallback(
         (slot: 'primary' | 'secondary', colorId: number): void => {
             setModels((currentModels) => {
@@ -267,10 +353,12 @@ export function useModelSelection(modelType: ModelType): UseModelSelectionResult
         modelError,
         onModelTypeChange,
         onSelectItem,
+        onSelectModelId,
         retryModel,
         availableModifications,
         selectedModificationIds,
         onToggleModification,
+        onSetModificationIds,
         vehicleColor,
         onSelectVehicleColor,
     };
