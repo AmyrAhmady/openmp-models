@@ -88,6 +88,7 @@ const ModelStage = ({
                         autoSpin={false}
                         animation={animation}
                         modelId={info?.id ?? null}
+                        backgroundColor={backgroundColor}
                         showWheelSpinTest={modelType === 'vehicle'}
                     />
                 ) : modelStatus === 'idle' ? (

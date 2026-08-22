@@ -42,41 +42,65 @@ export async function convertWebmToFormat(webm: Blob, format: RecordingFormat): 
     const { fetchFile } = await import('@ffmpeg/util');
 
     await encoder.writeFile(inputName, await fetchFile(webm));
-    await encoder.exec(
+
+    const mp4Commands = [
+        [
+            '-i',
+            inputName,
+            '-vf',
+            'scale=trunc(iw/2)*2:trunc(ih/2)*2',
+            '-c:v',
+            'libx264',
+            '-profile:v',
+            'main',
+            '-pix_fmt',
+            'yuv420p',
+            '-movflags',
+            'faststart',
+            outputName,
+        ],
+    ];
+    const commands =
         format === 'mp4'
-            ? [
-                  '-i',
-                  inputName,
-                  '-c:v',
-                  'libx264',
-                  '-pix_fmt',
-                  'yuv420p',
-                  '-movflags',
-                  'faststart',
-                  outputName,
-              ]
+            ? mp4Commands
             : [
-                  '-i',
-                  inputName,
-                  '-vf',
-                  'fps=15,scale=iw:-2:flags=lanczos,split[s0][s1];[s0]palettegen=stats_mode=diff[p];[s1][p]paletteuse=dither=sierra2_4a',
-                  '-loop',
-                  '0',
-                  outputName,
-              ]
-    );
+                  [
+                      '-i',
+                      inputName,
+                      '-vf',
+                      'fps=15,scale=iw:-2:flags=lanczos,split[s0][s1];[s0]palettegen=stats_mode=diff[p];[s1][p]paletteuse=dither=sierra2_4a',
+                      '-loop',
+                      '0',
+                      outputName,
+                  ],
+              ];
 
-    const output = await encoder.readFile(outputName);
-    await Promise.allSettled([encoder.deleteFile(inputName), encoder.deleteFile(outputName)]);
+    let exitCode = 1;
+    try {
+        for (const command of commands) {
+            await Promise.allSettled([encoder.deleteFile(outputName)]);
+            exitCode = await encoder.exec(command);
+            if (exitCode === 0) {
+                break;
+            }
+        }
 
-    if (typeof output === 'string') {
-        throw new Error(`FFmpeg returned invalid ${format.toUpperCase()} output.`);
+        if (exitCode !== 0) {
+            throw new Error(`FFmpeg could not create the ${format.toUpperCase()} file.`);
+        }
+
+        const output = await encoder.readFile(outputName);
+        if (typeof output === 'string' || output.byteLength === 0) {
+            throw new Error(`FFmpeg returned an empty ${format.toUpperCase()} file.`);
+        }
+
+        const outputBuffer = new ArrayBuffer(output.byteLength);
+        new Uint8Array(outputBuffer).set(output);
+
+        return new Blob([outputBuffer], {
+            type: format === 'mp4' ? 'video/mp4' : 'image/gif',
+        });
+    } finally {
+        await Promise.allSettled([encoder.deleteFile(inputName), encoder.deleteFile(outputName)]);
     }
-
-    const outputBuffer = new ArrayBuffer(output.byteLength);
-    new Uint8Array(outputBuffer).set(output);
-
-    return new Blob([outputBuffer], {
-        type: format === 'mp4' ? 'video/mp4' : 'image/gif',
-    });
 }
