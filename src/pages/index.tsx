@@ -86,15 +86,22 @@ const Main: NextPage<MainProps> = ({ initialMetadata }) => {
     });
 
     const handleAnimationSelection = useCallback((selection: AnimationSelection): void => {
+        const pending = pendingUrlState.current;
+        const isPendingUrlSelection =
+            pending?.animationLibraryId === selection.libraryId &&
+            pending.animationName === selection.animationName;
+
         setSelectedAnimation(selection.animation);
         setAnimationSelection(selection);
         setAnimationTarget({
             libraryId: selection.libraryId,
             animationName: selection.animationName,
         });
-        localUrlChange.current = true;
-        restoringUrl.current = false;
-        syncUrlEnabled.current = true;
+        if (!isPendingUrlSelection) {
+            localUrlChange.current = true;
+            restoringUrl.current = false;
+            syncUrlEnabled.current = true;
+        }
     }, []);
 
     const handleVehicleModification = useCallback(
