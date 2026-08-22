@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { NextPage } from 'next';
+import Head from 'next/head';
 import { StyleSheet, View } from 'react-native-web';
 import ColorPicker from 'src/components/ColorPicker';
 import Header from 'src/components/Header';
@@ -24,6 +25,7 @@ import type { ParsedAnimation } from 'src/animation/ifpParser';
 import type { AnimationSelection } from 'src/components/AnimationBrowser';
 import { useShareableUrl } from 'src/hooks/useShareableUrl';
 import { serializeShareableUrl, type ShareableUrlState } from 'src/domain/shareableUrl';
+import { animationLibraries } from 'src/domain/animationCatalog';
 
 const Main: NextPage = () => {
     const isMobileView = useResponsiveView();
@@ -313,9 +315,34 @@ const Main: NextPage = () => {
         pushState(shareableState);
     }, [info, pushState, shareableState, shareableUrlReady]);
     const infoRows = useMemo(() => (info ? getCatalogInfoRows(info) : []), [info]);
+    const categoryLabel =
+        modelType === 'vehicle' ? 'Vehicles' : modelType === 'skin' ? 'Skins' : 'Objects';
+    const animationLibraryName = animationSelection.libraryId
+        ? (animationLibraries.find((library) => library.id === animationSelection.libraryId)
+              ?.name ?? animationSelection.libraryId)
+        : null;
+    const pageTitle = info
+        ? `open.mp | Model Library | ${categoryLabel} | ${info.name} (${info.id})`
+        : `open.mp | Model Library | ${categoryLabel}`;
+    const pageDescription =
+        modelType === 'skin' && info && animationLibraryName && animationSelection.animationName
+            ? `The ${info.name} skin playing ${animationLibraryName}:${animationSelection.animationName} animation.`
+            : info
+              ? `Explore the ${info.name} model (ID ${info.id}) in the open.mp ${categoryLabel.toLowerCase()} library.`
+              : `Browse ${categoryLabel.toLowerCase()} in the open.mp model library.`;
 
     return (
         <ThemeProvider mode={themeMode}>
+            <Head>
+                <title>{pageTitle}</title>
+                <meta name="description" content={pageDescription} />
+                <meta property="og:type" content="website" />
+                <meta property="og:title" content={pageTitle} />
+                <meta property="og:description" content={pageDescription} />
+                <meta name="twitter:card" content="summary" />
+                <meta name="twitter:title" content={pageTitle} />
+                <meta name="twitter:description" content={pageDescription} />
+            </Head>
             <View style={[styles.container, { backgroundColor: theme.mainBg }]}>
                 <Header
                     isMobile={isMobileView}

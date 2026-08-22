@@ -7,7 +7,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     return (
         <AppErrorBoundary>
             <Head>
-                <title>OPEN.MP | Model Library</title>
+                <title>open.mp | Model Library</title>
                 <meta
                     name="viewport"
                     content="width=device-width, initial-scale=1.0, maximum-scale=1.0"
