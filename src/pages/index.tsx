@@ -315,21 +315,43 @@ const Main: NextPage = () => {
         pushState(shareableState);
     }, [info, pushState, shareableState, shareableUrlReady]);
     const infoRows = useMemo(() => (info ? getCatalogInfoRows(info) : []), [info]);
-    const categoryLabel =
-        modelType === 'vehicle' ? 'Vehicles' : modelType === 'skin' ? 'Skins' : 'Objects';
-    const animationLibraryName = animationSelection.libraryId
-        ? (animationLibraries.find((library) => library.id === animationSelection.libraryId)
-              ?.name ?? animationSelection.libraryId)
-        : null;
-    const pageTitle = info
-        ? `open.mp | Model Library | ${categoryLabel} | ${info.name} (${info.id})`
-        : `open.mp | Model Library | ${categoryLabel}`;
+    const metadataModelType = shareableUrlState.modelType;
+    const metadataCategoryLabel =
+        metadataModelType === 'vehicle'
+            ? 'Vehicles'
+            : metadataModelType === 'skin'
+              ? 'Skins'
+              : 'Objects';
+    const hasUrlModel =
+        shareableUrlReady &&
+        shareableUrlHasQuery &&
+        shareableUrlState.modelId !== null &&
+        selectedModelType === metadataModelType &&
+        info?.id === shareableUrlState.modelId;
+    const animationLibraryName =
+        metadataModelType === 'skin' && shareableUrlState.animationLibraryId
+            ? (animationLibraries.find(
+                  (library) =>
+                      library.id.toLowerCase() ===
+                      shareableUrlState.animationLibraryId?.toLowerCase()
+              )?.name ?? shareableUrlState.animationLibraryId)
+            : null;
+    const pageTitle = hasUrlModel
+        ? `open.mp | Model Library | ${metadataCategoryLabel} | ${info.name} (${info.id})`
+        : shareableUrlReady && shareableUrlHasQuery
+          ? `open.mp | Model Library | ${metadataCategoryLabel}`
+          : 'open.mp | Model Library';
     const pageDescription =
-        modelType === 'skin' && info && animationLibraryName && animationSelection.animationName
-            ? `The ${info.name} skin playing ${animationLibraryName}:${animationSelection.animationName} animation.`
-            : info
-              ? `Explore the ${info.name} model (ID ${info.id}) in the open.mp ${categoryLabel.toLowerCase()} library.`
-              : `Browse ${categoryLabel.toLowerCase()} in the open.mp model library.`;
+        hasUrlModel &&
+        metadataModelType === 'skin' &&
+        animationLibraryName &&
+        shareableUrlState.animationName
+            ? `The ${info.name} skin playing ${animationLibraryName}:${shareableUrlState.animationName} animation.`
+            : hasUrlModel
+              ? `Explore the ${info.name} model (ID ${info.id}) in the Open Multiplayer ${metadataCategoryLabel.toLowerCase()} library.`
+              : shareableUrlReady && shareableUrlHasQuery
+                ? `Browse ${metadataCategoryLabel.toLowerCase()} in the Open Multiplayer model library.`
+                : 'Explore the Open Multiplayer model library.';
 
     return (
         <ThemeProvider mode={themeMode}>

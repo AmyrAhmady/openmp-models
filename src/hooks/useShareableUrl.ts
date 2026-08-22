@@ -41,6 +41,8 @@ export function useShareableUrl(): UseShareableUrlResult {
             '',
             `${window.location.pathname}${search}${window.location.hash}`
         );
+        setState(nextState);
+        setHasQuery(search.length > 0);
     }, []);
 
     return { ready, hasQuery, state, pushState };
