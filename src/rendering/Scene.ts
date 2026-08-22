@@ -560,9 +560,7 @@ export default class Scene implements SceneController {
             return;
         }
 
-        this.renderScheduler.setSpinning(
-            this.options.spin || Boolean(this.activeAnimation)
-        );
+        this.renderScheduler.setSpinning(this.options.spin || Boolean(this.activeAnimation));
         this.render();
     }
 
@@ -1132,7 +1130,10 @@ export default class Scene implements SceneController {
         const root = model.instance;
         const objectsByFrame = new Map<number, THREE.Bone>();
         root.traverse((object) => {
-            if (object instanceof THREE.Bone && typeof object.userData.modelFrameIndex === 'number') {
+            if (
+                object instanceof THREE.Bone &&
+                typeof object.userData.modelFrameIndex === 'number'
+            ) {
                 objectsByFrame.set(object.userData.modelFrameIndex, object);
             }
         });
@@ -1357,10 +1358,7 @@ export default class Scene implements SceneController {
                 return;
             }
 
-            const skinnedMesh = new THREE.SkinnedMesh(
-                geometryMesh,
-                matsByName
-            );
+            const skinnedMesh = new THREE.SkinnedMesh(geometryMesh, matsByName);
             const bindMatrix = skinBindMatrix ?? object.matrixWorld.clone();
             const bindMatrixInverse = bindMatrix.clone().invert();
             const boneInverses = geometry.skin.inverseMatrices.map((inverseMatrix) =>

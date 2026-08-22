@@ -30,12 +30,7 @@ export interface ParsedAnimationLibrary {
     animations: ParsedAnimation[];
 }
 
-function readFixedString(
-    bytes: Uint8Array,
-    offset: number,
-    length: number,
-    trim = true
-): string {
+function readFixedString(bytes: Uint8Array, offset: number, length: number, trim = true): string {
     let end = offset;
     const limit = offset + length;
 

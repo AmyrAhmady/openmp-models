@@ -212,8 +212,7 @@ test('model asset client rejects invalid payloads and allows a retry', async () 
         return {
             ok: true,
             status: 200,
-            arrayBuffer: async () =>
-                fetchCount === 1 ? new ArrayBuffer(1) : validDff,
+            arrayBuffer: async () => (fetchCount === 1 ? new ArrayBuffer(1) : validDff),
         };
     };
 

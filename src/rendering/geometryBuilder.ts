@@ -66,9 +66,33 @@ function appendIndexedFace(
     indices: number[],
     vertexMap: Map<string, number>
 ): void {
-    const firstVertex = getIndexedVertex(geometry, firstVertexIndex, positions, uvs, skinIndices, skinWeights, vertexMap);
-    const secondVertex = getIndexedVertex(geometry, secondVertexIndex, positions, uvs, skinIndices, skinWeights, vertexMap);
-    const thirdVertex = getIndexedVertex(geometry, thirdVertexIndex, positions, uvs, skinIndices, skinWeights, vertexMap);
+    const firstVertex = getIndexedVertex(
+        geometry,
+        firstVertexIndex,
+        positions,
+        uvs,
+        skinIndices,
+        skinWeights,
+        vertexMap
+    );
+    const secondVertex = getIndexedVertex(
+        geometry,
+        secondVertexIndex,
+        positions,
+        uvs,
+        skinIndices,
+        skinWeights,
+        vertexMap
+    );
+    const thirdVertex = getIndexedVertex(
+        geometry,
+        thirdVertexIndex,
+        positions,
+        uvs,
+        skinIndices,
+        skinWeights,
+        vertexMap
+    );
     if (firstVertex !== null && secondVertex !== null && thirdVertex !== null) {
         indices.push(firstVertex, secondVertex, thirdVertex);
     }

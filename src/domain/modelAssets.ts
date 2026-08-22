@@ -146,16 +146,25 @@ function findInvalidModelExportPath(value: unknown): string | null {
                 if (!isFiniteNumber(geometry.skin.boneCount)) {
                     return `${skinPath}.boneCount`;
                 }
-                if (!Array.isArray(geometry.skin.boneIndices) || geometry.skin.boneIndices.length !== geometry.vertices.length) {
+                if (
+                    !Array.isArray(geometry.skin.boneIndices) ||
+                    geometry.skin.boneIndices.length !== geometry.vertices.length
+                ) {
                     return `${skinPath}.boneIndices`;
                 }
-                if (!Array.isArray(geometry.skin.weights) || geometry.skin.weights.length !== geometry.vertices.length) {
+                if (
+                    !Array.isArray(geometry.skin.weights) ||
+                    geometry.skin.weights.length !== geometry.vertices.length
+                ) {
                     return `${skinPath}.weights`;
                 }
                 if (!Array.isArray(geometry.skin.inverseMatrices)) {
                     return `${skinPath}.inverseMatrices`;
                 }
-                if (geometry.skin.boneFrameIndices !== undefined && !isFiniteNumberArray(geometry.skin.boneFrameIndices)) {
+                if (
+                    geometry.skin.boneFrameIndices !== undefined &&
+                    !isFiniteNumberArray(geometry.skin.boneFrameIndices)
+                ) {
                     return `${skinPath}.boneFrameIndices`;
                 }
             }

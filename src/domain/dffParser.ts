@@ -166,9 +166,24 @@ class DffReader {
 function readMatrix(reader: DffReader): ModelMatrix {
     const rotation = Array.from({ length: 9 }, () => reader.float32());
     const position = Array.from({ length: 3 }, () => reader.float32());
-    const row0: MatrixRow = [rotation[0] ?? 1, rotation[3] ?? 0, rotation[6] ?? 0, position[0] ?? 0];
-    const row1: MatrixRow = [rotation[1] ?? 0, rotation[4] ?? 1, rotation[7] ?? 0, position[1] ?? 0];
-    const row2: MatrixRow = [rotation[2] ?? 0, rotation[5] ?? 0, rotation[8] ?? 1, position[2] ?? 0];
+    const row0: MatrixRow = [
+        rotation[0] ?? 1,
+        rotation[3] ?? 0,
+        rotation[6] ?? 0,
+        position[0] ?? 0,
+    ];
+    const row1: MatrixRow = [
+        rotation[1] ?? 0,
+        rotation[4] ?? 1,
+        rotation[7] ?? 0,
+        position[1] ?? 0,
+    ];
+    const row2: MatrixRow = [
+        rotation[2] ?? 0,
+        rotation[5] ?? 0,
+        rotation[8] ?? 1,
+        position[2] ?? 0,
+    ];
     return [row0, row1, row2, [0, 0, 0, 1]];
 }
 
@@ -236,7 +251,9 @@ function readFrameList(reader: DffReader): DffFrame[] {
 function readTextureName(reader: DffReader): string {
     const texture = reader.chunk();
     if (texture.type !== 0x6) {
-        throw new Error(`DFF material is missing its texture (chunk 0x${texture.type.toString(16)} at ${texture.payload})`);
+        throw new Error(
+            `DFF material is missing its texture (chunk 0x${texture.type.toString(16)} at ${texture.payload})`
+        );
     }
     const structure = reader.chunk();
     reader.skip(structure.end - reader.offset);
@@ -340,10 +357,10 @@ function readSkin(reader: DffReader, chunk: Chunk, vertexCount: number): ModelGe
             reader.finishChunk(structure);
             return undefined;
         }
-            const boneCount = reader.uint8();
-            const specialIndexCount = reader.uint8();
-            reader.skip(2);
-            reader.skip(specialIndexCount);
+        const boneCount = reader.uint8();
+        const specialIndexCount = reader.uint8();
+        reader.skip(2);
+        reader.skip(specialIndexCount);
         const inverseMatrices: number[][] = [];
         for (let bone = 0; bone < boneCount; bone += 1) {
             inverseMatrices.push(readSkinMatrix(reader));
@@ -364,15 +381,24 @@ function readSkin(reader: DffReader, chunk: Chunk, vertexCount: number): ModelGe
     const boneIndices: [number, number, number, number][] = [];
     for (let vertex = 0; vertex < vertexCount; vertex += 1) {
         const packed = reader.uint32();
-        const indices = [packed & 0xff, (packed >>> 8) & 0xff, (packed >>> 16) & 0xff, packed >>> 24];
+        const indices = [
+            packed & 0xff,
+            (packed >>> 8) & 0xff,
+            (packed >>> 16) & 0xff,
+            packed >>> 24,
+        ];
         boneIndices.push(indices as [number, number, number, number]);
     }
-    const weights: [number, number, number, number][] = Array.from({ length: vertexCount }, () => [
-        reader.float32(),
-        reader.float32(),
-        reader.float32(),
-        reader.float32(),
-    ] as [number, number, number, number]);
+    const weights: [number, number, number, number][] = Array.from(
+        { length: vertexCount },
+        () =>
+            [reader.float32(), reader.float32(), reader.float32(), reader.float32()] as [
+                number,
+                number,
+                number,
+                number,
+            ]
+    );
     const inverseMatrices: number[][] = [];
     for (let bone = 0; bone < boneCount; bone += 1) {
         inverseMatrices.push(readSkinMatrix(reader));
@@ -525,13 +551,19 @@ function readGeometry(reader: DffReader): DffGeometry {
             reader.skip(vertexCount * 4);
         }
         if (flags & FLAGS_TEXTURED) {
-            texcoords = Array.from({ length: vertexCount }, () => ({ uvx: reader.float32(), uvy: reader.float32() }));
+            texcoords = Array.from({ length: vertexCount }, () => ({
+                uvx: reader.float32(),
+                uvy: reader.float32(),
+            }));
         }
         if (flags & FLAGS_TEXTURED2) {
             const firstLayer = flags & FLAGS_TEXTURED ? 1 : 0;
             for (let layer = 0; layer < numUvs; layer += 1) {
                 if (layer === firstLayer) {
-                    texcoords = Array.from({ length: vertexCount }, () => ({ uvx: reader.float32(), uvy: reader.float32() }));
+                    texcoords = Array.from({ length: vertexCount }, () => ({
+                        uvx: reader.float32(),
+                        uvy: reader.float32(),
+                    }));
                 } else {
                     reader.skip(vertexCount * 8);
                 }
@@ -544,7 +576,11 @@ function readGeometry(reader: DffReader): DffGeometry {
     reader.skip(4);
     const vertices = native
         ? []
-        : Array.from({ length: vertexCount }, () => ({ x: reader.float32(), y: reader.float32(), z: reader.float32() }));
+        : Array.from({ length: vertexCount }, () => ({
+              x: reader.float32(),
+              y: reader.float32(),
+              z: reader.float32(),
+          }));
     if (!native && flags & FLAGS_NORMALS) {
         reader.skip(vertexCount * 12);
     }
