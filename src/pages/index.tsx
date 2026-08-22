@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { NextPage } from 'next';
+import type { GetServerSideProps, NextPage } from 'next';
 import Head from 'next/head';
 import { StyleSheet, View } from 'react-native-web';
 import ColorPicker from 'src/components/ColorPicker';
@@ -24,10 +24,18 @@ import type { CatalogListItem } from 'src/domain/catalog';
 import type { ParsedAnimation } from 'src/animation/ifpParser';
 import type { AnimationSelection } from 'src/components/AnimationBrowser';
 import { useShareableUrl } from 'src/hooks/useShareableUrl';
-import { serializeShareableUrl, type ShareableUrlState } from 'src/domain/shareableUrl';
-import { animationLibraries } from 'src/domain/animationCatalog';
+import {
+    parseShareableUrl,
+    serializeShareableUrl,
+    type ShareableUrlState,
+} from 'src/domain/shareableUrl';
+import { getPageMetadata, type PageMetadata } from 'src/domain/pageMetadata';
 
-const Main: NextPage = () => {
+interface MainProps {
+    initialMetadata: PageMetadata;
+}
+
+const Main: NextPage<MainProps> = ({ initialMetadata }) => {
     const isMobileView = useResponsiveView();
     const [modelType, setModelType] = useState<ModelType>('vehicle');
     const [selectedAnimation, setSelectedAnimation] = useState<ParsedAnimation | null>(null);
@@ -315,55 +323,21 @@ const Main: NextPage = () => {
         pushState(shareableState);
     }, [info, pushState, shareableState, shareableUrlReady]);
     const infoRows = useMemo(() => (info ? getCatalogInfoRows(info) : []), [info]);
-    const metadataModelType = shareableUrlState.modelType;
-    const metadataCategoryLabel =
-        metadataModelType === 'vehicle'
-            ? 'Vehicles'
-            : metadataModelType === 'skin'
-              ? 'Skins'
-              : 'Objects';
-    const hasUrlModel =
-        shareableUrlReady &&
-        shareableUrlHasQuery &&
-        shareableUrlState.modelId !== null &&
-        selectedModelType === metadataModelType &&
-        info?.id === shareableUrlState.modelId;
-    const animationLibraryName =
-        metadataModelType === 'skin' && shareableUrlState.animationLibraryId
-            ? (animationLibraries.find(
-                  (library) =>
-                      library.id.toLowerCase() ===
-                      shareableUrlState.animationLibraryId?.toLowerCase()
-              )?.name ?? shareableUrlState.animationLibraryId)
-            : null;
-    const pageTitle = hasUrlModel
-        ? `open.mp | Model Library | ${metadataCategoryLabel} | ${info.name} (${info.id})`
-        : shareableUrlReady && shareableUrlHasQuery
-          ? `open.mp | Model Library | ${metadataCategoryLabel}`
-          : 'open.mp | Model Library';
-    const pageDescription =
-        hasUrlModel &&
-        metadataModelType === 'skin' &&
-        animationLibraryName &&
-        shareableUrlState.animationName
-            ? `The ${info.name} skin playing ${animationLibraryName}:${shareableUrlState.animationName} animation.`
-            : hasUrlModel
-              ? `Explore the ${info.name} model (ID ${info.id}) in the Open Multiplayer ${metadataCategoryLabel.toLowerCase()} library.`
-              : shareableUrlReady && shareableUrlHasQuery
-                ? `Browse ${metadataCategoryLabel.toLowerCase()} in the Open Multiplayer model library.`
-                : 'Explore the Open Multiplayer model library.';
+    const pageMetadata = shareableUrlReady
+        ? getPageMetadata(shareableUrlState, shareableUrlHasQuery)
+        : initialMetadata;
 
     return (
         <ThemeProvider mode={themeMode}>
             <Head>
-                <title>{pageTitle}</title>
-                <meta name="description" content={pageDescription} />
+                <title>{pageMetadata.title}</title>
+                <meta name="description" content={pageMetadata.description} />
                 <meta property="og:type" content="website" />
-                <meta property="og:title" content={pageTitle} />
-                <meta property="og:description" content={pageDescription} />
+                <meta property="og:title" content={pageMetadata.title} />
+                <meta property="og:description" content={pageMetadata.description} />
                 <meta name="twitter:card" content="summary" />
-                <meta name="twitter:title" content={pageTitle} />
-                <meta name="twitter:description" content={pageDescription} />
+                <meta name="twitter:title" content={pageMetadata.title} />
+                <meta name="twitter:description" content={pageMetadata.description} />
             </Head>
             <View style={[styles.container, { backgroundColor: theme.mainBg }]}>
                 <Header
@@ -486,6 +460,17 @@ const Main: NextPage = () => {
 };
 
 export default Main;
+
+export const getServerSideProps: GetServerSideProps<MainProps> = async ({ resolvedUrl }) => {
+    const queryStart = resolvedUrl.indexOf('?');
+    const search = queryStart === -1 ? '' : resolvedUrl.slice(queryStart);
+
+    return {
+        props: {
+            initialMetadata: getPageMetadata(parseShareableUrl(search), search.length > 0),
+        },
+    };
+};
 
 const styles = StyleSheet.create({
     container: {
