@@ -34,6 +34,10 @@ const Main: NextPage = () => {
         animationName: null,
         animation: null,
     });
+    const [animationTarget, setAnimationTarget] = useState({
+        libraryId: null as string | null,
+        animationName: null as string | null,
+    });
     const [vehicleColorsChanged, setVehicleColorsChanged] = useState(false);
     const syncUrlEnabled = useRef(false);
     const restoringUrl = useRef(true);
@@ -73,11 +77,17 @@ const Main: NextPage = () => {
     const handleAnimationSelection = useCallback((selection: AnimationSelection): void => {
         setSelectedAnimation(selection.animation);
         setAnimationSelection(selection);
+        setAnimationTarget({
+            libraryId: selection.libraryId,
+            animationName: selection.animationName,
+        });
+        restoringUrl.current = false;
         syncUrlEnabled.current = true;
     }, []);
 
     const handleVehicleModification = useCallback(
         (modification: Parameters<typeof onToggleModification>[0]): void => {
+            restoringUrl.current = false;
             syncUrlEnabled.current = true;
             onToggleModification(modification);
         },
@@ -86,6 +96,7 @@ const Main: NextPage = () => {
 
     const handleBackgroundColor = useCallback(
         (color: string): void => {
+            restoringUrl.current = false;
             syncUrlEnabled.current = true;
             onSelectColor(color);
         },
@@ -95,6 +106,7 @@ const Main: NextPage = () => {
     const handleVehicleColor = useCallback(
         (slot: 'primary' | 'secondary', colorId: number): void => {
             setVehicleColorsChanged(true);
+            restoringUrl.current = false;
             syncUrlEnabled.current = true;
             onSelectVehicleColor(slot, colorId);
         },
@@ -105,6 +117,7 @@ const Main: NextPage = () => {
         (type: { value: ModelType }): void => {
             setSelectedAnimation(null);
             setAnimationSelection({ libraryId: null, animationName: null, animation: null });
+            setAnimationTarget({ libraryId: null, animationName: null });
             setVehicleColorsChanged(false);
             onModelTypeChange(type);
             setModelType(type.value);
@@ -128,6 +141,7 @@ const Main: NextPage = () => {
         (item: CatalogListItem): void => {
             setSelectedAnimation(null);
             setAnimationSelection({ libraryId: null, animationName: null, animation: null });
+            setAnimationTarget({ libraryId: null, animationName: null });
             setVehicleColorsChanged(false);
             onSelectItem(item);
             restoringUrl.current = false;
@@ -164,6 +178,10 @@ const Main: NextPage = () => {
         pendingUrlState.current = shareableUrlState;
         setSelectedAnimation(null);
         setAnimationSelection({ libraryId: null, animationName: null, animation: null });
+        setAnimationTarget({
+            libraryId: shareableUrlState.animationLibraryId,
+            animationName: shareableUrlState.animationName,
+        });
         setVehicleColorsChanged(
             shareableUrlState.primaryColorId !== null || shareableUrlState.secondaryColorId !== null
         );
@@ -333,8 +351,8 @@ const Main: NextPage = () => {
                             onSelectVehicleColor={handleVehicleColor}
                             onSelectAnimation={setSelectedAnimation}
                             onSelectionChange={handleAnimationSelection}
-                            initialAnimationLibraryId={shareableUrlState.animationLibraryId}
-                            initialAnimationName={shareableUrlState.animationName}
+                            initialAnimationLibraryId={animationTarget.libraryId}
+                            initialAnimationName={animationTarget.animationName}
                         />
                     ) : (
                         <View style={styles.desktopMenuColumn}>
@@ -362,14 +380,13 @@ const Main: NextPage = () => {
                         <View style={styles.desktopDetailsColumn}>
                             {modelType === 'skin' && (
                                 <AnimationBrowser
-                                    key={`animation-browser-${info?.id ?? 'none'}`}
                                     style={{ marginBottom: 14 }}
                                     collapsible
                                     initiallyExpanded={true}
                                     onSelectAnimation={setSelectedAnimation}
                                     onSelectionChange={handleAnimationSelection}
-                                    initialLibraryId={shareableUrlState.animationLibraryId}
-                                    initialAnimationName={shareableUrlState.animationName}
+                                    initialLibraryId={animationTarget.libraryId}
+                                    initialAnimationName={animationTarget.animationName}
                                 />
                             )}
                             {modelType === 'vehicle' && (

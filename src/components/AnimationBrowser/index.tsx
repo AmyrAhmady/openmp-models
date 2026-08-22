@@ -151,19 +151,23 @@ const AnimationBrowser = ({
             return;
         }
 
-        const controller = new AbortController();
+        let active = true;
         setLibraryData(null);
         setSelectedAnimationName('');
         setStatus('loading');
         setError('');
 
-        getAnimationLibrary(selectedLibrary, controller.signal)
+        getAnimationLibrary(selectedLibrary)
             .then((data) => {
+                if (!active) {
+                    return;
+                }
+
                 setLibraryData(data);
                 setStatus('ready');
             })
             .catch((requestError: unknown) => {
-                if (controller.signal.aborted) {
+                if (!active) {
                     return;
                 }
 
@@ -175,7 +179,9 @@ const AnimationBrowser = ({
                 );
             });
 
-        return () => controller.abort();
+        return () => {
+            active = false;
+        };
     }, [selectedLibrary]);
 
     useEffect(() => {

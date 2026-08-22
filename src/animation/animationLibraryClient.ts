@@ -5,16 +5,14 @@ import type { ParsedAnimationLibrary } from './ifpParser';
 const animationLibraryCache = new Map<string, Promise<ParsedAnimationLibrary>>();
 
 export function getAnimationLibrary(
-    library: AnimationLibraryInfo,
-    signal?: AbortSignal
+    library: AnimationLibraryInfo
 ): Promise<ParsedAnimationLibrary> {
     const cached = animationLibraryCache.get(library.id);
     if (cached) {
         return cached;
     }
 
-    const requestInit: RequestInit = signal ? { signal } : {};
-    const request = fetch(`/ifps/${encodeURIComponent(library.file)}`, requestInit)
+    const request = fetch(`/ifps/${encodeURIComponent(library.file)}`)
         .then((response) => {
             if (!response.ok) {
                 throw new Error(`Could not load ${library.name}.`);
