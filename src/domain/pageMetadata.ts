@@ -1,6 +1,6 @@
 import { animationLibraries } from './animationCatalog';
-import { findCatalogItem } from 'src/catalog/catalogRegistry';
 import { MODEL_TYPE_LABELS } from './modelType';
+import type { CatalogItem } from './catalog';
 import type { ShareableUrlState } from './shareableUrl';
 
 export interface PageMetadata {
@@ -10,7 +10,11 @@ export interface PageMetadata {
 
 const siteTitle = 'open.mp | Model Library';
 
-export function getPageMetadata(state: ShareableUrlState, hasQuery: boolean): PageMetadata {
+export function getPageMetadata(
+    state: ShareableUrlState,
+    hasQuery: boolean,
+    item: CatalogItem | null
+): PageMetadata {
     if (!hasQuery) {
         return {
             title: siteTitle,
@@ -19,8 +23,6 @@ export function getPageMetadata(state: ShareableUrlState, hasQuery: boolean): Pa
     }
 
     const categoryLabel = MODEL_TYPE_LABELS[state.modelType];
-    const item =
-        state.modelId === null ? undefined : findCatalogItem(state.modelType, state.modelId);
     const title = item
         ? `${siteTitle} | ${categoryLabel} | ${item.name} (${item.id})`
         : `${siteTitle} | ${categoryLabel}`;

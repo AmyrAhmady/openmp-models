@@ -52,6 +52,7 @@ const Main: NextPage<MainProps> = ({ initialMetadata }) => {
     const syncUrlEnabled = useRef(false);
     const restoringUrl = useRef(true);
     const seenUrlKey = useRef<string | null>(null);
+    const localUrlChange = useRef(false);
     const pendingUrlState = useRef<ShareableUrlState | null>(null);
     const {
         ready: shareableUrlReady,
@@ -91,12 +92,14 @@ const Main: NextPage<MainProps> = ({ initialMetadata }) => {
             libraryId: selection.libraryId,
             animationName: selection.animationName,
         });
+        localUrlChange.current = true;
         restoringUrl.current = false;
         syncUrlEnabled.current = true;
     }, []);
 
     const handleVehicleModification = useCallback(
         (modification: Parameters<typeof onToggleModification>[0]): void => {
+            localUrlChange.current = true;
             restoringUrl.current = false;
             syncUrlEnabled.current = true;
             onToggleModification(modification);
@@ -106,6 +109,7 @@ const Main: NextPage<MainProps> = ({ initialMetadata }) => {
 
     const handleBackgroundColor = useCallback(
         (color: string): void => {
+            localUrlChange.current = true;
             restoringUrl.current = false;
             syncUrlEnabled.current = true;
             onSelectColor(color);
@@ -116,6 +120,7 @@ const Main: NextPage<MainProps> = ({ initialMetadata }) => {
     const handleVehicleColor = useCallback(
         (slot: 'primary' | 'secondary', colorId: number): void => {
             setVehicleColorsChanged(true);
+            localUrlChange.current = true;
             restoringUrl.current = false;
             syncUrlEnabled.current = true;
             onSelectVehicleColor(slot, colorId);
@@ -131,6 +136,7 @@ const Main: NextPage<MainProps> = ({ initialMetadata }) => {
             setVehicleColorsChanged(false);
             onModelTypeChange(type);
             setModelType(type.value);
+            localUrlChange.current = true;
             restoringUrl.current = false;
             syncUrlEnabled.current = true;
             pushState({
@@ -154,6 +160,7 @@ const Main: NextPage<MainProps> = ({ initialMetadata }) => {
             setAnimationTarget({ libraryId: null, animationName: null });
             setVehicleColorsChanged(false);
             onSelectItem(item);
+            localUrlChange.current = true;
             restoringUrl.current = false;
             syncUrlEnabled.current = true;
             pushState({
@@ -171,6 +178,36 @@ const Main: NextPage<MainProps> = ({ initialMetadata }) => {
         [backgroundSelection, modelType, onSelectItem, pushState]
     );
 
+    const shareableState = useMemo<ShareableUrlState>(
+        () => ({
+            modelType,
+            modelId: selectedModelType === modelType && info ? info.id : null,
+            animationLibraryId: modelType === 'skin' ? animationSelection.libraryId : null,
+            animationName: modelType === 'skin' ? animationSelection.animationName : null,
+            modificationIds: modelType === 'vehicle' ? [...selectedModificationIds] : [],
+            primaryColorId:
+                modelType === 'vehicle' && vehicleColorsChanged
+                    ? (vehicleColor?.primary ?? null)
+                    : null,
+            secondaryColorId:
+                modelType === 'vehicle' && vehicleColorsChanged
+                    ? (vehicleColor?.secondary ?? null)
+                    : null,
+            backgroundColor:
+                backgroundSelection.source === 'custom' ? backgroundSelection.color : null,
+        }),
+        [
+            animationSelection,
+            backgroundSelection,
+            info,
+            modelType,
+            selectedModelType,
+            selectedModificationIds,
+            vehicleColor,
+            vehicleColorsChanged,
+        ]
+    );
+
     useEffect(() => {
         if (!shareableUrlReady) {
             return;
@@ -178,6 +215,15 @@ const Main: NextPage<MainProps> = ({ initialMetadata }) => {
 
         const urlKey = serializeShareableUrl(shareableUrlState);
         if (seenUrlKey.current === urlKey) {
+            return;
+        }
+
+        if (localUrlChange.current) {
+            localUrlChange.current = false;
+            seenUrlKey.current = urlKey;
+            restoringUrl.current = false;
+            pendingUrlState.current = null;
+            syncUrlEnabled.current = shareableUrlHasQuery;
             return;
         }
 
@@ -285,46 +331,27 @@ const Main: NextPage<MainProps> = ({ initialMetadata }) => {
         vehicleColor,
     ]);
 
-    const shareableState = useMemo<ShareableUrlState>(
-        () => ({
-            modelType,
-            modelId: selectedModelType === modelType && info ? info.id : null,
-            animationLibraryId: modelType === 'skin' ? animationSelection.libraryId : null,
-            animationName: modelType === 'skin' ? animationSelection.animationName : null,
-            modificationIds: modelType === 'vehicle' ? [...selectedModificationIds] : [],
-            primaryColorId:
-                modelType === 'vehicle' && vehicleColorsChanged
-                    ? (vehicleColor?.primary ?? null)
-                    : null,
-            secondaryColorId:
-                modelType === 'vehicle' && vehicleColorsChanged
-                    ? (vehicleColor?.secondary ?? null)
-                    : null,
-            backgroundColor:
-                backgroundSelection.source === 'custom' ? backgroundSelection.color : null,
-        }),
-        [
-            animationSelection,
-            backgroundSelection,
-            info,
-            modelType,
-            selectedModelType,
-            selectedModificationIds,
-            vehicleColor,
-            vehicleColorsChanged,
-        ]
-    );
-
     useEffect(() => {
         if (!shareableUrlReady || !syncUrlEnabled.current || restoringUrl.current || !info) {
+            return;
+        }
+
+        if (window.location.search === serializeShareableUrl(shareableState)) {
+            localUrlChange.current = false;
             return;
         }
 
         pushState(shareableState);
     }, [info, pushState, shareableState, shareableUrlReady]);
     const infoRows = useMemo(() => (info ? getCatalogInfoRows(info) : []), [info]);
+    const metadataItem =
+        shareableUrlState.modelId !== null &&
+        selectedModelType === shareableUrlState.modelType &&
+        info?.id === shareableUrlState.modelId
+            ? info
+            : null;
     const pageMetadata = shareableUrlReady
-        ? getPageMetadata(shareableUrlState, shareableUrlHasQuery)
+        ? getPageMetadata(shareableUrlState, shareableUrlHasQuery, metadataItem)
         : initialMetadata;
 
     return (
@@ -464,10 +491,13 @@ export default Main;
 export const getServerSideProps: GetServerSideProps<MainProps> = async ({ resolvedUrl }) => {
     const queryStart = resolvedUrl.indexOf('?');
     const search = queryStart === -1 ? '' : resolvedUrl.slice(queryStart);
+    const { findCatalogItem } = await import('src/catalog/catalogRegistry');
+    const state = parseShareableUrl(search);
+    const item = state.modelId === null ? null : findCatalogItem(state.modelType, state.modelId);
 
     return {
         props: {
-            initialMetadata: getPageMetadata(parseShareableUrl(search), search.length > 0),
+            initialMetadata: getPageMetadata(state, search.length > 0, item ?? null),
         },
     };
 };

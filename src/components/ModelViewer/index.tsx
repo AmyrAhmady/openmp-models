@@ -1,10 +1,12 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
+import dynamic from 'next/dynamic';
 import { Text, TouchableOpacity, View } from 'react-native-web';
 import type { ModelData, SceneController } from 'src/rendering/types';
 import Scene from 'src/rendering/Scene';
 import { reportError } from 'src/monitoring/reportError';
 import type { ParsedAnimation } from 'src/animation/ifpParser';
-import RecordingModal from 'src/components/RecordingModal';
+
+const RecordingModal = dynamic(() => import('src/components/RecordingModal'), { ssr: false });
 
 interface ModelViewerProps {
     models: ModelData[];
@@ -375,12 +377,14 @@ export default function ModelViewer({
                     {recordingError}
                 </Text>
             ) : null}
-            <RecordingModal
-                visible={recordedWebm !== null}
-                webmBlob={recordedWebm}
-                fileBaseName={recordingFileBaseName}
-                onRequestClose={() => setRecordedWebm(null)}
-            />
+            {recordedWebm ? (
+                <RecordingModal
+                    visible
+                    webmBlob={recordedWebm}
+                    fileBaseName={recordingFileBaseName}
+                    onRequestClose={() => setRecordedWebm(null)}
+                />
+            ) : null}
         </div>
     );
 }
