@@ -16,6 +16,7 @@ export interface SceneController {
     setAnimation(animation: ParsedAnimation | null): void;
     setSpin(autoSpin: boolean): void;
     setWheelSpin(spinning: boolean): void;
+    getCanvas(): HTMLCanvasElement | null;
     render(): void;
     dispose(): void;
 }

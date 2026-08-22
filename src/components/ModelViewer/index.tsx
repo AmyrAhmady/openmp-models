@@ -1,13 +1,15 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native-web';
 import type { ModelData, SceneController } from 'src/rendering/types';
 import Scene from 'src/rendering/Scene';
 import { reportError } from 'src/monitoring/reportError';
 import type { ParsedAnimation } from 'src/animation/ifpParser';
+import RecordingModal from 'src/components/RecordingModal';
 
 interface ModelViewerProps {
     models: ModelData[];
     autoSpin: boolean;
+    modelId: number | null;
     animation?: ParsedAnimation | null;
     backgroundColor?: string;
     showWheelSpinTest?: boolean;
@@ -33,6 +35,7 @@ function reportSceneError(error: unknown, operation: string): void {
 export default function ModelViewer({
     models,
     autoSpin,
+    modelId,
     animation = null,
     backgroundColor = 'transparent',
     showWheelSpinTest = false,
@@ -44,6 +47,13 @@ export default function ModelViewer({
     const [mountAttempt, setMountAttempt] = useState(0);
     const [sceneError, setSceneError] = useState<string | null>(null);
     const [wheelSpin, setWheelSpin] = useState(false);
+    const [isRecording, setIsRecording] = useState(false);
+    const [recordingError, setRecordingError] = useState<string | null>(null);
+    const [recordedWebm, setRecordedWebm] = useState<Blob | null>(null);
+    const [recordingFileBaseName, setRecordingFileBaseName] = useState('omp-model-recording');
+    const recorderRef = useRef<MediaRecorder | null>(null);
+    const recordingStreamRef = useRef<MediaStream | null>(null);
+    const recordingChunksRef = useRef<Blob[]>([]);
     latestPropsRef.current = { models, autoSpin, animation };
 
     useEffect(() => {
@@ -156,6 +166,89 @@ export default function ModelViewer({
         return () => sceneRef.current?.setWheelSpin(false);
     }, [wheelSpin]);
 
+    const stopRecording = useCallback((): void => {
+        const recorder = recorderRef.current;
+        if (!recorder || recorder.state === 'inactive') {
+            return;
+        }
+
+        recorder.stop();
+    }, []);
+
+    const startRecording = useCallback((): void => {
+        const canvas = sceneRef.current?.getCanvas();
+        if (!canvas || typeof canvas.captureStream !== 'function') {
+            setRecordingError('This browser cannot record the 3D preview.');
+            return;
+        }
+
+        if (typeof MediaRecorder === 'undefined') {
+            setRecordingError('This browser does not support WebM recording.');
+            return;
+        }
+
+        const mimeType = ['video/webm;codecs=vp9', 'video/webm;codecs=vp8', 'video/webm'].find(
+            (candidate) => MediaRecorder.isTypeSupported(candidate)
+        );
+
+        if (!mimeType) {
+            setRecordingError('This browser does not support a compatible WebM format.');
+            return;
+        }
+
+        const stream = canvas.captureStream(30);
+        const recorder = new MediaRecorder(stream, { mimeType });
+        const randomSuffix = Array.from({ length: 6 }, () =>
+            'abcdefghijklmnopqrstuvwxyz0123456789'.charAt(Math.floor(Math.random() * 36))
+        ).join('');
+        recordingChunksRef.current = [];
+        recordingStreamRef.current = stream;
+        recorderRef.current = recorder;
+        setRecordedWebm(null);
+        setRecordingFileBaseName(`omp-model-${modelId ?? 'unknown'}-${randomSuffix}`);
+        setRecordingError(null);
+        setIsRecording(true);
+
+        recorder.ondataavailable = (event: BlobEvent) => {
+            if (event.data.size > 0) {
+                recordingChunksRef.current.push(event.data);
+            }
+        };
+        recorder.onerror = () => {
+            setRecordingError('The recording could not be completed.');
+            setIsRecording(false);
+            recordingStreamRef.current?.getTracks().forEach((track) => track.stop());
+            recordingStreamRef.current = null;
+            recorderRef.current = null;
+        };
+        recorder.onstop = () => {
+            const blob = new Blob(recordingChunksRef.current, { type: 'video/webm' });
+            recordingChunksRef.current = [];
+            recordingStreamRef.current?.getTracks().forEach((track) => track.stop());
+            recordingStreamRef.current = null;
+            recorderRef.current = null;
+            setIsRecording(false);
+
+            if (blob.size > 0) {
+                setRecordedWebm(blob);
+            } else {
+                setRecordingError('The recording was empty.');
+            }
+        };
+        recorder.start(1000);
+    }, [modelId]);
+
+    useEffect(
+        () => () => {
+            const recorder = recorderRef.current;
+            if (recorder && recorder.state !== 'inactive') {
+                recorder.stop();
+            }
+            recordingStreamRef.current?.getTracks().forEach((track) => track.stop());
+        },
+        []
+    );
+
     return (
         <div
             ref={rootElementRef}
@@ -238,6 +331,56 @@ export default function ModelViewer({
                     </Text>
                 </TouchableOpacity>
             ) : null}
+            {!sceneError ? (
+                <TouchableOpacity
+                    accessibilityRole="button"
+                    accessibilityLabel={isRecording ? 'Stop recording' : 'Record model preview'}
+                    onPress={isRecording ? stopRecording : startRecording}
+                    style={{
+                        backgroundColor: isRecording ? '#b42318' : 'rgba(255, 255, 255, 0.9)',
+                        borderColor: isRecording ? '#b42318' : '#635bff',
+                        borderRadius: 8,
+                        borderWidth: 1,
+                        bottom: showWheelSpinTest ? 64 : 18,
+                        paddingHorizontal: 12,
+                        paddingVertical: 8,
+                        position: 'absolute',
+                        right: 18,
+                    }}
+                >
+                    <Text
+                        style={{
+                            color: isRecording ? '#ffffff' : '#635bff',
+                            fontSize: 12,
+                            fontWeight: '800',
+                        }}
+                    >
+                        {isRecording ? 'Stop recording' : 'Record'}
+                    </Text>
+                </TouchableOpacity>
+            ) : null}
+            {recordingError ? (
+                <Text
+                    accessibilityRole="alert"
+                    style={{
+                        bottom: showWheelSpinTest ? 112 : 66,
+                        color: '#b42318',
+                        fontSize: 11,
+                        maxWidth: 220,
+                        position: 'absolute',
+                        right: 18,
+                        textAlign: 'right',
+                    }}
+                >
+                    {recordingError}
+                </Text>
+            ) : null}
+            <RecordingModal
+                visible={recordedWebm !== null}
+                webmBlob={recordedWebm}
+                fileBaseName={recordingFileBaseName}
+                onRequestClose={() => setRecordedWebm(null)}
+            />
         </div>
     );
 }

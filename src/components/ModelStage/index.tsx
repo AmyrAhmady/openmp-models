@@ -87,6 +87,7 @@ const ModelStage = ({
                         models={models}
                         autoSpin={false}
                         animation={animation}
+                        modelId={info?.id ?? null}
                         showWheelSpinTest={modelType === 'vehicle'}
                     />
                 ) : modelStatus === 'idle' ? (

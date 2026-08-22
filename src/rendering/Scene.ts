@@ -564,6 +564,10 @@ export default class Scene implements SceneController {
         this.render();
     }
 
+    getCanvas(): HTMLCanvasElement | null {
+        return this.renderer?.domElement ?? null;
+    }
+
     render(): void {
         if (!this.renderer || !this.scene || !this.camera) {
             return;
