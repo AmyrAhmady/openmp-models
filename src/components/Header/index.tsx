@@ -4,7 +4,6 @@ import {
     StyleSheet,
     Image,
     Pressable,
-    Platform,
     Linking,
     Switch,
     Text,
@@ -62,26 +61,44 @@ const Header = (props: Props) => {
                 </View>
 
                 {isMobile ? (
-                    <ModalList<ModelTypeOption>
-                        style={styles.mobilePicker}
-                        isMobile={isMobile}
-                        data={MODEL_TYPE_OPTIONS}
-                        selectedValue={modelType}
-                        onPress={(item) => onModelTypeChange(item)}
-                        buttonComponent={
-                            <View
-                                style={[
-                                    styles.mobilePickerButton,
-                                    styles.mobilePickerButtonCompact,
-                                    { backgroundColor: theme.accentSoft },
-                                ]}
-                            >
-                                <Text style={[styles.mobilePickerText, { color: theme.accent }]}>
-                                    {MODEL_TYPE_LABELS[modelType]} ▾
-                                </Text>
-                            </View>
-                        }
-                    />
+                    <View style={styles.mobileHeaderActions}>
+                        <ModalList<ModelTypeOption>
+                            style={styles.mobilePicker}
+                            isMobile={isMobile}
+                            data={MODEL_TYPE_OPTIONS}
+                            selectedValue={modelType}
+                            onPress={(item) => onModelTypeChange(item)}
+                            buttonComponent={
+                                <View
+                                    style={[
+                                        styles.mobilePickerButton,
+                                        styles.mobilePickerButtonCompact,
+                                        { backgroundColor: theme.accentSoft },
+                                    ]}
+                                >
+                                    <Text
+                                        style={[styles.mobilePickerText, { color: theme.accent }]}
+                                    >
+                                        {MODEL_TYPE_LABELS[modelType]} ▾
+                                    </Text>
+                                </View>
+                            }
+                        />
+                        <View style={styles.mobileThemeToggle}>
+                            <Text style={[styles.modeLabel, { color: theme.mutedText }]}>
+                                {darkMode ? 'Dark' : 'Light'}
+                            </Text>
+                            <Switch
+                                accessibilityLabel="Toggle dark mode"
+                                trackColor={{ false: theme.lines, true: theme.accent }}
+                                thumbColor="#ffffff"
+                                onValueChange={(value) =>
+                                    onThemeModeChange(value ? 'dark' : 'light')
+                                }
+                                value={darkMode}
+                            />
+                        </View>
+                    </View>
                 ) : (
                     <View style={styles.tabs}>
                         {MODEL_TYPE_OPTIONS.map((item) => (
@@ -131,23 +148,6 @@ const Header = (props: Props) => {
                     </View>
                 )}
             </View>
-            {isMobile && (
-                <View
-                    style={[
-                        styles.actions,
-                        styles.mobileActions,
-                        Platform.OS === 'web' && styles.mobileActionsWeb,
-                    ]}
-                >
-                    <Switch
-                        accessibilityLabel="Toggle dark mode"
-                        trackColor={{ false: theme.lines, true: theme.accent }}
-                        thumbColor="#ffffff"
-                        onValueChange={(value) => onThemeModeChange(value ? 'dark' : 'light')}
-                        value={darkMode}
-                    />
-                </View>
-            )}
         </>
     );
 };
@@ -211,17 +211,16 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-end',
         alignItems: 'center',
     },
-    mobileActions: {
-        position: 'absolute',
-        right: 16,
-        bottom: 16,
-        zIndex: 10,
-        width: 'auto',
-        flexShrink: 0,
+    mobileHeaderActions: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        flexShrink: 1,
     },
-    mobileActionsWeb: {
-        // React Native Web supports fixed positioning, but its shared types do not.
-        position: 'fixed' as 'absolute',
+    mobileThemeToggle: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginLeft: 8,
+        flexShrink: 0,
     },
     modeLabel: {
         fontSize: 12,

@@ -303,79 +303,83 @@ export default function ModelViewer({
                     </TouchableOpacity>
                 </View>
             ) : null}
-            {showWheelSpinTest && !sceneError ? (
-                <TouchableOpacity
-                    accessibilityRole="button"
-                    accessibilityLabel={
-                        wheelSpin ? 'Stop wheel spin test' : 'Start wheel spin test'
-                    }
-                    onPress={() => setWheelSpin((current) => !current)}
-                    style={{
-                        backgroundColor: wheelSpin ? '#635bff' : 'rgba(255, 255, 255, 0.85)',
-                        borderColor: '#635bff',
-                        borderRadius: 8,
-                        borderWidth: 1,
-                        bottom: 18,
-                        right: 18,
-                        paddingHorizontal: 12,
-                        paddingVertical: 8,
-                        position: 'absolute',
-                    }}
-                >
-                    <Text
-                        style={{
-                            color: wheelSpin ? '#ffffff' : '#635bff',
-                            fontSize: 12,
-                            fontWeight: '800',
-                        }}
-                    >
-                        {wheelSpin ? 'Stop wheel spin' : 'Test wheel spin'}
-                    </Text>
-                </TouchableOpacity>
-            ) : null}
             {!sceneError ? (
-                <TouchableOpacity
-                    accessibilityRole="button"
-                    accessibilityLabel={isRecording ? 'Stop recording' : 'Record model preview'}
-                    onPress={isRecording ? stopRecording : startRecording}
+                <View
                     style={{
-                        backgroundColor: isRecording ? '#b42318' : 'rgba(255, 255, 255, 0.9)',
-                        borderColor: isRecording ? '#b42318' : '#635bff',
-                        borderRadius: 8,
-                        borderWidth: 1,
-                        bottom: showWheelSpinTest ? 64 : 18,
-                        paddingHorizontal: 12,
-                        paddingVertical: 8,
+                        alignItems: 'flex-end',
+                        bottom: 18,
                         position: 'absolute',
                         right: 18,
                     }}
                 >
-                    <Text
+                    {recordingError ? (
+                        <Text
+                            accessibilityRole="alert"
+                            style={{
+                                color: '#b42318',
+                                fontSize: 11,
+                                marginBottom: 6,
+                                maxWidth: 220,
+                                textAlign: 'right',
+                            }}
+                        >
+                            {recordingError}
+                        </Text>
+                    ) : null}
+                    <TouchableOpacity
+                        accessibilityRole="button"
+                        accessibilityLabel={isRecording ? 'Stop recording' : 'Record model preview'}
+                        onPress={isRecording ? stopRecording : startRecording}
                         style={{
-                            color: isRecording ? '#ffffff' : '#635bff',
-                            fontSize: 12,
-                            fontWeight: '800',
+                            backgroundColor: isRecording ? '#b42318' : 'rgba(255, 255, 255, 0.9)',
+                            borderColor: isRecording ? '#b42318' : '#635bff',
+                            borderRadius: 8,
+                            borderWidth: 1,
+                            paddingHorizontal: 12,
+                            paddingVertical: 8,
                         }}
                     >
-                        {isRecording ? 'Stop recording' : 'Record'}
-                    </Text>
-                </TouchableOpacity>
-            ) : null}
-            {recordingError ? (
-                <Text
-                    accessibilityRole="alert"
-                    style={{
-                        bottom: showWheelSpinTest ? 112 : 66,
-                        color: '#b42318',
-                        fontSize: 11,
-                        maxWidth: 220,
-                        position: 'absolute',
-                        right: 18,
-                        textAlign: 'right',
-                    }}
-                >
-                    {recordingError}
-                </Text>
+                        <Text
+                            style={{
+                                color: isRecording ? '#ffffff' : '#635bff',
+                                fontSize: 12,
+                                fontWeight: '800',
+                            }}
+                        >
+                            {isRecording ? 'Stop recording' : 'Record'}
+                        </Text>
+                    </TouchableOpacity>
+                    {showWheelSpinTest ? (
+                        <TouchableOpacity
+                            accessibilityRole="button"
+                            accessibilityLabel={
+                                wheelSpin ? 'Stop wheel spin test' : 'Start wheel spin test'
+                            }
+                            onPress={() => setWheelSpin((current) => !current)}
+                            style={{
+                                backgroundColor: wheelSpin
+                                    ? '#635bff'
+                                    : 'rgba(255, 255, 255, 0.85)',
+                                borderColor: '#635bff',
+                                borderRadius: 8,
+                                borderWidth: 1,
+                                marginTop: 8,
+                                paddingHorizontal: 12,
+                                paddingVertical: 8,
+                            }}
+                        >
+                            <Text
+                                style={{
+                                    color: wheelSpin ? '#ffffff' : '#635bff',
+                                    fontSize: 12,
+                                    fontWeight: '800',
+                                }}
+                            >
+                                {wheelSpin ? 'Stop wheel spin' : 'Test wheel spin'}
+                            </Text>
+                        </TouchableOpacity>
+                    ) : null}
+                </View>
             ) : null}
             {recordedWebm ? (
                 <RecordingModal
