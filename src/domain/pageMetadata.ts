@@ -9,6 +9,7 @@ export interface PageMetadata {
 }
 
 const siteTitle = 'open.mp | Model Library';
+const landingTitle = 'open.mp | Open Multiplayer Developer Toolkit';
 
 export function getPageMetadata(
     state: ShareableUrlState,
@@ -17,8 +18,9 @@ export function getPageMetadata(
 ): PageMetadata {
     if (!hasQuery) {
         return {
-            title: siteTitle,
-            description: 'Explore the Open Multiplayer model library.',
+            title: landingTitle,
+            description:
+                'Explore the Open Multiplayer developer toolkit for models, animations, worlds, and maps.',
         };
     }
 

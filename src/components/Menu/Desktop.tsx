@@ -2,11 +2,15 @@ import React from 'react';
 import { View, TouchableOpacity, Text, FlatList, TextInput } from 'react-native-web';
 import { useTheme } from 'src/theme/ThemeContext';
 import type { CatalogListItem } from 'src/domain/catalog';
+import type { ModelType } from 'src/domain/catalog';
 import type { UseCatalogQueryResult } from 'src/hooks/useCatalogQuery';
 import CatalogStatus from '../CatalogStatus';
 import Row from '../Row';
+import ModelTypeNavigation from '../ModelTypeNavigation';
 
 interface Props {
+    modelType: ModelType;
+    onModelTypeChange: (type: ModelType) => void;
     selectedItemId: number;
     onSelectItem: (model: CatalogListItem) => void;
     catalogQuery: UseCatalogQueryResult;
@@ -52,7 +56,13 @@ const CatalogRow = React.memo(({ item, selected, onSelect }: CatalogRowProps) =>
     );
 });
 
-const MenuDesktop = ({ selectedItemId, onSelectItem, catalogQuery }: Props) => {
+const MenuDesktop = ({
+    modelType,
+    onModelTypeChange,
+    selectedItemId,
+    onSelectItem,
+    catalogQuery,
+}: Props) => {
     const { theme } = useTheme();
     const { list, searchInput, status, error, search, clearSearch, retry } = catalogQuery;
 
@@ -66,6 +76,11 @@ const MenuDesktop = ({ selectedItemId, onSelectItem, catalogQuery }: Props) => {
                 borderColor: theme.lines,
             }}
         >
+            <ModelTypeNavigation
+                modelType={modelType}
+                onModelTypeChange={onModelTypeChange}
+                variant="sidebar"
+            />
             <View style={{ paddingHorizontal: 22, paddingTop: 22, paddingBottom: 14 }}>
                 <Text style={{ color: theme.title, fontSize: 19, fontWeight: '800' }}>
                     Browse models

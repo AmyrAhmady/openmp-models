@@ -36,7 +36,7 @@ const ModelStage = ({
 
     return (
         <View style={[styles.stage, isMobileView && styles.mobileStage, { backgroundColor }]}>
-            <View style={styles.stageHeader}>
+            <View style={[styles.stageHeader, isMobileView && styles.mobileStageHeader]}>
                 <View>
                     <Text style={[styles.stageEyebrow, { color: theme.mutedText }]}>
                         {modelType === 'vehicle' ? 'VEHICLE' : modelType.toUpperCase()}
@@ -130,6 +130,9 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'flex-start',
+    },
+    mobileStageHeader: {
+        top: 5,
     },
     stageEyebrow: {
         fontSize: 11,

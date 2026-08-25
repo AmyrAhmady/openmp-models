@@ -75,6 +75,7 @@ const MenuMobile = ({
                     flexDirection: 'row',
                     flexWrap: 'wrap',
                     paddingHorizontal: 8,
+                    paddingTop: 12,
                     paddingBottom: 4,
                     backgroundColor: theme.mainBg,
                     width: '100%',
@@ -83,35 +84,20 @@ const MenuMobile = ({
                 <TouchableOpacity
                     style={{
                         alignItems: 'center',
+                        borderColor: theme.button,
                         borderRadius: 100,
-                        height: '3rem',
+                        borderWidth: 1.8,
+                        height: '2.5rem',
                         justifyContent: 'center',
+                        marginBottom: 4,
                         marginRight: 4,
-                        width: '3rem',
+                        paddingHorizontal: 12,
                     }}
                     onPress={() => setListVisible(true)}
                     accessibilityRole="button"
-                    accessibilityLabel="Open model selector"
+                    accessibilityLabel="Browse models"
                 >
-                    <View accessibilityElementsHidden style={{ width: 22 }}>
-                        <View style={{ backgroundColor: theme.button, height: 2, width: '100%' }} />
-                        <View
-                            style={{
-                                backgroundColor: theme.button,
-                                height: 2,
-                                marginTop: 4,
-                                width: '100%',
-                            }}
-                        />
-                        <View
-                            style={{
-                                backgroundColor: theme.button,
-                                height: 2,
-                                marginTop: 4,
-                                width: '100%',
-                            }}
-                        />
-                    </View>
+                    <Text style={{ color: theme.button }}>Models</Text>
                 </TouchableOpacity>
                 {modelType === 'skin' && (
                     <TouchableOpacity

@@ -11,6 +11,7 @@ import ModelStage from 'src/components/ModelStage';
 import VehicleModPicker from 'src/components/VehicleModPicker';
 import VehicleColorPicker from 'src/components/VehicleColorPicker';
 import AnimationBrowser from 'src/components/AnimationBrowser';
+import LandingPage from 'src/components/LandingPage';
 import { ThemeProvider } from 'src/theme/ThemeContext';
 import type { ModelType } from 'src/domain/catalog';
 import { getCatalogInfoRows } from 'src/domain/catalogInfo';
@@ -31,11 +32,12 @@ import {
 } from 'src/domain/shareableUrl';
 import { getPageMetadata, type PageMetadata } from 'src/domain/pageMetadata';
 
-interface MainProps {
+export interface MainProps {
     initialMetadata: PageMetadata;
+    forceLibrary?: boolean;
 }
 
-const Main: NextPage<MainProps> = ({ initialMetadata }) => {
+export const Main: NextPage<MainProps> = ({ initialMetadata, forceLibrary = false }) => {
     const isMobileView = useResponsiveView();
     const [modelType, setModelType] = useState<ModelType>('vehicle');
     const [selectedAnimation, setSelectedAnimation] = useState<ParsedAnimation | null>(null);
@@ -358,7 +360,7 @@ const Main: NextPage<MainProps> = ({ initialMetadata }) => {
             ? info
             : null;
     const pageMetadata = shareableUrlReady
-        ? getPageMetadata(shareableUrlState, shareableUrlHasQuery, metadataItem)
+        ? getPageMetadata(shareableUrlState, shareableUrlHasQuery || forceLibrary, metadataItem)
         : initialMetadata;
 
     return (
@@ -373,122 +375,134 @@ const Main: NextPage<MainProps> = ({ initialMetadata }) => {
                 <meta name="twitter:title" content={pageMetadata.title} />
                 <meta name="twitter:description" content={pageMetadata.description} />
             </Head>
-            <View style={[styles.container, { backgroundColor: theme.mainBg }]}>
-                <Header
-                    isMobile={isMobileView}
-                    modelType={modelType}
-                    themeMode={themeMode}
-                    onThemeModeChange={onThemeModeChange}
-                    onModelTypeChange={handleModelTypeChange}
-                />
-                <View
-                    style={{
-                        flexDirection: isMobileView ? 'column' : 'row',
-                        flex: 1,
-                        minHeight: 0,
-                        minWidth: 0,
-                        width: '100%',
-                        backgroundColor: theme.mainBg,
-                    }}
-                >
-                    {isMobileView ? (
-                        <MenuMobile
-                            selectedItemId={selectedModelType === modelType && info ? info.id : -1}
-                            onSelectColor={handleBackgroundColor}
-                            selectedColor={backgroundSelection.color}
-                            modelData={infoRows}
-                            onSelectItem={handleSelectItem}
-                            catalogQuery={catalogQuery}
-                            modelType={modelType}
-                            modifications={availableModifications}
-                            selectedModificationIds={selectedModificationIds}
-                            onToggleModification={handleVehicleModification}
-                            primaryVehicleColorId={vehicleColor?.primary ?? 0}
-                            secondaryVehicleColorId={vehicleColor?.secondary ?? 0}
-                            onSelectVehicleColor={handleVehicleColor}
-                            onSelectAnimation={setSelectedAnimation}
-                            onSelectionChange={handleAnimationSelection}
-                            initialAnimationLibraryId={animationTarget.libraryId}
-                            initialAnimationName={animationTarget.animationName}
-                        />
-                    ) : (
-                        <View style={styles.desktopMenuColumn}>
-                            <MenuDesktop
+            {shareableUrlReady && !shareableUrlHasQuery && !forceLibrary ? (
+                <LandingPage themeMode={themeMode} onThemeModeChange={onThemeModeChange} />
+            ) : (
+                <View style={[styles.container, { backgroundColor: theme.mainBg }]}>
+                    <Header
+                        activePage="library"
+                        isMobile={isMobileView}
+                        subtitle="Model library"
+                        modelType={modelType}
+                        onModelTypeChange={(type) => handleModelTypeChange({ value: type })}
+                        themeMode={themeMode}
+                        onThemeModeChange={onThemeModeChange}
+                    />
+                    <View
+                        style={{
+                            flexDirection: isMobileView ? 'column' : 'row',
+                            flex: 1,
+                            minHeight: 0,
+                            minWidth: 0,
+                            width: '100%',
+                            backgroundColor: theme.mainBg,
+                        }}
+                    >
+                        {isMobileView ? (
+                            <MenuMobile
                                 selectedItemId={
                                     selectedModelType === modelType && info ? info.id : -1
                                 }
+                                onSelectColor={handleBackgroundColor}
+                                selectedColor={backgroundSelection.color}
+                                modelData={infoRows}
                                 onSelectItem={handleSelectItem}
                                 catalogQuery={catalogQuery}
+                                modelType={modelType}
+                                modifications={availableModifications}
+                                selectedModificationIds={selectedModificationIds}
+                                onToggleModification={handleVehicleModification}
+                                primaryVehicleColorId={vehicleColor?.primary ?? 0}
+                                secondaryVehicleColorId={vehicleColor?.secondary ?? 0}
+                                onSelectVehicleColor={handleVehicleColor}
+                                onSelectAnimation={setSelectedAnimation}
+                                onSelectionChange={handleAnimationSelection}
+                                initialAnimationLibraryId={animationTarget.libraryId}
+                                initialAnimationName={animationTarget.animationName}
                             />
-                        </View>
-                    )}
-                    <ModelStage
-                        modelType={modelType}
-                        info={info}
-                        models={models}
-                        animation={selectedAnimation}
-                        modelStatus={modelStatus}
-                        modelError={modelError}
-                        backgroundColor={backgroundSelection.color}
-                        retryModel={retryModel}
-                        isMobileView={isMobileView}
-                    />
-                    {isMobileView ? null : (
-                        <View style={styles.desktopDetailsColumn}>
-                            {modelType === 'skin' && (
-                                <AnimationBrowser
-                                    style={{ marginBottom: 14 }}
-                                    collapsible
-                                    initiallyExpanded={true}
-                                    onSelectAnimation={setSelectedAnimation}
-                                    onSelectionChange={handleAnimationSelection}
-                                    initialLibraryId={animationTarget.libraryId}
-                                    initialAnimationName={animationTarget.animationName}
+                        ) : (
+                            <View style={styles.desktopMenuColumn}>
+                                <MenuDesktop
+                                    modelType={modelType}
+                                    onModelTypeChange={(type) =>
+                                        handleModelTypeChange({ value: type })
+                                    }
+                                    selectedItemId={
+                                        selectedModelType === modelType && info ? info.id : -1
+                                    }
+                                    onSelectItem={handleSelectItem}
+                                    catalogQuery={catalogQuery}
                                 />
-                            )}
-                            {modelType === 'vehicle' && (
-                                <>
-                                    <VehicleModPicker
+                            </View>
+                        )}
+                        <ModelStage
+                            modelType={modelType}
+                            info={info}
+                            models={models}
+                            animation={selectedAnimation}
+                            modelStatus={modelStatus}
+                            modelError={modelError}
+                            backgroundColor={backgroundSelection.color}
+                            retryModel={retryModel}
+                            isMobileView={isMobileView}
+                        />
+                        {isMobileView ? null : (
+                            <View style={styles.desktopDetailsColumn}>
+                                {modelType === 'skin' && (
+                                    <AnimationBrowser
                                         style={{ marginBottom: 14 }}
-                                        modifications={availableModifications}
-                                        selectedIds={selectedModificationIds}
-                                        onToggle={handleVehicleModification}
                                         collapsible
-                                        initiallyExpanded={false}
+                                        initiallyExpanded={true}
+                                        onSelectAnimation={setSelectedAnimation}
+                                        onSelectionChange={handleAnimationSelection}
+                                        initialLibraryId={animationTarget.libraryId}
+                                        initialAnimationName={animationTarget.animationName}
                                     />
-                                    <VehicleColorPicker
-                                        style={{ marginBottom: 14 }}
-                                        colors={vehicleColorOptions}
-                                        primaryColorId={vehicleColor?.primary ?? 0}
-                                        secondaryColorId={vehicleColor?.secondary ?? 0}
-                                        onSelect={handleVehicleColor}
-                                        collapsible
-                                        initiallyExpanded={false}
-                                    />
-                                </>
-                            )}
-                            <ColorPicker
-                                isMobileView={isMobileView}
-                                title="Background color"
-                                style={{ marginBottom: 14 }}
-                                colors={backgroundColors}
-                                selectedColor={backgroundSelection.color}
-                                rows={2}
-                                onSelect={handleBackgroundColor}
-                                collapsible
-                                initiallyExpanded={false}
-                            />
-                            <ModelInfo
-                                title="Model info"
-                                style={{ marginBottom: 14 }}
-                                data={infoRows}
-                                collapsible
-                                initiallyExpanded={false}
-                            />
-                        </View>
-                    )}
+                                )}
+                                {modelType === 'vehicle' && (
+                                    <>
+                                        <VehicleModPicker
+                                            style={{ marginBottom: 14 }}
+                                            modifications={availableModifications}
+                                            selectedIds={selectedModificationIds}
+                                            onToggle={handleVehicleModification}
+                                            collapsible
+                                            initiallyExpanded={false}
+                                        />
+                                        <VehicleColorPicker
+                                            style={{ marginBottom: 14 }}
+                                            colors={vehicleColorOptions}
+                                            primaryColorId={vehicleColor?.primary ?? 0}
+                                            secondaryColorId={vehicleColor?.secondary ?? 0}
+                                            onSelect={handleVehicleColor}
+                                            collapsible
+                                            initiallyExpanded={false}
+                                        />
+                                    </>
+                                )}
+                                <ColorPicker
+                                    isMobileView={isMobileView}
+                                    title="Background color"
+                                    style={{ marginBottom: 14 }}
+                                    colors={backgroundColors}
+                                    selectedColor={backgroundSelection.color}
+                                    rows={2}
+                                    onSelect={handleBackgroundColor}
+                                    collapsible
+                                    initiallyExpanded={false}
+                                />
+                                <ModelInfo
+                                    title="Model info"
+                                    style={{ marginBottom: 14 }}
+                                    data={infoRows}
+                                    collapsible
+                                    initiallyExpanded={false}
+                                />
+                            </View>
+                        )}
+                    </View>
                 </View>
-            </View>
+            )}
         </ThemeProvider>
     );
 };
