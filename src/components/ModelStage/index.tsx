@@ -1,6 +1,15 @@
 import React from 'react';
 import dynamic from 'next/dynamic';
-import { ActivityIndicator, StyleSheet, Text, TouchableOpacity, View } from 'react-native-web';
+import {
+    ActivityIndicator,
+    Image,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
+} from 'react-native-web';
+import { getModelPreviewUrl, getPreviewName } from 'src/domain/globalSearch';
+import type { PreviewMode } from 'src/domain/previewMode';
 import type { CatalogItem, ModelType } from 'src/domain/catalog';
 import type { ModelLoadStatus } from 'src/hooks/useModelSelection';
 import type { ModelPreviewData } from 'src/domain/modelPreview';
@@ -19,6 +28,7 @@ interface Props {
     backgroundColor: string;
     retryModel: () => void;
     isMobileView: boolean;
+    previewMode: PreviewMode;
 }
 
 const ModelStage = ({
@@ -31,8 +41,11 @@ const ModelStage = ({
     backgroundColor,
     retryModel,
     isMobileView,
+    previewMode,
 }: Props) => {
     const { theme } = useTheme();
+    const [failedThumbnail, setFailedThumbnail] = React.useState<string | null>(null);
+    const thumbnailName = info ? getPreviewName(info) : null;
 
     return (
         <View style={[styles.stage, isMobileView && styles.mobileStage, { backgroundColor }]}>
@@ -58,7 +71,28 @@ const ModelStage = ({
                 </View>
             </View>
             <View style={styles.viewer}>
-                {modelStatus === 'loading' ? (
+                {previewMode === 'thumbnail' && thumbnailName ? (
+                    failedThumbnail === thumbnailName ? (
+                        <View style={styles.stageMessage}>
+                            <Text style={[styles.stageMessageTitle, { color: theme.title }]}>
+                                Thumbnail unavailable
+                            </Text>
+                            <Text style={[styles.stageMessageText, { color: theme.mutedText }]}>
+                                No preview image exists for this model.
+                            </Text>
+                        </View>
+                    ) : (
+                        <View style={styles.thumbnailFrame}>
+                            <Image
+                                source={{ uri: getModelPreviewUrl(thumbnailName) }}
+                                resizeMode="contain"
+                                onError={() => setFailedThumbnail(thumbnailName)}
+                                style={styles.thumbnail}
+                                accessibilityLabel={info?.name ?? thumbnailName}
+                            />
+                        </View>
+                    )
+                ) : modelStatus === 'loading' ? (
                     <View style={styles.stageMessage}>
                         <ActivityIndicator color={theme.accent} />
                         <Text style={[styles.stageMessageText, { color: theme.mutedText }]}>
@@ -104,9 +138,11 @@ const ModelStage = ({
                     </View>
                 ) : null}
             </View>
-            <Text style={[styles.stageHint, { color: theme.mutedText }]}>
-                Drag to rotate · Scroll to zoom
-            </Text>
+            {previewMode === 'model' && (
+                <Text style={[styles.stageHint, { color: theme.mutedText }]}>
+                    Drag to rotate · Scroll to zoom
+                </Text>
+            )}
         </View>
     );
 };
@@ -149,6 +185,20 @@ const styles = StyleSheet.create({
     viewer: {
         flex: 1,
         minHeight: 0,
+    },
+    thumbnailFrame: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingTop: 110,
+        paddingBottom: 40,
+        paddingHorizontal: 40,
+    },
+    thumbnail: {
+        width: '100%',
+        height: '100%',
+        maxWidth: 512,
+        maxHeight: 512,
     },
     stageMessage: {
         flex: 1,

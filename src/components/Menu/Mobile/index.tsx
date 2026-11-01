@@ -10,6 +10,7 @@ import VehicleModPickerMobile from './VehicleModPickerMobile';
 import VehicleColorPickerMobile from './VehicleColorPickerMobile';
 import AnimationBrowserMobile from './AnimationBrowserMobile';
 import ModelTexturesMobile from './ModelTexturesMobile';
+import type { PreviewMode } from 'src/domain/previewMode';
 import type { VehicleModification } from 'src/domain/vehicleModifications';
 import { vehicleColorOptions } from 'src/domain/vehicleColors';
 import type { ParsedAnimation } from 'src/animation/ifpParser';
@@ -36,6 +37,8 @@ interface Props {
     textures: string[];
     onOpenTexture: (name: string) => void;
     onOpenSearch: () => void;
+    previewMode: PreviewMode;
+    onPreviewModeChange: (mode: PreviewMode) => void;
 }
 
 const MenuMobile = ({
@@ -59,6 +62,8 @@ const MenuMobile = ({
     textures,
     onOpenTexture,
     onOpenSearch,
+    previewMode,
+    onPreviewModeChange,
 }: Props) => {
     const [listVisible, setListVisible] = useState(false);
     const [bgColorModalVisible, setBgColorModalVisible] = useState(false);
@@ -249,6 +254,7 @@ const MenuMobile = ({
                         height: '2.5rem',
                         justifyContent: 'center',
                         marginBottom: 4,
+                        marginRight: 4,
                         paddingHorizontal: 8,
                     }}
                     onPress={() => setTexturesVisible(true)}
@@ -256,6 +262,28 @@ const MenuMobile = ({
                     accessibilityLabel="Open model textures"
                 >
                     <Text style={{ color: theme.button }}>Textures</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    style={{
+                        alignItems: 'center',
+                        borderColor: theme.button,
+                        borderRadius: 100,
+                        borderWidth: 1.8,
+                        height: '2.5rem',
+                        justifyContent: 'center',
+                        marginBottom: 4,
+                        marginRight: 4,
+                        paddingHorizontal: 8,
+                    }}
+                    onPress={() =>
+                        onPreviewModeChange(previewMode === 'model' ? 'thumbnail' : 'model')
+                    }
+                    accessibilityRole="button"
+                    accessibilityLabel="Toggle thumbnail view"
+                >
+                    <Text style={{ color: theme.button }}>
+                        {previewMode === 'thumbnail' ? 'Thumbnail' : '3D view'}
+                    </Text>
                 </TouchableOpacity>
             </View>
             <ModelList
@@ -307,6 +335,11 @@ const MenuMobile = ({
                 visible={texturesVisible}
                 onRequestClose={() => setTexturesVisible(false)}
                 textures={textures}
+                emptyText={
+                    previewMode === 'thumbnail' && selectedItemId >= 0
+                        ? 'Switch to the 3D view to list its textures.'
+                        : 'No model selected.'
+                }
                 onSelect={onOpenTexture}
             />
             <AnimationBrowserMobile

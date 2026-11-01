@@ -15,6 +15,7 @@ import type { ModelTypeOption } from 'src/domain/modelType';
 import type { ThemeMode } from 'src/theme/themeTokens';
 import { useTheme } from 'src/theme/ThemeContext';
 import ModalList from '../ModalList';
+import type { PreviewMode } from 'src/domain/previewMode';
 
 interface HeaderOption {
     label: string;
@@ -33,6 +34,8 @@ interface Props {
     onModelTypeChange: (type: ModelTypeOption) => void;
     onSelectTextures: () => void;
     search?: React.ReactNode;
+    previewMode: PreviewMode;
+    onPreviewModeChange: (mode: PreviewMode) => void;
     themeMode: ThemeMode;
     onThemeModeChange: (mode: ThemeMode) => void;
 }
@@ -45,6 +48,8 @@ const Header = (props: Props) => {
         onModelTypeChange,
         onSelectTextures,
         search,
+        previewMode,
+        onPreviewModeChange,
         onThemeModeChange,
         isMobile,
         themeMode,
@@ -170,6 +175,19 @@ const Header = (props: Props) => {
                 {!isMobile && (
                     <View style={styles.actions}>
                         <Text style={[styles.modeLabel, { color: theme.mutedText }]}>
+                            {previewMode === 'thumbnail' ? 'Thumbnail' : '3D view'}
+                        </Text>
+                        <Switch
+                            accessibilityLabel="Toggle thumbnail view"
+                            trackColor={{ false: theme.lines, true: theme.accent }}
+                            thumbColor="#ffffff"
+                            onValueChange={(value) =>
+                                onPreviewModeChange(value ? 'thumbnail' : 'model')
+                            }
+                            value={previewMode === 'thumbnail'}
+                            style={styles.previewSwitch}
+                        />
+                        <Text style={[styles.modeLabel, { color: theme.mutedText }]}>
                             {darkMode ? 'Dark' : 'Light'}
                         </Text>
                         <Switch
@@ -257,6 +275,9 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginLeft: 8,
         flexShrink: 0,
+    },
+    previewSwitch: {
+        marginRight: 20,
     },
     modeLabel: {
         fontSize: 12,

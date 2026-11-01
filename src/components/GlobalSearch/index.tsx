@@ -10,7 +10,7 @@ import {
 } from 'react-native-web';
 import type { StyleProp, ViewStyle } from 'react-native-web';
 import type { CatalogListItem, ModelType } from 'src/domain/catalog';
-import { getModelPreviewUrl } from 'src/domain/globalSearch';
+import { getModelPreviewUrl, getPreviewName } from 'src/domain/globalSearch';
 import { MODEL_TYPE_LABELS } from 'src/domain/modelType';
 import { getTextureUrl } from 'src/domain/textureCatalog';
 import type { TextureListItem } from 'src/domain/textureCatalog';
@@ -253,7 +253,7 @@ const GlobalSearch = ({ onSelectModel, onSelectTexture, onShowAll, style }: Prop
                                                               : String(item.id)
                                                       }
                                                       imageUrl={getModelPreviewUrl(
-                                                          'model' in item ? item.model : item.name
+                                                          getPreviewName(item)
                                                       )}
                                                       onPress={() => {
                                                           close();

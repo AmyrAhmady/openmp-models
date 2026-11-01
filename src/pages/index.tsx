@@ -29,6 +29,7 @@ import { useResponsiveView } from 'src/hooks/useResponsiveView';
 import { useModelSelection } from 'src/hooks/useModelSelection';
 import { useThemeController } from 'src/hooks/useThemeController';
 import { useTextureQuery } from 'src/hooks/useTextureQuery';
+import { usePreviewMode } from 'src/hooks/usePreviewMode';
 import { useTextureSelection } from 'src/hooks/useTextureSelection';
 import type { TextureListItem, TextureUsage } from 'src/domain/textureCatalog';
 import type { CatalogListItem } from 'src/domain/catalog';
@@ -84,6 +85,7 @@ const Main: NextPage<MainProps> = ({ initialMetadata }) => {
     } = useShareableUrl();
     const { themeMode, theme, backgroundSelection, onThemeModeChange, onSelectColor } =
         useThemeController();
+    const { previewMode, onPreviewModeChange } = usePreviewMode();
     const catalogQuery = useCatalogQuery(modelType);
     const textureQuery = useTextureQuery(texturesSelected);
     const {
@@ -111,11 +113,15 @@ const Main: NextPage<MainProps> = ({ initialMetadata }) => {
         vehicleColor,
         onSelectVehicleColor,
         onSelectModelId,
-    } = useModelSelection(modelType, {
-        ready: shareableUrlReady,
-        type: shareableUrlState.modelType,
-        modelId: shareableUrlState.modelId,
-    });
+    } = useModelSelection(
+        modelType,
+        {
+            ready: shareableUrlReady,
+            type: shareableUrlState.modelType,
+            modelId: shareableUrlState.modelId,
+        },
+        previewMode === 'model'
+    );
 
     const handleAnimationSelection = useCallback((selection: AnimationSelection): void => {
         const pending = pendingUrlState.current;
@@ -648,6 +654,8 @@ const Main: NextPage<MainProps> = ({ initialMetadata }) => {
                     modelType={modelType}
                     texturesSelected={texturesSelected}
                     onSelectTextures={handleSelectTexturesTab}
+                    previewMode={previewMode}
+                    onPreviewModeChange={onPreviewModeChange}
                     search={
                         <GlobalSearch
                             onSelectModel={handleSearchModel}
@@ -722,6 +730,8 @@ const Main: NextPage<MainProps> = ({ initialMetadata }) => {
                             initialAnimationName={animationTarget.animationName}
                             textures={modelTextureNames}
                             onOpenTexture={handleOpenModelTexture}
+                            previewMode={previewMode}
+                            onPreviewModeChange={onPreviewModeChange}
                             onOpenSearch={() => setSearchVisible(true)}
                         />
                     ) : texturesSelected ? (
@@ -764,6 +774,7 @@ const Main: NextPage<MainProps> = ({ initialMetadata }) => {
                             backgroundColor={backgroundSelection.color}
                             retryModel={retryModel}
                             isMobileView={isMobileView}
+                            previewMode={previewMode}
                         />
                     )}
                     {isMobileView ? null : texturesSelected ? (
@@ -861,7 +872,11 @@ const Main: NextPage<MainProps> = ({ initialMetadata }) => {
                                 title="Textures"
                                 style={{ marginBottom: 14 }}
                                 textures={modelTextureNames}
-                                emptyText="No model selected."
+                                emptyText={
+                                    previewMode === 'thumbnail' && info
+                                        ? 'Switch to the 3D view to list its textures.'
+                                        : 'No model selected.'
+                                }
                                 onSelect={handleOpenModelTexture}
                                 collapsible
                                 initiallyExpanded={false}

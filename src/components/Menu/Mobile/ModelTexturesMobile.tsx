@@ -6,10 +6,11 @@ interface Props {
     visible: boolean;
     onRequestClose: () => void;
     textures: string[];
+    emptyText: string;
     onSelect: (name: string) => void;
 }
 
-const ModelTexturesMobile = ({ visible, onRequestClose, textures, onSelect }: Props) => (
+const ModelTexturesMobile = ({ visible, onRequestClose, textures, emptyText, onSelect }: Props) => (
     <MobileModal
         visible={visible}
         animationType="fade"
@@ -21,7 +22,7 @@ const ModelTexturesMobile = ({ visible, onRequestClose, textures, onSelect }: Pr
         <TextureGrid
             title="Textures"
             textures={textures}
-            emptyText="No model selected."
+            emptyText={emptyText}
             onClose={onRequestClose}
             onSelect={(name) => {
                 onRequestClose();

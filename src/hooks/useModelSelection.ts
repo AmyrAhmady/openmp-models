@@ -62,7 +62,8 @@ function getModelErrorMessage(error: unknown, selected: boolean): string {
 
 export function useModelSelection(
     modelType: ModelType,
-    initialSelection?: InitialModelSelection
+    initialSelection?: InitialModelSelection,
+    loadModels = true
 ): UseModelSelectionResult {
     const [info, setInfo] = useState<CatalogItem | null>(initialInfo);
     const [selectedModelType, setSelectedModelType] = useState<ModelType | null>('vehicle');
@@ -70,6 +71,7 @@ export function useModelSelection(
     const [modelStatus, setModelStatus] = useState<ModelLoadStatus>('idle');
     const [modelError, setModelError] = useState<string | null>(null);
     const modelLoadGeneration = useRef(0);
+    const loadModelsRef = useRef(loadModels);
     const modelLoadAbortController = useRef<AbortController | null>(null);
     const selectedItemGeneration = useRef(0);
     const selectedItemAbortController = useRef<AbortController | null>(null);
@@ -155,7 +157,11 @@ export function useModelSelection(
 
                 setInfo(response.item);
                 setSelectedModelType(modelType);
-                await loadModel(getAssetName(response.item), modelType);
+                if (loadModelsRef.current) {
+                    await loadModel(getAssetName(response.item), modelType);
+                } else {
+                    setModelStatus('idle');
+                }
             } catch (error) {
                 if (abortController.signal.aborted || isAbortError(error)) {
                     return;
@@ -198,7 +204,9 @@ export function useModelSelection(
         } else if (modelType === 'vehicle') {
             setInfo(initialInfo);
             setSelectedModelType('vehicle');
-            void loadModel(getAssetName(initialInfo), 'vehicle');
+            if (loadModelsRef.current) {
+                void loadModel(getAssetName(initialInfo), 'vehicle');
+            }
         } else {
             setInfo(null);
             setSelectedModelType(null);
@@ -223,6 +231,18 @@ export function useModelSelection(
         },
         []
     );
+
+    useEffect(() => {
+        loadModelsRef.current = loadModels;
+        if (!loadModels) {
+            modelLoadAbortController.current?.abort();
+            modelLoadGeneration.current++;
+            setModels([]);
+            setModelStatus((current) => (current === 'loading' && !info ? current : 'idle'));
+        } else if (info && selectedModelType === modelType && !models.length) {
+            void loadModel(getAssetName(info), modelType);
+        }
+    }, [loadModels]);
 
     const retryModel = useCallback((): void => {
         if (!info || selectedModelType !== modelType) {
