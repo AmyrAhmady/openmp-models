@@ -178,6 +178,8 @@ const alternateSkinRotation = new THREE.Quaternion().setFromRotationMatrix(
 
 const animationGroundRotation = new THREE.Matrix4().makeRotationY(-Math.PI / 2);
 
+const objectViewDirection = new THREE.Vector3(0.6, 0.7, 1);
+
 interface SceneDependencies {
     createRenderer: (parameters: THREE.WebGLRendererParameters) => THREE.WebGLRenderer;
     createTextureLoader: () => THREE.TextureLoader;
@@ -263,6 +265,7 @@ export default class Scene implements SceneController {
     private controlChangeHandler = () => this.onControlChange();
     private modelLoadGeneration = 0;
     private disposed = false;
+    private objectViewFitted = false;
     private textureLoader: THREE.TextureLoader;
     private textureCache = new Map<string, THREE.Texture>();
     private textureUrlLookup = new Map<string, string>();
@@ -464,6 +467,7 @@ export default class Scene implements SceneController {
 
         this.controls = null;
         this.camera = null;
+        this.objectViewFitted = false;
         this.scene = null;
         this.rootElement = null;
         this.models = [];
@@ -634,6 +638,14 @@ export default class Scene implements SceneController {
             return;
         }
 
+        this.applyDefaultCameraPosition(camera);
+
+        this.controls = this.dependencies.createControls(camera, renderer.domElement);
+        this.controls.enabled = true;
+        this.controls.addEventListener('change', this.controlChangeHandler);
+    }
+
+    private applyDefaultCameraPosition(camera: THREE.Camera): void {
         if (this.cameraPos) {
             camera.position.set(this.cameraPos.x, this.cameraPos.y, this.cameraPos.z);
         } else {
@@ -641,10 +653,59 @@ export default class Scene implements SceneController {
         }
 
         camera.lookAt(0, -1, 0);
+    }
 
-        this.controls = this.dependencies.createControls(camera, renderer.domElement);
-        this.controls.enabled = true;
-        this.controls.addEventListener('change', this.controlChangeHandler);
+    private fitObjectToView(instance: THREE.Object3D): void {
+        instance.updateMatrixWorld(true);
+        const bounds = new THREE.Box3().setFromObject(instance);
+        if (bounds.isEmpty()) {
+            return;
+        }
+
+        instance.position.sub(bounds.getCenter(new THREE.Vector3()));
+
+        if (this.camera instanceof THREE.PerspectiveCamera) {
+            const radius = Math.max(bounds.getBoundingSphere(new THREE.Sphere()).radius, 0.01);
+            const verticalHalfFov = Math.atan(
+                Math.tan(THREE.MathUtils.degToRad(this.camera.fov) / 2) / this.camera.zoom
+            );
+            const horizontalHalfFov = Math.atan(Math.tan(verticalHalfFov) * this.camera.aspect);
+            const distance =
+                (radius * 1.1) / Math.sin(Math.min(verticalHalfFov, horizontalHalfFov));
+            const direction = this.objectViewFitted
+                ? this.camera.position.clone().sub(this.controls?.target ?? new THREE.Vector3())
+                : objectViewDirection.clone();
+
+            this.camera.position.copy(direction.setLength(distance));
+            this.camera.near = distance / 100;
+            this.camera.far = distance * 10;
+            this.camera.lookAt(0, 0, 0);
+            this.camera.updateProjectionMatrix();
+
+            if (this.controls?.target) {
+                this.controls.target.set(0, 0, 0);
+                this.controls.update();
+            }
+
+            this.objectViewFitted = true;
+        }
+    }
+
+    private resetObjectView(): void {
+        if (!this.objectViewFitted || !this.camera) {
+            return;
+        }
+
+        this.objectViewFitted = false;
+        this.camera.near = 0.5;
+        this.camera.far = 200;
+        this.applyDefaultCameraPosition(this.camera);
+        this.camera.updateProjectionMatrix();
+
+        if (this.controls?.target) {
+            this.controls.target.set(0, 0, 0);
+            this.controls.update();
+        }
     }
 
     onControlChange() {
@@ -980,7 +1041,7 @@ export default class Scene implements SceneController {
         if (modelData.type === 'skin') {
             rotation = this.defaultRotation || { x: 0, y: Math.PI / 2, z: Math.PI / 2 };
         } else {
-            rotation = this.defaultRotation || { x: 0, y: 0, z: 0 };
+            rotation = this.defaultRotation || { x: -Math.PI / 2, y: 0, z: 0 };
         }
 
         if (!model.instance) {
@@ -993,6 +1054,12 @@ export default class Scene implements SceneController {
         }
 
         this.createSkinnedMeshes(model);
+
+        if (modelData.type === 'object') {
+            this.fitObjectToView(model.instance);
+        } else {
+            this.resetObjectView();
+        }
 
         this.needUpdate = true;
     }
@@ -1064,6 +1131,8 @@ export default class Scene implements SceneController {
         if (!model || !model.instance) {
             return;
         }
+
+        this.resetObjectView();
 
         const box = new THREE.Box3().setFromObject(model.instance);
         const modelSize = box.getSize(new THREE.Vector3());
