@@ -11,7 +11,7 @@ test('catalog validation accepts every checked-in catalog', async () => {
         fileURLToPath(new URL('./validate-catalog.mjs', import.meta.url)),
     ]);
 
-    assert.match(stdout, /object: 8626 valid records/);
+    assert.match(stdout, /object: 10071 valid records/);
     assert.match(stdout, /skin: 312 valid records/);
     assert.match(stdout, /vehicle: 212 valid records/);
 });

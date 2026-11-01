@@ -64,9 +64,9 @@ try {
     assert.equal(objectList.body.list.length, 500);
     assert.deepEqual(Object.keys(objectList.body.list[0]).sort(), ['id', 'name']);
 
-    const objectListTail = await getJson('/api/list?type=object&offset=8500&limit=500');
+    const objectListTail = await getJson('/api/list?type=object&offset=10000&limit=500');
     assert.equal(objectListTail.response.status, 200);
-    assert.equal(objectListTail.body.list.length, 126);
+    assert.equal(objectListTail.body.list.length, 71);
 
     const search = await getJson('/api/search?type=vehicle&q=400');
     assert.equal(search.response.status, 200);
