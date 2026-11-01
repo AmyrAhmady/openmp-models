@@ -66,6 +66,7 @@ const Main: NextPage<MainProps> = ({ initialMetadata }) => {
     const localUrlChange = useRef(false);
     const pendingUrlState = useRef<ShareableUrlState | null>(null);
     const requestedPendingModel = useRef<ShareableUrlState | null>(null);
+    const clearedPendingModel = useRef<ShareableUrlState | null>(null);
     const openModelTexture = useRef<string | null>(null);
     const {
         ready: shareableUrlReady,
@@ -92,6 +93,7 @@ const Main: NextPage<MainProps> = ({ initialMetadata }) => {
         modelStatus,
         modelError,
         onModelTypeChange,
+        onClearSelection,
         onSelectItem,
         retryModel,
         availableModifications,
@@ -417,9 +419,13 @@ const Main: NextPage<MainProps> = ({ initialMetadata }) => {
             setModelType(shareableUrlState.modelType);
         } else if (!isInitialUrl && shareableUrlState.modelId !== null) {
             onSelectModelId(shareableUrlState.modelId);
+        } else if (!isInitialUrl) {
+            clearedPendingModel.current = shareableUrlState;
+            onClearSelection();
         }
     }, [
         modelType,
+        onClearSelection,
         onModelTypeChange,
         onSelectModelId,
         selectTexture,
@@ -460,6 +466,9 @@ const Main: NextPage<MainProps> = ({ initialMetadata }) => {
             return;
         }
         if (pending.modelId !== null && modelStatus === 'loading') {
+            return;
+        }
+        if (clearedPendingModel.current === pending && info) {
             return;
         }
         if (pending.modelId === null && modelStatus === 'loading') {

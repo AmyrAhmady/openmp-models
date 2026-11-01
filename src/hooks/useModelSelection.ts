@@ -20,6 +20,7 @@ export interface UseModelSelectionResult {
     modelStatus: ModelLoadStatus;
     modelError: string | null;
     onModelTypeChange: (type: ModelTypeSelection) => void;
+    onClearSelection: () => void;
     onSelectItem: (model: CatalogListItem) => void;
     onSelectModelId: (modelId: number) => void;
     retryModel: () => void;
@@ -231,23 +232,27 @@ export function useModelSelection(
         void loadModel(getAssetName(info), modelType);
     }, [info, loadModel, modelType, selectedModelType]);
 
+    const onClearSelection = useCallback((): void => {
+        selectedItemAbortController.current?.abort();
+        selectedItemGeneration.current++;
+        modelLoadAbortController.current?.abort();
+        modelLoadGeneration.current++;
+        setSelectedModelType(null);
+        setInfo(null);
+        setModels([]);
+        setModelStatus('idle');
+        setModelError(null);
+    }, []);
+
     const onModelTypeChange = useCallback(
         (type: ModelTypeSelection): void => {
             if (type.value === modelType) {
                 return;
             }
 
-            selectedItemAbortController.current?.abort();
-            selectedItemGeneration.current++;
-            modelLoadAbortController.current?.abort();
-            modelLoadGeneration.current++;
-            setSelectedModelType(null);
-            setInfo(null);
-            setModels([]);
-            setModelStatus('idle');
-            setModelError(null);
+            onClearSelection();
         },
-        [modelType]
+        [modelType, onClearSelection]
     );
 
     const onSelectItem = useCallback(
@@ -355,6 +360,7 @@ export function useModelSelection(
         modelStatus,
         modelError,
         onModelTypeChange,
+        onClearSelection,
         onSelectItem,
         onSelectModelId,
         retryModel,
