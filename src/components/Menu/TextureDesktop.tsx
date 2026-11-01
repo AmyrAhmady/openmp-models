@@ -11,6 +11,7 @@ interface Props {
     selectedTexture: TextureListItem | null;
     onSelectTexture: (texture: TextureListItem) => void;
     textureQuery: UseTextureQueryResult;
+    showSearch?: boolean;
 }
 
 interface TextureRowProps {
@@ -65,7 +66,12 @@ const TextureRow = React.memo(({ item, selected, onSelect }: TextureRowProps) =>
     );
 });
 
-const TextureMenuDesktop = ({ selectedTexture, onSelectTexture, textureQuery }: Props) => {
+const TextureMenuDesktop = ({
+    selectedTexture,
+    onSelectTexture,
+    textureQuery,
+    showSearch = false,
+}: Props) => {
     const { theme } = useTheme();
     const { list, searchInput, status, error, search, clearSearch, retry } = textureQuery;
 
@@ -87,49 +93,76 @@ const TextureMenuDesktop = ({ selectedTexture, onSelectTexture, textureQuery }: 
                     Choose a texture to preview
                 </Text>
             </View>
-            <Row
-                style={{
-                    height: 48,
-                    width: 'auto',
-                    marginHorizontal: 18,
-                    backgroundColor: theme.textBox,
-                    direction: 'ltr',
-                    borderWidth: 1,
-                    borderColor: theme.lines,
-                    borderRadius: 10,
-                    paddingHorizontal: 12,
-                }}
-                centerContainerStyle={{ flex: undefined }}
-                leftContainerStyle={{ height: '100%', flex: 1 }}
-                leftComponent={
-                    <View style={{ width: '100%', paddingRight: 10 }}>
-                        <TextInput
-                            value={searchInput}
-                            style={{
-                                height: 44,
-                                width: '100%',
-                                paddingHorizontal: 0,
-                                fontSize: 14,
-                                color: theme.normalText,
-                            }}
-                            placeholder="Search by texture or texture file"
-                            placeholderTextColor={theme.textBoxPlaceholder}
-                            accessibilityLabel="Search by texture or texture file"
-                            onChangeText={search}
-                        />
-                    </View>
-                }
-                rightContainerStyle={{ height: '100%', flex: undefined }}
-                rightComponent={
+            {showSearch ? (
+                <Row
+                    style={{
+                        height: 48,
+                        width: 'auto',
+                        marginHorizontal: 18,
+                        backgroundColor: theme.textBox,
+                        direction: 'ltr',
+                        borderWidth: 1,
+                        borderColor: theme.lines,
+                        borderRadius: 10,
+                        paddingHorizontal: 12,
+                    }}
+                    centerContainerStyle={{ flex: undefined }}
+                    leftContainerStyle={{ height: '100%', flex: 1 }}
+                    leftComponent={
+                        <View style={{ width: '100%', paddingRight: 10 }}>
+                            <TextInput
+                                value={searchInput}
+                                style={{
+                                    height: 44,
+                                    width: '100%',
+                                    paddingHorizontal: 0,
+                                    fontSize: 14,
+                                    color: theme.normalText,
+                                }}
+                                placeholder="Search by texture or texture file"
+                                placeholderTextColor={theme.textBoxPlaceholder}
+                                accessibilityLabel="Search by texture or texture file"
+                                onChangeText={search}
+                            />
+                        </View>
+                    }
+                    rightContainerStyle={{ height: '100%', flex: undefined }}
+                    rightComponent={
+                        <TouchableOpacity
+                            accessibilityRole="button"
+                            accessibilityLabel="Clear texture search"
+                            onPress={clearSearch}
+                        >
+                            <Text style={{ fontSize: 22, color: theme.mutedText }}>×</Text>
+                        </TouchableOpacity>
+                    }
+                />
+            ) : searchInput ? (
+                <View
+                    style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        marginHorizontal: 22,
+                    }}
+                >
+                    <Text
+                        numberOfLines={1}
+                        style={{ flex: 1, color: theme.mutedText, fontSize: 13 }}
+                    >
+                        Results for "{searchInput}"
+                    </Text>
                     <TouchableOpacity
                         accessibilityRole="button"
                         accessibilityLabel="Clear texture search"
                         onPress={clearSearch}
                     >
-                        <Text style={{ fontSize: 22, color: theme.mutedText }}>×</Text>
+                        <Text style={{ color: theme.accent, fontSize: 13, fontWeight: '700' }}>
+                            Clear
+                        </Text>
                     </TouchableOpacity>
-                }
-            />
+                </View>
+            ) : null}
             <CatalogStatus
                 status={status}
                 hasItems={list.length > 0}

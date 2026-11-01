@@ -21,6 +21,8 @@ const clientModules = [
     '../src/components/TextureUsageList/index.tsx',
     '../src/components/Menu/Mobile/TextureMenuMobile.tsx',
     '../src/components/Menu/Mobile/ModelTexturesMobile.tsx',
+    '../src/components/GlobalSearch/index.tsx',
+    '../src/hooks/useGlobalSearch.ts',
 ];
 const catalogClientSource = await readFile(
     new URL('../src/catalog/catalogClient.ts', import.meta.url),

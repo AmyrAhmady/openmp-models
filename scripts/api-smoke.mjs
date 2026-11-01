@@ -122,6 +122,16 @@ try {
     assert.equal(invalidTexture.response.status, 400);
     assert.equal(invalidTexture.body.error.code, 'INVALID_TEXTURE_SOURCE');
 
+    const searchAll = await getJson('/api/search/all?q=infernus');
+    assert.equal(searchAll.response.status, 200);
+    assert.equal(searchAll.body.vehicle.results[0].name, 'Infernus');
+    assert.equal(searchAll.body.vehicle.total, 1);
+    assert.ok(searchAll.body.texture.results.every((texture) => texture.txd === 'infernus'));
+
+    const emptySearchAll = await getJson('/api/search/all?q=');
+    assert.equal(emptySearchAll.response.status, 200);
+    assert.equal(emptySearchAll.body.object.total, 0);
+
     const method = await getJson('/api/list?type=vehicle', { method: 'POST' });
     assert.equal(method.response.status, 405);
     assert.equal(method.response.headers.get('allow'), 'GET');

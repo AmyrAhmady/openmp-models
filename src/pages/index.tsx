@@ -16,6 +16,8 @@ import TextureMenuDesktop from 'src/components/Menu/TextureDesktop';
 import TextureStage from 'src/components/TextureStage';
 import TextureGrid from 'src/components/TextureGrid';
 import TextureUsageList from 'src/components/TextureUsageList';
+import GlobalSearch from 'src/components/GlobalSearch';
+import MobileModal from 'src/components/MobileModal';
 import { ThemeProvider } from 'src/theme/ThemeContext';
 import type { ModelType } from 'src/domain/catalog';
 import { getCatalogInfoRows, getTextureInfoRows } from 'src/domain/catalogInfo';
@@ -49,6 +51,7 @@ const Main: NextPage<MainProps> = ({ initialMetadata }) => {
     const isMobileView = useResponsiveView();
     const [modelType, setModelType] = useState<ModelType>('vehicle');
     const [texturesSelected, setTexturesSelected] = useState(false);
+    const [searchVisible, setSearchVisible] = useState(false);
     const [selectedAnimation, setSelectedAnimation] = useState<ParsedAnimation | null>(null);
     const [animationSelection, setAnimationSelection] = useState<AnimationSelection>({
         libraryId: null,
@@ -68,6 +71,11 @@ const Main: NextPage<MainProps> = ({ initialMetadata }) => {
     const requestedPendingModel = useRef<ShareableUrlState | null>(null);
     const clearedPendingModel = useRef<ShareableUrlState | null>(null);
     const openModelTexture = useRef<string | null>(null);
+    const pendingListSearch = useRef<{
+        type: ModelType;
+        query: string;
+        list: CatalogListItem[];
+    } | null>(null);
     const {
         ready: shareableUrlReady,
         hasQuery: shareableUrlHasQuery,
@@ -291,17 +299,21 @@ const Main: NextPage<MainProps> = ({ initialMetadata }) => {
     useEffect(() => {
         openModelTexture.current = null;
     }, [info, modelType, texturesSelected]);
-    const handleOpenTextureUsage = useCallback(
-        (usage: TextureUsage): void => {
+    const handleOpenModel = useCallback(
+        (type: ModelType, id: number): void => {
             pushState({
                 ...DEFAULT_SHAREABLE_URL_STATE,
-                modelType: usage.type,
-                modelId: usage.id,
+                modelType: type,
+                modelId: id,
                 backgroundColor:
                     backgroundSelection.source === 'custom' ? backgroundSelection.color : null,
             });
         },
         [backgroundSelection, pushState]
+    );
+    const handleOpenTextureUsage = useCallback(
+        (usage: TextureUsage): void => handleOpenModel(usage.type, usage.id),
+        [handleOpenModel]
     );
     const modelTextureNames = useMemo(
         () => models[0]?.textures.map((item) => item.name) ?? [],
@@ -363,6 +375,57 @@ const Main: NextPage<MainProps> = ({ initialMetadata }) => {
         },
         [handleModelTypeChange, modelType, pushState, shareableState, texturesSelected]
     );
+    const handleSearchModel = useCallback(
+        (type: ModelType, item: CatalogListItem): void => {
+            if (type === modelType && !texturesSelected) {
+                handleSelectItem(item);
+            } else {
+                handleOpenModel(type, item.id);
+            }
+        },
+        [handleOpenModel, handleSelectItem, modelType, texturesSelected]
+    );
+    const handleSearchTexture = useCallback(
+        (item: TextureListItem): void => {
+            setTexturesSelected(true);
+            if (item.txd === urlTexture?.txd && item.name === urlTexture.name) {
+                pushTextureState(item);
+            } else {
+                handleSelectTexture(item);
+            }
+        },
+        [handleSelectTexture, pushTextureState, urlTexture]
+    );
+    const handleSearchShowAll = useCallback(
+        (type: ModelType | 'texture', query: string): void => {
+            if (type === 'texture') {
+                handleSelectTexturesTab();
+                textureQuery.search(query);
+                return;
+            }
+
+            if (type === modelType) {
+                handleModelTabChange({ value: type });
+                catalogQuery.search(query);
+                return;
+            }
+
+            pendingListSearch.current = { type, query, list: catalogQuery.list };
+            handleModelTabChange({ value: type });
+        },
+        [catalogQuery, handleModelTabChange, handleSelectTexturesTab, modelType, textureQuery]
+    );
+    useEffect(() => {
+        const pending = pendingListSearch.current;
+        if (!pending || pending.type !== modelType) {
+            return;
+        }
+
+        if (catalogQuery.status === 'ready' && catalogQuery.list !== pending.list) {
+            pendingListSearch.current = null;
+            catalogQuery.search(pending.query);
+        }
+    }, [catalogQuery, modelType]);
 
     useEffect(() => {
         if (!shareableUrlReady) {
@@ -585,10 +648,38 @@ const Main: NextPage<MainProps> = ({ initialMetadata }) => {
                     modelType={modelType}
                     texturesSelected={texturesSelected}
                     onSelectTextures={handleSelectTexturesTab}
+                    search={
+                        <GlobalSearch
+                            onSelectModel={handleSearchModel}
+                            onSelectTexture={handleSearchTexture}
+                            onShowAll={handleSearchShowAll}
+                        />
+                    }
                     themeMode={themeMode}
                     onThemeModeChange={onThemeModeChange}
                     onModelTypeChange={handleModelTabChange}
                 />
+                <MobileModal
+                    visible={isMobileView && searchVisible}
+                    accessibilityLabel="Search dialog"
+                    onRequestClose={() => setSearchVisible(false)}
+                    contentStyle={{ width: '100%', maxWidth: 480 }}
+                >
+                    <GlobalSearch
+                        onSelectModel={(type, item) => {
+                            setSearchVisible(false);
+                            handleSearchModel(type, item);
+                        }}
+                        onSelectTexture={(item) => {
+                            setSearchVisible(false);
+                            handleSearchTexture(item);
+                        }}
+                        onShowAll={(type, query) => {
+                            setSearchVisible(false);
+                            handleSearchShowAll(type, query);
+                        }}
+                    />
+                </MobileModal>
                 <View
                     style={{
                         flexDirection: isMobileView ? 'column' : 'row',
@@ -608,6 +699,7 @@ const Main: NextPage<MainProps> = ({ initialMetadata }) => {
                             onSelectUsage={handleOpenTextureUsage}
                             onSelectColor={handleBackgroundColor}
                             selectedColor={backgroundSelection.color}
+                            onOpenSearch={() => setSearchVisible(true)}
                         />
                     ) : isMobileView ? (
                         <MenuMobile
@@ -630,6 +722,7 @@ const Main: NextPage<MainProps> = ({ initialMetadata }) => {
                             initialAnimationName={animationTarget.animationName}
                             textures={modelTextureNames}
                             onOpenTexture={handleOpenModelTexture}
+                            onOpenSearch={() => setSearchVisible(true)}
                         />
                     ) : texturesSelected ? (
                         <View style={styles.desktopMenuColumn}>

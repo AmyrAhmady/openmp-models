@@ -20,6 +20,7 @@ interface Props {
     onSelectUsage: (usage: TextureUsage) => void;
     onSelectColor: (color: string) => void;
     selectedColor: string;
+    onOpenSearch: () => void;
 }
 
 const TextureMenuMobile = ({
@@ -30,6 +31,7 @@ const TextureMenuMobile = ({
     onSelectUsage,
     onSelectColor,
     selectedColor,
+    onOpenSearch,
 }: Props) => {
     const [listVisible, setListVisible] = useState(false);
     const [bgColorModalVisible, setBgColorModalVisible] = useState(false);
@@ -98,6 +100,24 @@ const TextureMenuMobile = ({
                         marginRight: 4,
                         paddingHorizontal: 8,
                     }}
+                    onPress={onOpenSearch}
+                    accessibilityRole="button"
+                    accessibilityLabel="Open search"
+                >
+                    <Text style={{ color: theme.button }}>Search</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    style={{
+                        alignItems: 'center',
+                        borderColor: theme.button,
+                        borderRadius: 100,
+                        borderWidth: 1.8,
+                        height: '2.5rem',
+                        justifyContent: 'center',
+                        marginBottom: 4,
+                        marginRight: 4,
+                        paddingHorizontal: 8,
+                    }}
                     onPress={() => setBgColorModalVisible(true)}
                     accessibilityRole="button"
                     accessibilityLabel="Open background color selector"
@@ -142,6 +162,7 @@ const TextureMenuMobile = ({
                             onSelectTexture(item);
                         }}
                         textureQuery={textureQuery}
+                        showSearch
                     />
                 </View>
             </MobileModal>

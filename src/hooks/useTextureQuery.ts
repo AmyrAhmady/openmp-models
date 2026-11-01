@@ -117,6 +117,11 @@ export function useTextureQuery(enabled: boolean): UseTextureQueryResult {
             const normalizedQuery = normalizeSearchText(query.trim());
             const { generation, signal } = startRequest();
 
+            if (!normalizedQuery && !fullList.current.length) {
+                loadPage(0);
+                return;
+            }
+
             if (!normalizedQuery) {
                 setState({
                     list: fullList.current,
@@ -170,7 +175,7 @@ export function useTextureQuery(enabled: boolean): UseTextureQueryResult {
                     });
             }, 180);
         },
-        [startRequest]
+        [loadPage, startRequest]
     );
 
     const clearSearch = useCallback(() => search(''), [search]);

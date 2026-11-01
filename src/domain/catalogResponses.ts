@@ -11,7 +11,7 @@ function isRecord(value: unknown): value is Record<string, unknown> {
     return typeof value === 'object' && value !== null;
 }
 
-function isListItem(value: unknown): value is CatalogListItem {
+export function isListItem(value: unknown): value is CatalogListItem {
     if (!isRecord(value) || !Number.isInteger(value.id) || typeof value.name !== 'string') {
         return false;
     }

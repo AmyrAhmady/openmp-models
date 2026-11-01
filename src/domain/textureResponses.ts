@@ -15,7 +15,7 @@ function isNonEmptyString(value: unknown): value is string {
     return typeof value === 'string' && value.length > 0;
 }
 
-function isTextureListItem(value: unknown): value is TextureListItem {
+export function isTextureListItem(value: unknown): value is TextureListItem {
     return isRecord(value) && isNonEmptyString(value.txd) && isNonEmptyString(value.name);
 }
 

@@ -32,6 +32,7 @@ interface Props {
     isMobile?: boolean;
     onModelTypeChange: (type: ModelTypeOption) => void;
     onSelectTextures: () => void;
+    search?: React.ReactNode;
     themeMode: ThemeMode;
     onThemeModeChange: (mode: ThemeMode) => void;
 }
@@ -43,6 +44,7 @@ const Header = (props: Props) => {
         texturesSelected,
         onModelTypeChange,
         onSelectTextures,
+        search,
         onThemeModeChange,
         isMobile,
         themeMode,
@@ -129,37 +131,40 @@ const Header = (props: Props) => {
                         </View>
                     </View>
                 ) : (
-                    <View style={styles.tabs}>
-                        {HEADER_OPTIONS.map((item) => (
-                            <TouchableOpacity
-                                key={item.value}
-                                accessibilityRole="button"
-                                accessibilityLabel={item.label}
-                                accessibilityState={{ selected: item.value === selectedValue }}
-                                onPress={() => onSelectOption(item)}
-                                style={[
-                                    styles.tab,
-                                    item.value === selectedValue && {
-                                        backgroundColor: theme.accentSoft,
-                                    },
-                                ]}
-                            >
-                                <Text
+                    <>
+                        <View style={styles.tabs}>
+                            {HEADER_OPTIONS.map((item) => (
+                                <TouchableOpacity
+                                    key={item.value}
+                                    accessibilityRole="button"
+                                    accessibilityLabel={item.label}
+                                    accessibilityState={{ selected: item.value === selectedValue }}
+                                    onPress={() => onSelectOption(item)}
                                     style={[
-                                        styles.tabText,
-                                        {
-                                            color:
-                                                item.value === selectedValue
-                                                    ? theme.accent
-                                                    : theme.mutedText,
+                                        styles.tab,
+                                        item.value === selectedValue && {
+                                            backgroundColor: theme.accentSoft,
                                         },
                                     ]}
                                 >
-                                    {item.label}
-                                </Text>
-                            </TouchableOpacity>
-                        ))}
-                    </View>
+                                    <Text
+                                        style={[
+                                            styles.tabText,
+                                            {
+                                                color:
+                                                    item.value === selectedValue
+                                                        ? theme.accent
+                                                        : theme.mutedText,
+                                            },
+                                        ]}
+                                    >
+                                        {item.label}
+                                    </Text>
+                                </TouchableOpacity>
+                            ))}
+                        </View>
+                        {search && <View style={styles.search}>{search}</View>}
+                    </>
                 )}
 
                 {!isMobile && (
@@ -183,6 +188,7 @@ const Header = (props: Props) => {
 
 const styles = StyleSheet.create({
     container: {
+        zIndex: 10,
         paddingHorizontal: 24,
         width: '100%',
         height: 76,
@@ -198,7 +204,7 @@ const styles = StyleSheet.create({
     brand: {
         flexDirection: 'row',
         alignItems: 'center',
-        width: 250,
+        marginRight: 24,
     },
     mobileBrand: {
         width: 150,
@@ -221,8 +227,10 @@ const styles = StyleSheet.create({
     tabs: {
         flexDirection: 'row',
         alignItems: 'center',
+    },
+    search: {
         flex: 1,
-        justifyContent: 'center',
+        marginHorizontal: 24,
     },
     tab: {
         paddingHorizontal: 20,
@@ -235,7 +243,6 @@ const styles = StyleSheet.create({
         fontWeight: '700',
     },
     actions: {
-        width: 250,
         flexDirection: 'row',
         justifyContent: 'flex-end',
         alignItems: 'center',
