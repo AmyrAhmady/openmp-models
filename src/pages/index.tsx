@@ -221,7 +221,7 @@ const Main: NextPage<MainProps> = ({ initialMetadata }) => {
         [textureRequest]
     );
     const pushTextureState = useCallback(
-        (texture: TextureListItem | null): void => {
+        (item: TextureListItem | null): void => {
             localUrlChange.current = true;
             restoringUrl.current = false;
             syncUrlEnabled.current = true;
@@ -231,8 +231,8 @@ const Main: NextPage<MainProps> = ({ initialMetadata }) => {
                 backgroundColor:
                     backgroundSelection.source === 'custom' ? backgroundSelection.color : null,
                 texturesSelected: true,
-                textureDictionary: texture?.txd ?? null,
-                textureName: texture?.name ?? null,
+                textureDictionary: item?.txd ?? null,
+                textureName: item?.name ?? null,
             });
         },
         [backgroundSelection, modelType, pushState]
@@ -242,13 +242,13 @@ const Main: NextPage<MainProps> = ({ initialMetadata }) => {
         pushTextureState(urlTexture);
     }, [pushTextureState, urlTexture]);
     const handleSelectTexture = useCallback(
-        (texture: TextureListItem): void => {
-            if (texture.txd === urlTexture?.txd && texture.name === urlTexture.name) {
+        (item: TextureListItem): void => {
+            if (item.txd === urlTexture?.txd && item.name === urlTexture.name) {
                 return;
             }
 
-            selectTexture({ name: texture.name, txd: texture.txd });
-            pushTextureState(texture);
+            selectTexture({ name: item.name, txd: item.txd });
+            pushTextureState(item);
         },
         [pushTextureState, selectTexture, urlTexture]
     );
@@ -343,7 +343,7 @@ const Main: NextPage<MainProps> = ({ initialMetadata }) => {
             vehicleColorsChanged,
         ]
     );
-    const handleSelectModelType = useCallback(
+    const handleModelTabChange = useCallback(
         (type: { value: ModelType }): void => {
             if (!texturesSelected || type.value !== modelType) {
                 handleModelTypeChange(type);
@@ -587,7 +587,7 @@ const Main: NextPage<MainProps> = ({ initialMetadata }) => {
                     onSelectTextures={handleSelectTexturesTab}
                     themeMode={themeMode}
                     onThemeModeChange={onThemeModeChange}
-                    onModelTypeChange={handleSelectModelType}
+                    onModelTypeChange={handleModelTabChange}
                 />
                 <View
                     style={{

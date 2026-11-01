@@ -46,7 +46,6 @@ export function useTextureSelection(): UseTextureSelectionResult {
         return () => controller.abort();
     }, [attempt, request]);
 
-    const selectTexture = useCallback((next: TextureRequest | null) => setRequest(next), []);
     const retryTexture = useCallback(() => setAttempt((current) => current + 1), []);
     const current = result?.request === request ? result : null;
     const textureStatus: TextureLoadStatus = !request
@@ -62,7 +61,7 @@ export function useTextureSelection(): UseTextureSelectionResult {
         texture: current?.texture ?? null,
         textureStatus,
         textureError: textureStatus === 'error' ? 'This texture could not be loaded.' : null,
-        selectTexture,
+        selectTexture: setRequest,
         retryTexture,
     };
 }

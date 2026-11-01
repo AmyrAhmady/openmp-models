@@ -66,7 +66,7 @@ async function loadParsers() {
     };
 }
 
-test('texture response parsers accept list, search and detail envelopes', async () => {
+test('texture response parsers accept typed list and detail envelopes', async () => {
     const { parsers, cleanup } = await loadParsers();
     try {
         const item = {
@@ -95,7 +95,7 @@ test('texture response parsers accept list, search and detail envelopes', async 
     }
 });
 
-test('texture response parsers reject malformed envelopes', async () => {
+test('texture response parsers reject malformed payloads', async () => {
     const { parsers, cleanup } = await loadParsers();
     try {
         assert.throws(() => parsers.parseTextureListResponse({ list: [{ txd: 'boxes' }] }));

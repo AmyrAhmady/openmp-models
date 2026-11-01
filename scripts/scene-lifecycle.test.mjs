@@ -291,6 +291,8 @@ const emptyModel = {
     textures: [],
 };
 
+const objectViewDirection = new THREE.Vector3(0.6, 0.7, 1).normalize();
+
 const offsetObject = {
     type: 'object',
     name: 'offset-object',
@@ -448,7 +450,7 @@ test('scene mount, replacement, and disposal release owned resources', async () 
     }
 });
 
-test('objects are centered, upright and fit to the view, other model types restore the default camera', async () => {
+test('scene fits centered objects to the camera', async () => {
     const outputDirectory = await mkdtemp(join(tmpdir(), 'omp-scene-framing-'));
     const originalWindow = globalThis.window;
     const originalDocument = globalThis.document;
@@ -503,20 +505,10 @@ test('objects are centered, upright and fit to the view, other model types resto
         }
         assert.equal(scene.controls.target.length(), 0);
         assert.equal(instance.rotation.x, -Math.PI / 2);
-        assert.ok(
-            camera.position
-                .clone()
-                .normalize()
-                .distanceTo(new THREE.Vector3(0.6, 0.7, 1).normalize()) < 1e-6
-        );
+        assert.ok(camera.position.clone().normalize().distanceTo(objectViewDirection) < 1e-6);
 
         await scene.mount(root);
-        assert.ok(
-            scene.camera.position
-                .clone()
-                .normalize()
-                .distanceTo(new THREE.Vector3(0.6, 0.7, 1).normalize()) < 1e-6
-        );
+        assert.ok(scene.camera.position.clone().normalize().distanceTo(objectViewDirection) < 1e-6);
 
         await scene.setModel([{ ...model, type: 'vehicle', name: 'test-vehicle' }], false);
         assert.equal(scene.camera.near, 0.5);

@@ -49,6 +49,7 @@ const Header = (props: Props) => {
     } = props;
     const darkMode = themeMode === 'dark';
     const selectedValue = texturesSelected ? 'textures' : modelType;
+    const selectedLabel = texturesSelected ? 'Textures' : MODEL_TYPE_LABELS[modelType];
     const onSelectOption = (item: HeaderOption) => {
         if (item.value === 'textures') {
             onSelectTextures();
@@ -107,10 +108,7 @@ const Header = (props: Props) => {
                                     <Text
                                         style={[styles.mobilePickerText, { color: theme.accent }]}
                                     >
-                                        {texturesSelected
-                                            ? 'Textures'
-                                            : MODEL_TYPE_LABELS[modelType]}{' '}
-                                        ▾
+                                        {selectedLabel} ▾
                                     </Text>
                                 </View>
                             }

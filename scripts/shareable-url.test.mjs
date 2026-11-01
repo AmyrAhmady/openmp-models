@@ -76,7 +76,7 @@ test('shareable URL state round-trips model features and ignores invalid IDs', a
     }
 });
 
-test('shareable URL state round-trips a texture and drops a texture without its file', async () => {
+test('shareable URL state round-trips textures and ignores a missing texture file', async () => {
     const { module, cleanup } = await loadUrlState();
     try {
         const state = module.parseShareableUrl(

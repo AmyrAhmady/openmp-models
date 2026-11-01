@@ -72,8 +72,9 @@ export function parseShareableUrl(search: string): ShareableUrlState {
     const category = queryValue(params, 'cat') ?? '';
     const modelType = MODEL_TYPE_BY_URL_VALUE[category] ?? 'vehicle';
     const texturesSelected = category === 'textures';
-    const textureDictionary = texturesSelected ? queryValue(params, 'txd') : null;
-    const textureName = textureDictionary ? queryValue(params, 'texture') : null;
+    const textureDictionary = queryValue(params, 'txd');
+    const textureName = queryValue(params, 'texture');
+    const hasTexture = texturesSelected && textureDictionary !== null && textureName !== null;
 
     return {
         modelType,
@@ -85,8 +86,8 @@ export function parseShareableUrl(search: string): ShareableUrlState {
         secondaryColorId: colorId(queryValue(params, 'secondaryColor')),
         backgroundColor: queryValue(params, 'bg'),
         texturesSelected,
-        textureDictionary: textureName ? textureDictionary : null,
-        textureName,
+        textureDictionary: hasTexture ? textureDictionary : null,
+        textureName: hasTexture ? textureName : null,
     };
 }
 

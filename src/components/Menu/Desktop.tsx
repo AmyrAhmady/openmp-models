@@ -92,31 +92,11 @@ const MenuDesktop = ({
             if (shownItem.current !== item) {
                 shownItem.current = item;
                 listRef.current?.scrollToIndex({ index, animated: false, viewPosition: 0.5 });
-                if (!uniformRows) {
-                    setTimeout(
-                        () =>
-                            listRef.current?.scrollToIndex({
-                                index,
-                                animated: false,
-                                viewPosition: 0.5,
-                            }),
-                        150
-                    );
-                }
             }
         } else if (hasMore && status === 'ready' && !catalogQuery.loadMoreError) {
             loadMore();
         }
-    }, [
-        catalogQuery.loadMoreError,
-        hasMore,
-        list,
-        loadMore,
-        searchInput,
-        selectedItemId,
-        status,
-        uniformRows,
-    ]);
+    }, [catalogQuery.loadMoreError, hasMore, list, loadMore, searchInput, selectedItemId, status]);
 
     return (
         <View
