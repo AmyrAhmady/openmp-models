@@ -16,18 +16,46 @@ import type { ThemeMode } from 'src/theme/themeTokens';
 import { useTheme } from 'src/theme/ThemeContext';
 import ModalList from '../ModalList';
 
+interface HeaderOption {
+    label: string;
+    value: ModelType | 'textures';
+}
+
+const HEADER_OPTIONS: HeaderOption[] = [
+    ...MODEL_TYPE_OPTIONS,
+    { label: 'Textures', value: 'textures' },
+];
+
 interface Props {
     modelType: ModelType;
+    texturesSelected: boolean;
     isMobile?: boolean;
     onModelTypeChange: (type: ModelTypeOption) => void;
+    onSelectTextures: () => void;
     themeMode: ThemeMode;
     onThemeModeChange: (mode: ThemeMode) => void;
 }
 
 const Header = (props: Props) => {
     const { theme } = useTheme();
-    const { modelType, onModelTypeChange, onThemeModeChange, isMobile, themeMode } = props;
+    const {
+        modelType,
+        texturesSelected,
+        onModelTypeChange,
+        onSelectTextures,
+        onThemeModeChange,
+        isMobile,
+        themeMode,
+    } = props;
     const darkMode = themeMode === 'dark';
+    const selectedValue = texturesSelected ? 'textures' : modelType;
+    const onSelectOption = (item: HeaderOption) => {
+        if (item.value === 'textures') {
+            onSelectTextures();
+        } else {
+            onModelTypeChange({ label: item.label, value: item.value });
+        }
+    };
 
     return (
         <>
@@ -62,12 +90,12 @@ const Header = (props: Props) => {
 
                 {isMobile ? (
                     <View style={styles.mobileHeaderActions}>
-                        <ModalList<ModelTypeOption>
+                        <ModalList<HeaderOption>
                             style={styles.mobilePicker}
                             isMobile={isMobile}
-                            data={MODEL_TYPE_OPTIONS}
-                            selectedValue={modelType}
-                            onPress={(item) => onModelTypeChange(item)}
+                            data={HEADER_OPTIONS}
+                            selectedValue={selectedValue}
+                            onPress={onSelectOption}
                             buttonComponent={
                                 <View
                                     style={[
@@ -79,7 +107,10 @@ const Header = (props: Props) => {
                                     <Text
                                         style={[styles.mobilePickerText, { color: theme.accent }]}
                                     >
-                                        {MODEL_TYPE_LABELS[modelType]} ▾
+                                        {texturesSelected
+                                            ? 'Textures'
+                                            : MODEL_TYPE_LABELS[modelType]}{' '}
+                                        ▾
                                     </Text>
                                 </View>
                             }
@@ -101,16 +132,16 @@ const Header = (props: Props) => {
                     </View>
                 ) : (
                     <View style={styles.tabs}>
-                        {MODEL_TYPE_OPTIONS.map((item) => (
+                        {HEADER_OPTIONS.map((item) => (
                             <TouchableOpacity
                                 key={item.value}
                                 accessibilityRole="button"
                                 accessibilityLabel={item.label}
-                                accessibilityState={{ selected: item.value === modelType }}
-                                onPress={() => onModelTypeChange(item)}
+                                accessibilityState={{ selected: item.value === selectedValue }}
+                                onPress={() => onSelectOption(item)}
                                 style={[
                                     styles.tab,
-                                    item.value === modelType && {
+                                    item.value === selectedValue && {
                                         backgroundColor: theme.accentSoft,
                                     },
                                 ]}
@@ -120,7 +151,7 @@ const Header = (props: Props) => {
                                         styles.tabText,
                                         {
                                             color:
-                                                item.value === modelType
+                                                item.value === selectedValue
                                                     ? theme.accent
                                                     : theme.mutedText,
                                         },

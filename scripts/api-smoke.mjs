@@ -89,6 +89,39 @@ try {
     assert.equal(invalid.response.status, 400);
     assert.equal(invalid.body.error.code, 'INVALID_MODEL_TYPE');
 
+    const textureList = await getJson('/api/textures/list?offset=0&limit=500');
+    assert.equal(textureList.response.status, 200);
+    assert.equal(textureList.body.list.length, 500);
+    assert.deepEqual(Object.keys(textureList.body.list[0]).sort(), ['name', 'txd']);
+
+    const textureSearch = await getJson('/api/textures/search?q=cardboxes');
+    assert.equal(textureSearch.response.status, 200);
+    assert.ok(
+        textureSearch.body.results.some(
+            (texture) => texture.txd === 'boxes' && texture.name === 'cardboxes_128'
+        )
+    );
+
+    const texture = await getJson('/api/textures/item?txd=boxes&name=cardboxes_128');
+    assert.equal(texture.response.status, 200);
+    assert.equal(texture.body.item.width, 128);
+    assert.deepEqual(texture.body.item.dictionary, ['crate128', 'cardboxes_128']);
+    assert.ok(
+        texture.body.item.usedBy.some((usage) => usage.type === 'object' && usage.id === 1220)
+    );
+
+    const modelTexture = await getJson('/api/textures/item?name=cardboxes_128&type=object&id=1220');
+    assert.equal(modelTexture.response.status, 200);
+    assert.equal(modelTexture.body.item.txd, 'boxes');
+
+    const missingTexture = await getJson('/api/textures/item?txd=boxes&name=missing');
+    assert.equal(missingTexture.response.status, 404);
+    assert.equal(missingTexture.body.error.code, 'TEXTURE_NOT_FOUND');
+
+    const invalidTexture = await getJson('/api/textures/item?name=cardboxes_128');
+    assert.equal(invalidTexture.response.status, 400);
+    assert.equal(invalidTexture.body.error.code, 'INVALID_TEXTURE_SOURCE');
+
     const method = await getJson('/api/list?type=vehicle', { method: 'POST' });
     assert.equal(method.response.status, 405);
     assert.equal(method.response.headers.get('allow'), 'GET');

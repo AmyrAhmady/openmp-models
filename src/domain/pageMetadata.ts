@@ -22,6 +22,20 @@ export function getPageMetadata(
         };
     }
 
+    if (state.texturesSelected) {
+        if (!state.textureName || !state.textureDictionary) {
+            return {
+                title: `${siteTitle} | Textures`,
+                description: 'Browse textures in the Open Multiplayer model library.',
+            };
+        }
+
+        return {
+            title: `${siteTitle} | Textures | ${state.textureName} (${state.textureDictionary}.txd)`,
+            description: `The ${state.textureName} texture from ${state.textureDictionary}.txd in the Open Multiplayer model library.`,
+        };
+    }
+
     const categoryLabel = MODEL_TYPE_LABELS[state.modelType];
     const title = item
         ? `${siteTitle} | ${categoryLabel} | ${item.name} (${item.id})`

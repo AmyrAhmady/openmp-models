@@ -63,11 +63,46 @@ test('shareable URL state round-trips model features and ignores invalid IDs', a
             primaryColorId: 12,
             secondaryColorId: 255,
             backgroundColor: '#dbeafe',
+            texturesSelected: false,
+            textureDictionary: null,
+            textureName: null,
         });
         assert.equal(
             module.serializeShareableUrl(state),
             '?cat=skins&model=12&animLib=BAR&anim=Barserve_loop&mods=1000&primaryColor=12&secondaryColor=255&bg=%23dbeafe'
         );
+    } finally {
+        await cleanup();
+    }
+});
+
+test('shareable URL state round-trips a texture and drops a texture without its file', async () => {
+    const { module, cleanup } = await loadUrlState();
+    try {
+        const state = module.parseShareableUrl(
+            '?cat=textures&txd=boxes&texture=cardboxes_128&model=12&bg=%23dbeafe'
+        );
+
+        assert.equal(state.texturesSelected, true);
+        assert.equal(state.textureDictionary, 'boxes');
+        assert.equal(state.textureName, 'cardboxes_128');
+        assert.equal(
+            module.serializeShareableUrl(state),
+            '?cat=textures&txd=boxes&texture=cardboxes_128&bg=%23dbeafe'
+        );
+
+        const incomplete = module.parseShareableUrl('?cat=textures&texture=cardboxes_128');
+        assert.equal(incomplete.texturesSelected, true);
+        assert.equal(incomplete.textureDictionary, null);
+        assert.equal(incomplete.textureName, null);
+        assert.equal(module.serializeShareableUrl(incomplete), '?cat=textures');
+
+        const model = module.parseShareableUrl(
+            '?cat=objects&model=1220&txd=boxes&texture=crate128'
+        );
+        assert.equal(model.texturesSelected, false);
+        assert.equal(model.textureDictionary, null);
+        assert.equal(module.serializeShareableUrl(model), '?cat=objects&model=1220');
     } finally {
         await cleanup();
     }

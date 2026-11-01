@@ -1,4 +1,5 @@
 import type { CatalogItem, InfoRow } from 'src/domain/catalog';
+import type { TextureDetails } from 'src/domain/textureCatalog';
 
 const infoLabels: Record<string, string> = {
     id: 'Model ID',
@@ -22,4 +23,13 @@ export function getCatalogInfoRows(item: CatalogItem): InfoRow[] {
         label: infoLabels[key] ?? 'Unknown info',
         value: String(value),
     }));
+}
+
+export function getTextureInfoRows(texture: TextureDetails): InfoRow[] {
+    return [
+        { label: 'Name', value: texture.name },
+        { label: 'Texture File', value: `${texture.txd}.txd` },
+        { label: 'Size', value: `${texture.width} × ${texture.height}` },
+        { label: 'Format', value: texture.format },
+    ];
 }

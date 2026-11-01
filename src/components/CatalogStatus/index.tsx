@@ -10,6 +10,7 @@ interface Props {
     onRetry: () => void;
     isLoadingMore?: boolean;
     loadMoreError?: string | null;
+    itemLabel?: string;
 }
 
 const CatalogStatus = ({
@@ -19,6 +20,7 @@ const CatalogStatus = ({
     onRetry,
     isLoadingMore = false,
     loadMoreError = null,
+    itemLabel = 'models',
 }: Props) => {
     const { theme } = useTheme();
 
@@ -31,7 +33,7 @@ const CatalogStatus = ({
                     </Text>
                     <TouchableOpacity
                         accessibilityRole="button"
-                        accessibilityLabel="Retry loading more models"
+                        accessibilityLabel={`Retry loading more ${itemLabel}`}
                         onPress={onRetry}
                         style={{ marginTop: 8 }}
                     >
@@ -48,7 +50,7 @@ const CatalogStatus = ({
                 <View style={{ alignItems: 'center', padding: 12 }}>
                     <ActivityIndicator color={theme.accent} />
                     <Text style={{ color: theme.mutedText, fontSize: 13, marginTop: 6 }}>
-                        Loading more models…
+                        Loading more {itemLabel}…
                     </Text>
                 </View>
             );
@@ -62,7 +64,7 @@ const CatalogStatus = ({
             <View style={{ alignItems: 'center', padding: 24 }}>
                 <ActivityIndicator color={theme.accent} />
                 <Text style={{ color: theme.mutedText, fontSize: 13, marginTop: 8 }}>
-                    Loading models…
+                    Loading {itemLabel}…
                 </Text>
             </View>
         );
@@ -76,7 +78,7 @@ const CatalogStatus = ({
                 </Text>
                 <TouchableOpacity
                     accessibilityRole="button"
-                    accessibilityLabel="Retry loading models"
+                    accessibilityLabel={`Retry loading ${itemLabel}`}
                     onPress={onRetry}
                     style={{ marginTop: 12 }}
                 >
@@ -90,7 +92,7 @@ const CatalogStatus = ({
 
     return (
         <View style={{ alignItems: 'center', padding: 24 }}>
-            <Text style={{ color: theme.mutedText, fontSize: 13 }}>No models found.</Text>
+            <Text style={{ color: theme.mutedText, fontSize: 13 }}>No {itemLabel} found.</Text>
         </View>
     );
 };

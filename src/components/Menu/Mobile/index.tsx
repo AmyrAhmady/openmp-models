@@ -9,6 +9,7 @@ import BGColorPicker from './BGColorPicker';
 import VehicleModPickerMobile from './VehicleModPickerMobile';
 import VehicleColorPickerMobile from './VehicleColorPickerMobile';
 import AnimationBrowserMobile from './AnimationBrowserMobile';
+import ModelTexturesMobile from './ModelTexturesMobile';
 import type { VehicleModification } from 'src/domain/vehicleModifications';
 import { vehicleColorOptions } from 'src/domain/vehicleColors';
 import type { ParsedAnimation } from 'src/animation/ifpParser';
@@ -32,6 +33,8 @@ interface Props {
     onSelectionChange?: ((selection: AnimationSelection) => void) | undefined;
     initialAnimationLibraryId?: string | null | undefined;
     initialAnimationName?: string | null | undefined;
+    textures: string[];
+    onOpenTexture: (name: string) => void;
 }
 
 const MenuMobile = ({
@@ -52,6 +55,8 @@ const MenuMobile = ({
     onSelectionChange,
     initialAnimationLibraryId,
     initialAnimationName,
+    textures,
+    onOpenTexture,
 }: Props) => {
     const [listVisible, setListVisible] = useState(false);
     const [bgColorModalVisible, setBgColorModalVisible] = useState(false);
@@ -59,6 +64,7 @@ const MenuMobile = ({
     const [vehicleModModalVisible, setVehicleModModalVisible] = useState(false);
     const [vehicleColorModalVisible, setVehicleColorModalVisible] = useState(false);
     const [animationBrowserVisible, setAnimationBrowserVisible] = useState(false);
+    const [texturesVisible, setTexturesVisible] = useState(false);
     const { theme } = useTheme();
 
     useEffect(() => {
@@ -205,6 +211,7 @@ const MenuMobile = ({
                         height: '2.5rem',
                         justifyContent: 'center',
                         marginBottom: 4,
+                        marginRight: 4,
                         paddingHorizontal: 8,
                     }}
                     onPress={() => setModelInfoModalVisible(true)}
@@ -212,6 +219,23 @@ const MenuMobile = ({
                     accessibilityLabel="Open model information"
                 >
                     <Text style={{ color: theme.button }}>Model info</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    style={{
+                        alignItems: 'center',
+                        borderColor: theme.button,
+                        borderRadius: 100,
+                        borderWidth: 1.8,
+                        height: '2.5rem',
+                        justifyContent: 'center',
+                        marginBottom: 4,
+                        paddingHorizontal: 8,
+                    }}
+                    onPress={() => setTexturesVisible(true)}
+                    accessibilityRole="button"
+                    accessibilityLabel="Open model textures"
+                >
+                    <Text style={{ color: theme.button }}>Textures</Text>
                 </TouchableOpacity>
             </View>
             <ModelList
@@ -258,6 +282,12 @@ const MenuMobile = ({
                 primaryColorId={primaryVehicleColorId}
                 secondaryColorId={secondaryVehicleColorId}
                 onSelect={onSelectVehicleColor}
+            />
+            <ModelTexturesMobile
+                visible={texturesVisible}
+                onRequestClose={() => setTexturesVisible(false)}
+                textures={textures}
+                onSelect={onOpenTexture}
             />
             <AnimationBrowserMobile
                 key={`animation-browser-${selectedItemId}`}

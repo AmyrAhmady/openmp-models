@@ -10,6 +10,9 @@ export interface ShareableUrlState {
     primaryColorId: number | null;
     secondaryColorId: number | null;
     backgroundColor: string | null;
+    texturesSelected: boolean;
+    textureDictionary: string | null;
+    textureName: string | null;
 }
 
 export const DEFAULT_SHAREABLE_URL_STATE: ShareableUrlState = {
@@ -21,6 +24,9 @@ export const DEFAULT_SHAREABLE_URL_STATE: ShareableUrlState = {
     primaryColorId: null,
     secondaryColorId: null,
     backgroundColor: null,
+    texturesSelected: false,
+    textureDictionary: null,
+    textureName: null,
 };
 
 const MODEL_TYPE_BY_URL_VALUE: Record<string, ModelType> = {
@@ -63,7 +69,11 @@ function modificationIds(value: string | null): number[] {
 
 export function parseShareableUrl(search: string): ShareableUrlState {
     const params = new URLSearchParams(search.startsWith('?') ? search.slice(1) : search);
-    const modelType = MODEL_TYPE_BY_URL_VALUE[queryValue(params, 'cat') ?? ''] ?? 'vehicle';
+    const category = queryValue(params, 'cat') ?? '';
+    const modelType = MODEL_TYPE_BY_URL_VALUE[category] ?? 'vehicle';
+    const texturesSelected = category === 'textures';
+    const textureDictionary = texturesSelected ? queryValue(params, 'txd') : null;
+    const textureName = textureDictionary ? queryValue(params, 'texture') : null;
 
     return {
         modelType,
@@ -74,11 +84,27 @@ export function parseShareableUrl(search: string): ShareableUrlState {
         primaryColorId: colorId(queryValue(params, 'primaryColor')),
         secondaryColorId: colorId(queryValue(params, 'secondaryColor')),
         backgroundColor: queryValue(params, 'bg'),
+        texturesSelected,
+        textureDictionary: textureName ? textureDictionary : null,
+        textureName,
     };
 }
 
 export function serializeShareableUrl(state: ShareableUrlState): string {
     const params = new URLSearchParams();
+    if (state.texturesSelected) {
+        params.set('cat', 'textures');
+        if (state.textureDictionary && state.textureName) {
+            params.set('txd', state.textureDictionary);
+            params.set('texture', state.textureName);
+        }
+        if (state.backgroundColor) {
+            params.set('bg', state.backgroundColor);
+        }
+
+        return `?${params.toString()}`;
+    }
+
     params.set('cat', `${state.modelType}s`);
 
     if (state.modelId !== null) {

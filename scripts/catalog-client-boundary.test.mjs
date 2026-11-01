@@ -12,6 +12,15 @@ const clientModules = [
     '../src/components/Menu/Mobile/ModelInfoMobile.tsx',
     '../src/components/Menu/Mobile/ModelList.tsx',
     '../src/components/ModelInfo/index.tsx',
+    '../src/catalog/textureClient.ts',
+    '../src/hooks/useTextureQuery.ts',
+    '../src/hooks/useTextureSelection.ts',
+    '../src/components/Menu/TextureDesktop.tsx',
+    '../src/components/TextureStage/index.tsx',
+    '../src/components/TextureGrid/index.tsx',
+    '../src/components/TextureUsageList/index.tsx',
+    '../src/components/Menu/Mobile/TextureMenuMobile.tsx',
+    '../src/components/Menu/Mobile/ModelTexturesMobile.tsx',
 ];
 const catalogClientSource = await readFile(
     new URL('../src/catalog/catalogClient.ts', import.meta.url),
@@ -37,6 +46,11 @@ test('client-facing modules import catalog contracts as types only', async () =>
             source,
             /import\s+(?!type\b)\{[^}]*\}\s+from\s+['"]src\/domain\/catalog['"]/,
             `${modulePath} must not create a runtime catalog import`
+        );
+        assert.doesNotMatch(
+            source,
+            /src\/catalog\/textureRegistry/,
+            `${modulePath} must not import the server texture registry`
         );
     }
     assert.match(catalogClientSource, /from 'src\/api\/request'/);

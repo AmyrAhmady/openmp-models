@@ -11,6 +11,10 @@ const pageSource = await readFile(new URL('../src/pages/index.tsx', import.meta.
 test('catalog info labels and row mapping stay in the domain boundary', () => {
     assert.match(domainSource, /export function getCatalogInfoRows\(item: CatalogItem\)/);
     assert.match(domainSource, /infoLabels\[key\] \?\? 'Unknown info'/);
-    assert.match(pageSource, /import \{ getCatalogInfoRows \} from 'src\/domain\/catalogInfo';/);
+    assert.match(domainSource, /export function getTextureInfoRows\(texture: TextureDetails\)/);
+    assert.match(
+        pageSource,
+        /import \{ getCatalogInfoRows, getTextureInfoRows \} from 'src\/domain\/catalogInfo';/
+    );
     assert.doesNotMatch(pageSource, /realNames|getInfoRows/);
 });
