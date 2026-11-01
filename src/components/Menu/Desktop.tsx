@@ -4,9 +4,11 @@ import type { FlatList as NativeFlatList } from 'react-native';
 import { useTheme } from 'src/theme/ThemeContext';
 import type { CatalogListItem } from 'src/domain/catalog';
 import type { UseCatalogQueryResult } from 'src/hooks/useCatalogQuery';
+import { getModelPreviewUrl, getPreviewName } from 'src/domain/globalSearch';
 import CatalogStatus from '../CatalogStatus';
+import PreviewImage from '../PreviewImage';
 
-const UNIFORM_ROW_HEIGHT = 43;
+const UNIFORM_ROW_HEIGHT = 48;
 const ROW_SPACING = 4;
 
 interface Props {
@@ -41,7 +43,7 @@ const CatalogRow = React.memo(({ item, selected, uniform, onSelect }: CatalogRow
                 style={{
                     width: '100%',
                     alignItems: 'center',
-                    paddingVertical: 13,
+                    paddingVertical: 8,
                     paddingHorizontal: 12,
                     flexDirection: 'row',
                     justifyContent: 'space-between',
@@ -49,7 +51,20 @@ const CatalogRow = React.memo(({ item, selected, uniform, onSelect }: CatalogRow
                     backgroundColor: selected ? theme.accentSoft : 'transparent',
                 }}
             >
-                <Text style={{ color: theme.normalText, fontSize: 14, fontWeight: '600' }}>
+                <PreviewImage
+                    uri={getModelPreviewUrl(getPreviewName(item))}
+                    size={32}
+                    marginRight={12}
+                />
+                <Text
+                    style={{
+                        flex: 1,
+                        marginRight: 8,
+                        color: theme.normalText,
+                        fontSize: 14,
+                        fontWeight: '600',
+                    }}
+                >
                     {item.name}
                 </Text>
                 <Text style={{ color: theme.mutedText, fontSize: 12, fontWeight: '700' }}>

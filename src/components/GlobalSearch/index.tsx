@@ -1,13 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import {
-    ActivityIndicator,
-    Image,
-    Pressable,
-    ScrollView,
-    Text,
-    TextInput,
-    View,
-} from 'react-native-web';
+import { ActivityIndicator, Pressable, ScrollView, Text, TextInput, View } from 'react-native-web';
 import type { StyleProp, ViewStyle } from 'react-native-web';
 import type { CatalogListItem, ModelType } from 'src/domain/catalog';
 import { getModelPreviewUrl, getPreviewName } from 'src/domain/globalSearch';
@@ -16,6 +8,7 @@ import { getTextureUrl } from 'src/domain/textureCatalog';
 import type { TextureListItem } from 'src/domain/textureCatalog';
 import { useGlobalSearch } from 'src/hooks/useGlobalSearch';
 import { useTheme } from 'src/theme/ThemeContext';
+import PreviewImage from '../PreviewImage';
 import RoundCard from '../RoundCard';
 
 type SearchType = ModelType | 'texture';
@@ -38,7 +31,6 @@ const MODEL_TYPES: ModelType[] = ['vehicle', 'skin', 'object'];
 
 const ResultRow = ({ title, subtitle, imageUrl, onPress }: ResultRowProps) => {
     const { theme } = useTheme();
-    const [imageFailed, setImageFailed] = useState(false);
 
     return (
         <Pressable
@@ -47,24 +39,7 @@ const ResultRow = ({ title, subtitle, imageUrl, onPress }: ResultRowProps) => {
             onPress={onPress}
             style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: 6 }}
         >
-            {imageFailed ? (
-                <View
-                    style={{
-                        width: 40,
-                        height: 40,
-                        borderRadius: 6,
-                        marginRight: 10,
-                        backgroundColor: theme.textBox,
-                    }}
-                />
-            ) : (
-                <Image
-                    source={{ uri: imageUrl }}
-                    resizeMode="contain"
-                    onError={() => setImageFailed(true)}
-                    style={{ width: 40, height: 40, borderRadius: 6, marginRight: 10 }}
-                />
-            )}
+            <PreviewImage uri={imageUrl} size={40} />
             <View style={{ flex: 1, minWidth: 0 }}>
                 <Text
                     numberOfLines={1}
