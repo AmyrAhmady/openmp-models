@@ -60,11 +60,16 @@ export function createModelPreviewData(
     modelExport: ModelExport,
     random: RandomNumber = Math.random
 ): ModelPreviewData {
+    const frames =
+        type === 'vehicle'
+            ? modelExport.filter((frame) => !frame.name.toLowerCase().includes('_vlo'))
+            : modelExport;
+
     return {
         type,
         name: name.trim().toLowerCase(),
-        obj: modelExport,
-        textures: getTextureData(modelExport),
+        obj: frames,
+        textures: getTextureData(frames),
         color: {
             primary: getRandomColor(random),
             secondary: getRandomColor(random),

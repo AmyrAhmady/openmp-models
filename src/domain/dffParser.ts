@@ -15,6 +15,7 @@ const CHUNK_FRAMELIST = 0xe;
 const CHUNK_GEOMETRY = 0xf;
 const CHUNK_CLUMP = 0x10;
 const CHUNK_ATOMIC = 0x14;
+const CHUNK_UV_ANIMATION_DICTIONARY = 0x2b;
 const CHUNK_GEOMETRYLIST = 0x1a;
 const CHUNK_SKIN = 0x116;
 const CHUNK_HANIM = 0x11e;
@@ -635,7 +636,11 @@ function toModelGeometry(geometry: DffGeometry): ModelGeometry {
 
 export function parseDff(buffer: ArrayBuffer): ModelExport {
     const reader = new DffReader(buffer);
-    const clump = reader.chunk();
+    let clump = reader.chunk();
+    while (clump.type === CHUNK_UV_ANIMATION_DICTIONARY) {
+        reader.finishChunk(clump);
+        clump = reader.chunk();
+    }
     if (clump.type !== CHUNK_CLUMP) {
         throw new Error('DFF does not contain a clump');
     }
@@ -696,28 +701,23 @@ export function parseDff(buffer: ArrayBuffer): ModelExport {
         });
     });
 
-    return frames
-        .map((frame, frameIndex) => {
-            if (frame.name.toLowerCase().includes('_vlo')) {
-                return null;
-            }
-            const sourceGeometry = geometryByFrame.get(frameIndex);
-            const geometry = sourceGeometry ? toModelGeometry(sourceGeometry) : null;
-            if (geometry?.skin) {
-                geometry.skin.boneFrameIndices = Array.from(
-                    { length: geometry.skin.boneCount },
-                    (_, boneIndex) =>
-                        boneFrameById.get(boneIdByNumber.get(boneIndex) ?? boneIndex) ?? -1
-                );
-            }
-            return {
-                damaged: frame.name.toLowerCase().includes('_dam'),
-                frame: frameIndex,
-                geometry,
-                matrix: frame.matrix,
-                name: frame.name,
-                parent: frame.parent,
-            };
-        })
-        .filter((frame): frame is NonNullable<typeof frame> => frame !== null);
+    return frames.map((frame, frameIndex) => {
+        const sourceGeometry = geometryByFrame.get(frameIndex);
+        const geometry = sourceGeometry ? toModelGeometry(sourceGeometry) : null;
+        if (geometry?.skin) {
+            geometry.skin.boneFrameIndices = Array.from(
+                { length: geometry.skin.boneCount },
+                (_, boneIndex) =>
+                    boneFrameById.get(boneIdByNumber.get(boneIndex) ?? boneIndex) ?? -1
+            );
+        }
+        return {
+            damaged: /_dam\d*$/.test(frame.name.toLowerCase()),
+            frame: frameIndex,
+            geometry,
+            matrix: frame.matrix,
+            name: frame.name,
+            parent: frame.parent,
+        };
+    });
 }
