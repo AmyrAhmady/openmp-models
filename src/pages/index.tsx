@@ -54,6 +54,7 @@ const Main: NextPage<MainProps> = ({ initialMetadata }) => {
     const seenUrlKey = useRef<string | null>(null);
     const localUrlChange = useRef(false);
     const pendingUrlState = useRef<ShareableUrlState | null>(null);
+    const requestedPendingModel = useRef<ShareableUrlState | null>(null);
     const {
         ready: shareableUrlReady,
         hasQuery: shareableUrlHasQuery,
@@ -239,6 +240,9 @@ const Main: NextPage<MainProps> = ({ initialMetadata }) => {
         restoringUrl.current = true;
         syncUrlEnabled.current = shareableUrlHasQuery;
         pendingUrlState.current = shareableUrlState;
+        if (isInitialUrl) {
+            requestedPendingModel.current = shareableUrlState;
+        }
         setSelectedAnimation(null);
         setAnimationSelection({ libraryId: null, animationName: null, animation: null });
         setAnimationTarget({
@@ -269,10 +273,18 @@ const Main: NextPage<MainProps> = ({ initialMetadata }) => {
         if (!shareableUrlReady || !pending || modelType !== pending.modelType) {
             return;
         }
-        if (
-            pending.modelId !== null &&
-            (info?.id !== pending.modelId || modelStatus === 'loading')
-        ) {
+        if (pending.modelId !== null && info?.id !== pending.modelId) {
+            if (
+                modelStatus === 'idle' &&
+                selectedModelType === null &&
+                requestedPendingModel.current !== pending
+            ) {
+                requestedPendingModel.current = pending;
+                onSelectModelId(pending.modelId);
+            }
+            return;
+        }
+        if (pending.modelId !== null && modelStatus === 'loading') {
             return;
         }
         if (pending.modelId === null && modelStatus === 'loading') {
@@ -330,9 +342,11 @@ const Main: NextPage<MainProps> = ({ initialMetadata }) => {
         modelStatus,
         modelType,
         onSelectColor,
+        onSelectModelId,
         onSelectVehicleColor,
         onSetModificationIds,
         pendingUrlState,
+        selectedModelType,
         selectedModificationIds,
         shareableUrlReady,
         vehicleColor,

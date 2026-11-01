@@ -204,13 +204,6 @@ export function useModelSelection(
             setModels([]);
             setModelStatus('idle');
         }
-
-        return () => {
-            selectedItemAbortController.current?.abort();
-            selectedItemGeneration.current++;
-            modelLoadAbortController.current?.abort();
-            modelLoadGeneration.current++;
-        };
     }, [
         initialSelection?.modelId,
         initialSelection?.ready,
@@ -219,6 +212,16 @@ export function useModelSelection(
         loadSelectedItem,
         modelType,
     ]);
+
+    useEffect(
+        () => () => {
+            selectedItemAbortController.current?.abort();
+            selectedItemGeneration.current++;
+            modelLoadAbortController.current?.abort();
+            modelLoadGeneration.current++;
+        },
+        []
+    );
 
     const retryModel = useCallback((): void => {
         if (!info || selectedModelType !== modelType) {
