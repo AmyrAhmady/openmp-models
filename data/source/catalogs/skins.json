@@ -4,2183 +4,3429 @@
     "model": "cj",
     "name": "Carl \"CJ\" Johnson (Main Character)",
     "location": "Anywhere",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "generic.txd",
+    "pedtype": "PLAYER1",
+    "animgroup": "player"
   },
   {
     "id": 1,
     "model": "truth",
     "name": "The Truth",
     "location": "San Fierro and Las Venturas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "truth.txd",
+    "pedtype": "Special character",
+    "animgroup": "Special character",
+    "size": [1.098, 0.384, 1.834]
   },
   {
     "id": 2,
     "model": "maccer",
     "name": "Maccer",
     "location": "Las Venturas and Los Santos",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "maccer.txd",
+    "pedtype": "Special character",
+    "animgroup": "Special character",
+    "size": [1.168, 0.406, 1.844]
   },
   {
     "id": 3,
     "model": "andre",
     "name": "Andre",
     "location": "Unknown",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "andre.txd",
+    "pedtype": "Special character",
+    "animgroup": "Special character",
+    "size": [1.166, 0.375, 1.839]
   },
   {
     "id": 4,
     "model": "bbthin",
     "name": "Barry \"Big Bear\" Thorne [Thin]",
     "location": "Los Santos",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "bbthin.txd",
+    "pedtype": "Special character",
+    "animgroup": "Special character",
+    "size": [1.065, 0.37, 1.865]
   },
   {
     "id": 5,
     "model": "bb",
     "name": "Barry \"Big Bear\" Thorne [Big]",
     "location": "Los Santos",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "bb.txd",
+    "pedtype": "Special character",
+    "animgroup": "Special character",
+    "size": [1.205, 0.476, 1.865]
   },
   {
     "id": 6,
     "model": "emmet",
     "name": "Emmet",
     "location": "Los Santos",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "emmet.txd",
+    "pedtype": "Special character",
+    "animgroup": "Special character",
+    "size": [1.088, 0.398, 1.857]
   },
   {
     "id": 7,
     "model": "male01",
     "name": "Taxi Driver/Train Driver",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "male01.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [0.931, 0.355, 1.904]
   },
   {
     "id": 8,
     "model": "janitor",
     "name": "Janitor",
     "location": "4 Dragons Casino",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "janitor.txd",
+    "pedtype": "Special character",
+    "animgroup": "Special character",
+    "size": [1.166, 0.351, 1.864]
   },
   {
     "id": 9,
     "model": "bfori",
     "name": "Normal Ped",
     "location": "San Andreas",
-    "gender": "Female"
+    "gender": "Female",
+    "txd": "BFORI.txd",
+    "pedtype": "CIVFEMALE",
+    "animgroup": "woman",
+    "size": [0.713, 0.359, 1.777]
   },
   {
     "id": 10,
     "model": "bfost",
     "name": "Old Woman",
     "location": "San Andreas",
-    "gender": "Female"
+    "gender": "Female",
+    "txd": "BFOST.txd",
+    "pedtype": "CIVFEMALE",
+    "animgroup": "oldfatwoman",
+    "size": [1.282, 0.417, 1.648]
   },
   {
     "id": 11,
     "model": "vbfycrp",
     "name": "Casino croupier",
     "location": "Las Venturas Casinos",
-    "gender": "Female"
+    "gender": "Female",
+    "txd": "VBFYCRP.txd",
+    "pedtype": "CIVFEMALE",
+    "animgroup": "woman",
+    "size": [0.686, 0.3, 1.798]
   },
   {
     "id": 12,
     "model": "bfyri",
     "name": "Rich Woman",
     "location": "San Andreas",
-    "gender": "Female"
+    "gender": "Female",
+    "txd": "BFYRI.txd",
+    "pedtype": "CIVFEMALE",
+    "animgroup": "sexywoman",
+    "size": [0.686, 0.322, 1.784]
   },
   {
     "id": 13,
     "model": "bfyst",
     "name": "Street Girl",
     "location": "San Andreas",
-    "gender": "Female"
+    "gender": "Female",
+    "txd": "BFYST.txd",
+    "pedtype": "CIVFEMALE",
+    "animgroup": "woman",
+    "size": [1.063, 0.347, 1.817]
   },
   {
     "id": 14,
     "model": "bmori",
     "name": "Normal Ped",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "bmori.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [0.902, 0.339, 1.883]
   },
   {
     "id": 15,
     "model": "bmost",
     "name": "Mr.Whittaker (RS Haul Owner)",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "bmost.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [0.873, 0.369, 1.852]
   },
   {
     "id": 16,
     "model": "bmyap",
     "name": "Airport Ground Worker",
     "location": "Airports",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "BMYAP.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [1.022, 0.37, 1.903]
   },
   {
     "id": 17,
     "model": "bmybu",
     "name": "Businessman",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "BMYBU.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [0.851, 0.339, 1.843]
   },
   {
     "id": 18,
     "model": "bmybe",
     "name": "Beach Visitor",
     "location": "Beaches of SA",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "BMYBE.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [0.955, 0.304, 1.848]
   },
   {
     "id": 19,
     "model": "bmydj",
     "name": "DJ",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "BMYDJ.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "gang1",
+    "size": [1.024, 0.334, 1.864]
   },
   {
     "id": 20,
     "model": "bmyri",
     "name": "Rich Guy (Madd Dogg's Manager)",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "BMYRI.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [0.922, 0.334, 1.89]
   },
   {
     "id": 21,
     "model": "bmycr",
     "name": "Normal Ped",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "BMYCR.txd",
+    "pedtype": "CRIMINAL",
+    "animgroup": "gang1",
+    "size": [0.931, 0.394, 1.873]
   },
   {
     "id": 22,
     "model": "bmyst",
     "name": "Normal Ped",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "BMYST.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "gang2",
+    "size": [0.931, 0.378, 1.908]
   },
   {
     "id": 23,
     "model": "wmybmx",
     "name": "BMXer",
     "location": "Los Santos",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "WMYBMX.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [0.879, 0.349, 1.904]
   },
   {
     "id": 24,
     "model": "wbdyg1",
     "name": "Madd Dogg Bodyguard",
     "location": "Madd Dogg's Mansion",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "WBDYG1.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [0.85, 0.37, 1.837]
   },
   {
     "id": 25,
     "model": "wbdyg2",
     "name": "Madd Dogg Bodyguard",
     "location": "Madd Dogg's Mansion",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "WBDYG2.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [0.85, 0.376, 1.825]
   },
   {
     "id": 26,
     "model": "wmybp",
     "name": "Backpacker",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "WMYBP.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [1.024, 0.478, 1.829]
   },
   {
     "id": 27,
     "model": "wmycon",
     "name": "Construction Worker",
     "location": "Doherty",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "WMYCON.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [0.927, 0.363, 1.93]
   },
   {
     "id": 28,
     "model": "bmydrug",
     "name": "Drug Dealer",
     "location": "Los Santos",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "BMYdrug.txd",
+    "pedtype": "CRIMINAL",
+    "animgroup": "gang2",
+    "size": [0.92, 0.355, 1.89]
   },
   {
     "id": 29,
     "model": "wmydrug",
     "name": "Drug Dealer",
     "location": "San Fierro",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "WMYdrug.txd",
+    "pedtype": "CRIMINAL",
+    "animgroup": "man",
+    "size": [1.041, 0.415, 1.902]
   },
   {
     "id": 30,
     "model": "hmydrug",
     "name": "Drug Dealer",
     "location": "Las Venturas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "HMYdrug.txd",
+    "pedtype": "CRIMINAL",
+    "animgroup": "man",
+    "size": [0.931, 0.355, 1.881]
   },
   {
     "id": 31,
     "model": "dwfolc",
     "name": "Farm-Town inhabitant",
     "location": "San Andreas",
-    "gender": "Female"
+    "gender": "Female",
+    "txd": "dwfolc.txd",
+    "pedtype": "CIVFEMALE",
+    "animgroup": "oldfatwoman",
+    "size": [1.246, 0.406, 1.683]
   },
   {
     "id": 32,
     "model": "dwmolc1",
     "name": "Farm-Town inhabitant",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "dwmolc1.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [0.713, 0.304, 1.736]
   },
   {
     "id": 33,
     "model": "dwmolc2",
     "name": "Farm-Town inhabitant",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "dwmolc2.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [0.693, 0.334, 1.718]
   },
   {
     "id": 34,
     "model": "dwmylc1",
     "name": "Farm-Town inhabitant",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "dwmylc1.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [1.014, 0.352, 1.814]
   },
   {
     "id": 35,
     "model": "hmogar",
     "name": "Gardener",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "HMOgar.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [0.798, 0.352, 1.848]
   },
   {
     "id": 36,
     "model": "wmygol1",
     "name": "Golfer",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "WMYgol1.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [0.798, 0.352, 1.846]
   },
   {
     "id": 37,
     "model": "wmygol2",
     "name": "Golfer",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "WMYgol2.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [0.798, 0.352, 1.846]
   },
   {
     "id": 38,
     "model": "hfori",
     "name": "Normal Ped",
     "location": "San Andreas",
-    "gender": "Female"
+    "gender": "Female",
+    "txd": "hfori.txd",
+    "pedtype": "CIVFEMALE",
+    "animgroup": "woman",
+    "size": [0.711, 0.308, 1.664]
   },
   {
     "id": 39,
     "model": "hfost",
     "name": "Normal Ped",
     "location": "San Andreas",
-    "gender": "Female"
+    "gender": "Female",
+    "txd": "hfost.txd",
+    "pedtype": "CIVFEMALE",
+    "animgroup": "oldfatwoman",
+    "size": [1.282, 0.417, 1.647]
   },
   {
     "id": 40,
     "model": "hfyri",
     "name": "Normal Ped",
     "location": "San Andreas",
-    "gender": "Female"
+    "gender": "Female",
+    "txd": "HFYRI.txd",
+    "pedtype": "CIVFEMALE",
+    "animgroup": "sexywoman",
+    "size": [0.686, 0.265, 1.708]
   },
   {
     "id": 41,
     "model": "hfyst",
     "name": "Normal Ped",
     "location": "San Andreas",
-    "gender": "Female"
+    "gender": "Female",
+    "txd": "HFYST.txd",
+    "pedtype": "CIVFEMALE",
+    "animgroup": "woman",
+    "size": [1.063, 0.313, 1.824]
   },
   {
     "id": 42,
     "model": "jethro",
     "name": "Jethro",
     "location": "San Fierro",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "jethro.txd",
+    "pedtype": "Special character",
+    "animgroup": "Special character",
+    "size": [1.166, 0.351, 1.864]
   },
   {
     "id": 43,
     "model": "hmori",
     "name": "Normal Ped",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "HMORI.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [0.686, 0.329, 1.696]
   },
   {
     "id": 44,
     "model": "hmost",
     "name": "Normal Ped",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "HMOST.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [0.691, 0.34, 1.689]
   },
   {
     "id": 45,
     "model": "hmybe",
     "name": "Beach Visitor",
     "location": "Beaches of SA",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "HMYBE.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [0.955, 0.304, 1.843]
   },
   {
     "id": 46,
     "model": "hmyri",
     "name": "Normal Ped",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "HMYRI.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [1.033, 0.364, 1.853]
   },
   {
     "id": 47,
     "model": "hmycr",
     "name": "Normal Ped",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "HMYCR.txd",
+    "pedtype": "CRIMINAL",
+    "animgroup": "man",
+    "size": [0.931, 0.392, 1.881]
   },
   {
     "id": 48,
     "model": "hmyst",
     "name": "Normal Ped",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "HMYST.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [0.931, 0.351, 1.903]
   },
   {
     "id": 49,
     "model": "omokung",
     "name": "Snakehead (Da Nang)",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "OMOkung.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "oldman",
+    "size": [0.915, 0.31, 1.769]
   },
   {
     "id": 50,
     "model": "wmymech",
     "name": "Mechanic",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "WMYMECH.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [1.023, 0.409, 1.866]
   },
   {
     "id": 51,
     "model": "bmymoun",
     "name": "Mountain Biker",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "BMYMOUN.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [1.024, 0.328, 1.872]
   },
   {
     "id": 52,
     "model": "wmymoun",
     "name": "Mountain Biker",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "WMYMOUN.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [1.024, 0.328, 1.872]
   },
   {
     "id": 53,
     "model": "ofori",
     "name": "Unknown",
     "location": "San Andreas",
-    "gender": "Female"
+    "gender": "Female",
+    "txd": "OFORI.txd",
+    "pedtype": "CIVFEMALE",
+    "animgroup": "oldwoman",
+    "size": [0.929, 0.324, 1.651]
   },
   {
     "id": 54,
     "model": "ofost",
     "name": "Normal Ped",
     "location": "San Andreas",
-    "gender": "Female"
+    "gender": "Female",
+    "txd": "OFOST.txd",
+    "pedtype": "CIVFEMALE",
+    "animgroup": "oldwoman",
+    "size": [1.163, 0.339, 1.664]
   },
   {
     "id": 55,
     "model": "ofyri",
     "name": "Normal Ped",
     "location": "San Andreas",
-    "gender": "Female"
+    "gender": "Female",
+    "txd": "OFYRI.txd",
+    "pedtype": "CIVFEMALE",
+    "animgroup": "woman",
+    "size": [0.686, 0.284, 1.708]
   },
   {
     "id": 56,
     "model": "ofyst",
     "name": "Normal Ped",
     "location": "San Andreas",
-    "gender": "Female"
+    "gender": "Female",
+    "txd": "OFYST.txd",
+    "pedtype": "CIVFEMALE",
+    "animgroup": "woman",
+    "size": [0.686, 0.284, 1.704]
   },
   {
     "id": 57,
     "model": "omori",
     "name": "Oriental Ped",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "OMORI.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [0.851, 0.332, 1.864]
   },
   {
     "id": 58,
     "model": "omost",
     "name": "Oriental Ped",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "OMOST.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [0.691, 0.313, 1.687]
   },
   {
     "id": 59,
     "model": "omyri",
     "name": "Normal Ped",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "OMYRI.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [1.033, 0.369, 1.865]
   },
   {
     "id": 60,
     "model": "omyst",
     "name": "Normal Ped",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "OMYST.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [0.931, 0.369, 1.872]
   },
   {
     "id": 61,
     "model": "wmyplt",
     "name": "Pilot",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "WMYPLT.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [0.876, 0.34, 1.843]
   },
   {
     "id": 62,
     "model": "wmopj",
     "name": "Colonel Fuhrberger",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "WMOpj.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "oldman",
+    "size": [0.875, 0.338, 1.835]
   },
   {
     "id": 63,
     "model": "bfypro",
     "name": "Prostitute",
     "location": "San Andreas",
-    "gender": "Female"
+    "gender": "Female",
+    "txd": "BFYPRO.txd",
+    "pedtype": "PROSTITUTE",
+    "animgroup": "pro",
+    "size": [0.863, 0.318, 1.8]
   },
   {
     "id": 64,
     "model": "hfypro",
     "name": "Prostitute",
     "location": "San Andreas",
-    "gender": "Female"
+    "gender": "Female",
+    "txd": "HFYPRO.txd",
+    "pedtype": "PROSTITUTE",
+    "animgroup": "pro",
+    "size": [0.979, 0.327, 1.779]
   },
   {
     "id": 65,
     "model": "kendl",
     "name": "Kendl Johnson",
     "location": "Los Santos and San Fierro",
-    "gender": "Female"
+    "gender": "Female",
+    "txd": "kendl.txd",
+    "pedtype": "Special character",
+    "animgroup": "Special character",
+    "size": [1.063, 0.338, 1.817]
   },
   {
     "id": 66,
     "model": "bmypol1",
     "name": "Pool Player",
     "location": "Bars",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "BMYpol1.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [1.066, 0.416, 1.825]
   },
   {
     "id": 67,
     "model": "bmypol2",
     "name": "Pool Player",
     "location": "Bars, Works at Dillimore Gas Station",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "BMYpol2.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [1.066, 0.416, 1.825]
   },
   {
     "id": 68,
     "model": "wmoprea",
     "name": "Priest/Preacher",
     "location": "Las Venturas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "WMOprea.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [0.876, 0.34, 1.836]
   },
   {
     "id": 69,
     "model": "sbfyst",
     "name": "Normal Ped",
     "location": "San Andreas",
-    "gender": "Female"
+    "gender": "Female",
+    "txd": "sbfyst.txd",
+    "pedtype": "CIVFEMALE",
+    "animgroup": "woman",
+    "size": [0.686, 0.3, 1.796]
   },
   {
     "id": 70,
     "model": "wmosci",
     "name": "Scientist",
     "location": "Area 69",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "WMOsci.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [0.886, 0.338, 1.839]
   },
   {
     "id": 71,
     "model": "wmysgrd",
     "name": "Security Guard",
     "location": "Airport Guard Boxes",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "WMYSGRD.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [1.033, 0.348, 1.833]
   },
   {
     "id": 72,
     "model": "swmyhp1",
     "name": "Hippy",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "SWMYhp1.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [0.808, 0.338, 1.822]
   },
   {
     "id": 73,
     "model": "swmyhp2",
     "name": "Hippy",
     "location": "San Fierro",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "SWMYhp2.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [0.808, 0.338, 1.822]
   },
   {
     "id": 74,
     "model": "-",
     "name": "-",
     "location": "-",
-    "gender": "-"
+    "gender": "-",
+    "txd": "-",
+    "pedtype": "-",
+    "animgroup": "-"
   },
   {
     "id": 75,
     "model": "swfopro",
     "name": "Prostitute",
     "location": "San Andreas",
-    "gender": "Female"
+    "gender": "Female",
+    "txd": "sWFOpro.txd",
+    "pedtype": "PROSTITUTE",
+    "animgroup": "pro",
+    "size": [0.979, 0.308, 1.786]
   },
   {
     "id": 76,
     "model": "wfystew",
     "name": "Stewardess",
     "location": "San Andreas",
-    "gender": "Female"
+    "gender": "Female",
+    "txd": "WFYSTEW.txd",
+    "pedtype": "CIVFEMALE",
+    "animgroup": "sexywoman",
+    "size": [0.686, 0.303, 1.799]
   },
   {
     "id": 77,
     "model": "swmotr1",
     "name": "Homeless",
     "location": "San Andreas",
-    "gender": "Female"
+    "gender": "Female",
+    "txd": "sWMOtr1.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [1.212, 0.42, 1.675]
   },
   {
     "id": 78,
     "model": "wmotr1",
     "name": "Homeless",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "WMOTR1.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [0.857, 0.366, 1.865]
   },
   {
     "id": 79,
     "model": "bmotr1",
     "name": "Homeless",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "BMOTR1.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [0.856, 0.43, 1.826]
   },
   {
     "id": 80,
     "model": "vbmybox",
     "name": "Boxer",
     "location": "San Andreas Gyms",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "VBMYbox.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [1.039, 0.328, 1.832]
   },
   {
     "id": 81,
     "model": "vwmybox",
     "name": "Boxer",
     "location": "San Andreas Gyms",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "VWMYbox.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [1.039, 0.328, 1.832]
   },
   {
     "id": 82,
     "model": "vhmyelv",
     "name": "Black Elvis",
     "location": "Las Venturas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "VHMYELV.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [1.041, 0.345, 1.877]
   },
   {
     "id": 83,
     "model": "vbmyelv",
     "name": "White Elvis",
     "location": "Las Venturas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "VBMYELV.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [1.04, 0.367, 1.866]
   },
   {
     "id": 84,
     "model": "vimyelv",
     "name": "Blue Elvis",
     "location": "Las Venturas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "VIMYELV.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [1.034, 0.361, 1.878]
   },
   {
     "id": 85,
     "model": "vwfypro",
     "name": "Prostitute",
     "location": "San Andreas",
-    "gender": "Female"
+    "gender": "Female",
+    "txd": "VWFYPRO.txd",
+    "pedtype": "PROSTITUTE",
+    "animgroup": "pro",
+    "size": [1.075, 0.37, 1.8]
   },
   {
     "id": 86,
     "model": "ryder3",
     "name": "Ryder with robbery mask",
     "location": "Los Santos",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "ryder3.txd",
+    "pedtype": "Special character",
+    "animgroup": "Special character",
+    "size": [0.837, 0.388, 1.843]
   },
   {
     "id": 87,
     "model": "vwfyst1",
     "name": "Stripper",
     "location": "San Andreas",
-    "gender": "Female"
+    "gender": "Female",
+    "txd": "VWFYST1.txd",
+    "pedtype": "CIVFEMALE",
+    "animgroup": "sexywoman",
+    "size": [1.059, 0.308, 1.786]
   },
   {
     "id": 88,
     "model": "wfori",
     "name": "Normal Ped",
     "location": "San Andreas",
-    "gender": "Female"
+    "gender": "Female",
+    "txd": "WFORI.txd",
+    "pedtype": "CIVFEMALE",
+    "animgroup": "oldwoman",
+    "size": [0.688, 0.282, 1.669]
   },
   {
     "id": 89,
     "model": "wfost",
     "name": "Normal Ped",
     "location": "San Andreas",
-    "gender": "Female"
+    "gender": "Female",
+    "txd": "WFOST.txd",
+    "pedtype": "CIVFEMALE",
+    "animgroup": "oldfatwoman",
+    "size": [1.226, 0.408, 1.651]
   },
   {
     "id": 90,
     "model": "wfyjg",
     "name": "Jogger",
     "location": "San Andreas",
-    "gender": "Female"
+    "gender": "Female",
+    "txd": "WFYJG.txd",
+    "pedtype": "CIVFEMALE",
+    "animgroup": "jogwoman",
+    "size": [0.63, 0.733, 1.797]
   },
   {
     "id": 91,
     "model": "wfyri",
     "name": "Rich Woman",
     "location": "San Andreas",
-    "gender": "Female"
+    "gender": "Female",
+    "txd": "WFYRI.txd",
+    "pedtype": "CIVFEMALE",
+    "animgroup": "sexywoman",
+    "size": [0.686, 0.278, 1.796]
   },
   {
     "id": 92,
     "model": "wfyro",
     "name": "Rollerskater",
     "location": "Beaches of SA",
-    "gender": "Female"
+    "gender": "Female",
+    "txd": "WFYRO.txd",
+    "pedtype": "CIVFEMALE",
+    "animgroup": "skate",
+    "size": [0.863, 0.365, 1.853]
   },
   {
     "id": 93,
     "model": "wfyst",
     "name": "Normal Ped",
     "location": "San Andreas",
-    "gender": "Female"
+    "gender": "Female",
+    "txd": "WFYST.txd",
+    "pedtype": "CIVFEMALE",
+    "animgroup": "sexywoman",
+    "size": [0.686, 0.311, 1.799]
   },
   {
     "id": 94,
     "model": "wmori",
     "name": "Normal Ped",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "WMORI.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [0.712, 0.29, 1.657]
   },
   {
     "id": 95,
     "model": "wmost",
     "name": "Normal Ped, Works at or owns Dillimore Gas Station",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "WMOST.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [0.691, 0.342, 1.693]
   },
   {
     "id": 96,
     "model": "wmyjg",
     "name": "Jogger",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "WMYJG.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "jogger",
+    "size": [1.04, 0.34, 1.847]
   },
   {
     "id": 97,
     "model": "wmylg",
     "name": "Lifeguard",
     "location": "Beaches",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "WMYlG.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "jogger",
+    "size": [1.024, 0.333, 1.842]
   },
   {
     "id": 98,
     "model": "wmyri",
     "name": "Normal Ped",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "WMYRI.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [1.021, 0.364, 1.853]
   },
   {
     "id": 99,
     "model": "wmyro",
     "name": "Rollerskater",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "WMYRO.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "skate",
+    "size": [1.024, 0.328, 1.926]
   },
   {
     "id": 100,
     "model": "wmycr",
     "name": "Biker",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "WMYCR.txd",
+    "pedtype": "CRIMINAL",
+    "animgroup": "man",
+    "size": [0.931, 0.364, 1.894]
   },
   {
     "id": 101,
     "model": "wmyst",
     "name": "Normal Ped",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "WMYST.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [1.076, 0.381, 1.848]
   },
   {
     "id": 102,
     "model": "ballas1",
     "name": "Balla",
     "location": "Los Santos",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "BALLAS1.txd",
+    "pedtype": "GANG1",
+    "animgroup": "gang1",
+    "size": [0.931, 0.394, 1.873]
   },
   {
     "id": 103,
     "model": "ballas2",
     "name": "Balla",
     "location": "Los Santos",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "BALLAS2.txd",
+    "pedtype": "GANG1",
+    "animgroup": "gang2",
+    "size": [1.254, 0.399, 1.88]
   },
   {
     "id": 104,
     "model": "ballas3",
     "name": "Balla",
     "location": "Los Santos",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "BALLAS3.txd",
+    "pedtype": "GANG1",
+    "animgroup": "gang1",
+    "size": [0.931, 0.41, 1.911]
   },
   {
     "id": 105,
     "model": "fam1",
     "name": "Grove Street Families",
     "location": "Los Santos",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "FAM1.txd",
+    "pedtype": "GANG2",
+    "animgroup": "gang2",
+    "size": [1.252, 0.405, 1.88]
   },
   {
     "id": 106,
     "model": "fam2",
     "name": "Grove Street Families",
     "location": "Los Santos",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "FAM2.txd",
+    "pedtype": "GANG2",
+    "animgroup": "gang1",
+    "size": [0.931, 0.385, 1.891]
   },
   {
     "id": 107,
     "model": "fam3",
     "name": "Grove Street Families",
     "location": "Los Santos",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "FAM3.txd",
+    "pedtype": "GANG2",
+    "animgroup": "gang2",
+    "size": [0.922, 0.385, 1.906]
   },
   {
     "id": 108,
     "model": "lsv1",
     "name": "Los Santos Vagos",
     "location": "Los Santos",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "LSV1.txd",
+    "pedtype": "GANG3",
+    "animgroup": "gang1",
+    "size": [0.934, 0.328, 1.851]
   },
   {
     "id": 109,
     "model": "lsv2",
     "name": "Los Santos Vagos",
     "location": "Los Santos",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "LSV2.txd",
+    "pedtype": "GANG3",
+    "animgroup": "gang2",
+    "size": [0.931, 0.355, 1.876]
   },
   {
     "id": 110,
     "model": "lsv3",
     "name": "Los Santos Vagos",
     "location": "Los Santos",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "LSV3.txd",
+    "pedtype": "GANG3",
+    "animgroup": "gang1",
+    "size": [0.931, 0.364, 1.873]
   },
   {
     "id": 111,
     "model": "maffa",
     "name": "The Russian Mafia",
     "location": "Around SA",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "MAFFA.txd",
+    "pedtype": "CRIMINAL",
+    "animgroup": "man",
+    "size": [0.84, 0.372, 1.845]
   },
   {
     "id": 112,
     "model": "maffb",
     "name": "The Russian Mafia",
     "location": "Around SA",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "MAFFB.txd",
+    "pedtype": "CRIMINAL",
+    "animgroup": "man",
+    "size": [0.756, 0.378, 1.71]
   },
   {
     "id": 113,
     "model": "mafboss",
     "name": "The Russian Mafia",
     "location": "Around SA",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "MAFBOSS.txd",
+    "pedtype": "CRIMINAL",
+    "animgroup": "man",
+    "size": [1.349, 0.362, 1.856]
   },
   {
     "id": 114,
     "model": "vla1",
     "name": "Varios Los Aztecas",
     "location": "Los Santos",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "VLA1.txd",
+    "pedtype": "GANG8",
+    "animgroup": "gang1",
+    "size": [0.931, 0.351, 1.897]
   },
   {
     "id": 115,
     "model": "vla2",
     "name": "Varios Los Aztecas",
     "location": "Los Santos",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "VLA2.txd",
+    "pedtype": "GANG8",
+    "animgroup": "gang2",
+    "size": [0.931, 0.381, 1.901]
   },
   {
     "id": 116,
     "model": "vla3",
     "name": "Varios Los Aztecas",
     "location": "Los Santos",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "VLA3.txd",
+    "pedtype": "GANG8",
+    "animgroup": "gang1",
+    "size": [0.923, 0.411, 1.873]
   },
   {
     "id": 117,
     "model": "triada",
     "name": "Triad",
     "location": "San Fierro",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "TRIADA.txd",
+    "pedtype": "GANG7",
+    "animgroup": "man",
+    "size": [0.997, 0.36, 1.793]
   },
   {
     "id": 118,
     "model": "triadb",
     "name": "Triad",
     "location": "San Fierro",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "TRIADB.txd",
+    "pedtype": "GANG7",
+    "animgroup": "man",
+    "size": [0.997, 0.36, 1.793]
   },
   {
     "id": 119,
     "model": "sindaco",
     "name": "Johhny Sindacco",
     "location": "Las Venturas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "sindaco.txd",
+    "pedtype": "Special character",
+    "animgroup": "Special character",
+    "size": [1.166, 0.366, 1.836]
   },
   {
     "id": 120,
     "model": "triboss",
     "name": "Triad Boss",
     "location": "San Fierro",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "TRIBOSS.txd",
+    "pedtype": "GANG7",
+    "animgroup": "man",
+    "size": [1.25, 0.343, 1.847]
   },
   {
     "id": 121,
     "model": "dnb1",
     "name": "Da Nang Boy",
     "location": "San Fierro",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "DNB1.txd",
+    "pedtype": "GANG5",
+    "animgroup": "gang1",
+    "size": [1.319, 0.351, 1.854]
   },
   {
     "id": 122,
     "model": "dnb2",
     "name": "Da Nang Boy",
     "location": "San Fierro",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "DNB2.txd",
+    "pedtype": "GANG5",
+    "animgroup": "gang2",
+    "size": [1.04, 0.332, 1.851]
   },
   {
     "id": 123,
     "model": "dnb3",
     "name": "Da Nang Boy",
     "location": "San Fierro",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "DNB3.txd",
+    "pedtype": "GANG5",
+    "animgroup": "gang1",
+    "size": [0.948, 0.385, 1.885]
   },
   {
     "id": 124,
     "model": "vmaff1",
     "name": "The Mafia",
     "location": "Las Venturas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "VMAFF1.txd",
+    "pedtype": "GANG6",
+    "animgroup": "gang1",
+    "size": [0.931, 0.325, 1.852]
   },
   {
     "id": 125,
     "model": "vmaff2",
     "name": "The Mafia",
     "location": "Las Venturas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "VMAFF2.txd",
+    "pedtype": "GANG6",
+    "animgroup": "man",
+    "size": [0.851, 0.366, 1.832]
   },
   {
     "id": 126,
     "model": "vmaff3",
     "name": "The Mafia",
     "location": "Las Venturas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "VMAFF3.txd",
+    "pedtype": "GANG6",
+    "animgroup": "man",
+    "size": [0.924, 0.337, 1.891]
   },
   {
     "id": 127,
     "model": "vmaff4",
     "name": "The Mafia",
     "location": "Las Venturas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "VMAFF4.txd",
+    "pedtype": "GANG6",
+    "animgroup": "man",
+    "size": [1.412, 0.403, 1.856]
   },
   {
     "id": 128,
     "model": "dnmylc",
     "name": "Farm Inhabitant",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "DNMYLC.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [1.01, 0.333, 1.836]
   },
   {
     "id": 129,
     "model": "dnfolc1",
     "name": "Farm Inhabitant",
     "location": "San Andreas",
-    "gender": "Female"
+    "gender": "Female",
+    "txd": "DNFOLC1.txd",
+    "pedtype": "CIVFEMALE",
+    "animgroup": "oldwoman",
+    "size": [0.706, 0.479, 1.643]
   },
   {
     "id": 130,
     "model": "dnfolc2",
     "name": "Farm Inhabitant",
     "location": "San Andreas",
-    "gender": "Female"
+    "gender": "Female",
+    "txd": "DNFOLC2.txd",
+    "pedtype": "CIVFEMALE",
+    "animgroup": "oldwoman",
+    "size": [1.228, 0.469, 1.653]
   },
   {
     "id": 131,
     "model": "dnfylc",
     "name": "Farm Inhabitant",
     "location": "San Andreas",
-    "gender": "Female"
+    "gender": "Female",
+    "txd": "DNFYLC.txd",
+    "pedtype": "CIVFEMALE",
+    "animgroup": "sexywoman",
+    "size": [0.979, 0.319, 1.778]
   },
   {
     "id": 132,
     "model": "dnmolc1",
     "name": "Farm Inhabitant",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "DNMOLC1.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [0.713, 0.288, 1.675]
   },
   {
     "id": 133,
     "model": "dnmolc2",
     "name": "Farm Inhabitant",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "DNMOLC2.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [1.014, 0.324, 1.809]
   },
   {
     "id": 134,
     "model": "sbmotr2",
     "name": "Homeless",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "SBMOTR2.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "oldman",
+    "size": [0.744, 0.308, 1.691]
   },
   {
     "id": 135,
     "model": "swmotr2",
     "name": "Homeless",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "SWMOTR2.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [0.851, 0.368, 1.845]
   },
   {
     "id": 136,
     "model": "sbmytr3",
     "name": "Normal Ped",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "SBMYTR3.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [0.729, 0.327, 1.695]
   },
   {
     "id": 137,
     "model": "swmotr3",
     "name": "Homeless",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "SWMOTR3.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [0.714, 0.295, 1.672]
   },
   {
     "id": 138,
     "model": "wfybe",
     "name": "Beach Visitor",
     "location": "Beaches of SA",
-    "gender": "Female"
+    "gender": "Female",
+    "txd": "WFYBE.txd",
+    "pedtype": "CIVFEMALE",
+    "animgroup": "woman",
+    "size": [0.863, 0.331, 1.802]
   },
   {
     "id": 139,
     "model": "bfybe",
     "name": "Beach Visitor",
     "location": "Beaches of SA",
-    "gender": "Female"
+    "gender": "Female",
+    "txd": "BFYBE.txd",
+    "pedtype": "CIVFEMALE",
+    "animgroup": "woman",
+    "size": [0.863, 0.338, 1.792]
   },
   {
     "id": 140,
     "model": "hfybe",
     "name": "Beach Visitor",
     "location": "Beaches of SA",
-    "gender": "Female"
+    "gender": "Female",
+    "txd": "HFYBE.txd",
+    "pedtype": "CIVFEMALE",
+    "animgroup": "woman",
+    "size": [0.863, 0.321, 1.802]
   },
   {
     "id": 141,
     "model": "sofybu",
     "name": "Businesswoman",
     "location": "San Andreas",
-    "gender": "Female"
+    "gender": "Female",
+    "txd": "SOFYBU.txd",
+    "pedtype": "CIVFEMALE",
+    "animgroup": "busywoman",
+    "size": [0.687, 0.332, 1.799]
   },
   {
     "id": 142,
     "model": "sbmyst",
     "name": "Taxi Driver",
     "location": "San Fierro",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "SBMYST.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [0.931, 0.385, 1.876]
   },
   {
     "id": 143,
     "model": "sbmycr",
     "name": "Crack Maker",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "SBMYCR.txd",
+    "pedtype": "CRIMINAL",
+    "animgroup": "gang1",
+    "size": [0.931, 0.385, 1.894]
   },
   {
     "id": 144,
     "model": "bmycg",
     "name": "Crack Maker",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "bmycg.txd",
+    "pedtype": "CRIMINAL",
+    "animgroup": "gang2",
+    "size": [0.931, 0.385, 1.915]
   },
   {
     "id": 145,
     "model": "wfycrk",
     "name": "Crack Maker",
     "location": "Beaches of SA",
-    "gender": "Female"
+    "gender": "Female",
+    "txd": "Wfycrk.txd",
+    "pedtype": "CIVFEMALE",
+    "animgroup": "woman",
+    "size": [0.863, 0.304, 1.796]
   },
   {
     "id": 146,
     "model": "hmycm",
     "name": "Crack Maker",
     "location": "Beaches of SA",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "hmycm.txd",
+    "pedtype": "CRIMINAL",
+    "animgroup": "man",
+    "size": [1.024, 0.328, 1.85]
   },
   {
     "id": 147,
     "model": "wmybu",
     "name": "Businessman",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "wmybu.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [0.859, 0.338, 1.839]
   },
   {
     "id": 148,
     "model": "bfybu",
     "name": "Businesswoman",
     "location": "San Andreas",
-    "gender": "Female"
+    "gender": "Female",
+    "txd": "bfybu.txd",
+    "pedtype": "CIVFEMALE",
+    "animgroup": "busywoman",
+    "size": [0.687, 0.31, 1.799]
   },
   {
     "id": 149,
     "model": "smokev",
     "name": "Big Smoke Armored",
     "location": "Los Santos",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "smokev.txd",
+    "pedtype": "Special character",
+    "animgroup": "Special character",
+    "size": [1.287, 0.456, 1.891]
   },
   {
     "id": 150,
     "model": "wfybu",
     "name": "Businesswoman",
     "location": "San Andreas",
-    "gender": "Female"
+    "gender": "Female",
+    "txd": "wfybu.txd",
+    "pedtype": "CIVFEMALE",
+    "animgroup": "busywoman",
+    "size": [0.687, 0.324, 1.799]
   },
   {
     "id": 151,
     "model": "dwfylc1",
     "name": "Normal Ped",
     "location": "San Andreas",
-    "gender": "Female"
+    "gender": "Female",
+    "txd": "Dwfylc1.txd",
+    "pedtype": "CIVFEMALE",
+    "animgroup": "sexywoman",
+    "size": [0.931, 0.384, 1.878]
   },
   {
     "id": 152,
     "model": "wfypro",
     "name": "Prostitute",
     "location": "San Andreas",
-    "gender": "Female"
+    "gender": "Female",
+    "txd": "WFYpro.txd",
+    "pedtype": "PROSTITUTE",
+    "animgroup": "pro",
+    "size": [0.835, 0.346, 1.763]
   },
   {
     "id": 153,
     "model": "wmyconb",
     "name": "Construction Worker",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "wmyconb.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [0.847, 0.338, 1.859]
   },
   {
     "id": 154,
     "model": "wmybe",
     "name": "Beach Visitor",
     "location": "Beaches of SA",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "wmybe.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [0.955, 0.304, 1.838]
   },
   {
     "id": 155,
     "model": "wmypizz",
     "name": "Well Stacked Pizza Worker",
     "location": "Well Stacked Pizza co.",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "wmypizz.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [0.931, 0.385, 1.89]
   },
   {
     "id": 156,
     "model": "bmobar",
     "name": "Barber",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "bmobar.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [0.902, 0.371, 1.899]
   },
   {
     "id": 157,
     "model": "cwfyhb",
     "name": "Hillbilly",
     "location": "San Andreas",
-    "gender": "Female"
+    "gender": "Female",
+    "txd": "cwfyhb.txd",
+    "pedtype": "CIVFEMALE",
+    "animgroup": "woman",
+    "size": [0.983, 0.362, 1.773]
   },
   {
     "id": 158,
     "model": "cwmofr",
     "name": "Farmer",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "cwmofr.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [1.001, 0.362, 1.869]
   },
   {
     "id": 159,
     "model": "cwmohb1",
     "name": "Hillbilly",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "cwmohb1.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [0.969, 0.323, 1.841]
   },
   {
     "id": 160,
     "model": "cwmohb2",
     "name": "Hillbilly",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "cwmohb2.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "oldman",
+    "size": [0.738, 0.282, 1.666]
   },
   {
     "id": 161,
     "model": "cwmyfr",
     "name": "Farmer",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "cwmyfr.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [1.083, 0.392, 1.876]
   },
   {
     "id": 162,
     "model": "cwmyhb1",
     "name": "Hillbilly",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "cwmyhb1.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "oldman",
+    "size": [1.014, 0.346, 1.846]
   },
   {
     "id": 163,
     "model": "bmyboun",
     "name": "Black Bouncer",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "bmyboun.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [0.858, 0.34, 1.842]
   },
   {
     "id": 164,
     "model": "wmyboun",
     "name": "White Bouncer",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "wmyboun.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [0.858, 0.372, 1.839]
   },
   {
     "id": 165,
     "model": "wmomib",
     "name": "White MIB agent",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "wmomib.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [1.167, 0.375, 1.832]
   },
   {
     "id": 166,
     "model": "bmymib",
     "name": "Black MIB agent",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "bmymib.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [1.167, 0.375, 1.832]
   },
   {
     "id": 167,
     "model": "wmybell",
     "name": "Cluckin' Bell Worker",
     "location": "Cluckin' Bell",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "wmybell.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [1.06, 0.445, 2.026]
   },
   {
     "id": 168,
     "model": "bmochil",
     "name": "Hotdog/Chilli Dog Vendor",
     "location": "Hotdog vans and chilli dog carts",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "bmochil.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [0.87, 0.381, 1.841]
   },
   {
     "id": 169,
     "model": "sofyri",
     "name": "Normal Ped",
     "location": "San Andreas",
-    "gender": "Female"
+    "gender": "Female",
+    "txd": "sofyri.txd",
+    "pedtype": "CIVFEMALE",
+    "animgroup": "sexywoman",
+    "size": [0.686, 0.284, 1.708]
   },
   {
     "id": 170,
     "model": "somyst",
     "name": "Normal Ped",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "somyst.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [0.931, 0.369, 1.872]
   },
   {
     "id": 171,
     "model": "vwmybjd",
     "name": "Blackjack Dealer",
     "location": "Casinos",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "vwmybjd.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [0.924, 0.308, 1.894]
   },
   {
     "id": 172,
     "model": "vwfycrp",
     "name": "Casino croupier",
     "location": "Casinos",
-    "gender": "Female"
+    "gender": "Female",
+    "txd": "vwfycrp.txd",
+    "pedtype": "CIVFEMALE",
+    "animgroup": "busywoman",
+    "size": [0.686, 0.325, 1.799]
   },
   {
     "id": 173,
     "model": "sfr1",
     "name": "San Fierro Rifa",
     "location": "San Fierro",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "SFR1.txd",
+    "pedtype": "GANG4",
+    "animgroup": "gang1",
+    "size": [0.931, 0.355, 1.943]
   },
   {
     "id": 174,
     "model": "sfr2",
     "name": "San Fierro Rifa",
     "location": "San Fierro",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "SFR2.txd",
+    "pedtype": "GANG4",
+    "animgroup": "gang2",
+    "size": [0.931, 0.373, 1.904]
   },
   {
     "id": 175,
     "model": "sfr3",
     "name": "San Fierro Rifa",
     "location": "San Fierro",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "SFR3.txd",
+    "pedtype": "GANG4",
+    "animgroup": "gang1",
+    "size": [0.931, 0.355, 1.897]
   },
   {
     "id": 176,
     "model": "bmybar",
     "name": "Barber",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "BMYBAR.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [0.931, 0.385, 1.891]
   },
   {
     "id": 177,
     "model": "wmybar",
     "name": "Barber",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "WMYBAR.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [0.931, 0.385, 1.92]
   },
   {
     "id": 178,
     "model": "wfysex",
     "name": "Whore",
     "location": "San Andreas",
-    "gender": "Female"
+    "gender": "Female",
+    "txd": "WFYSEX.txd",
+    "pedtype": "CIVFEMALE",
+    "animgroup": "sexywoman",
+    "size": [0.863, 0.335, 1.813]
   },
   {
     "id": 179,
     "model": "wmyammo",
     "name": "Ammunation Salesman",
     "location": "Ammunation",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "WMYAMMO.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [0.931, 0.333, 1.873]
   },
   {
     "id": 180,
     "model": "bmytatt",
     "name": "Tattoo Artist",
     "location": "Tattoo Shops",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "BMYTATT.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [0.931, 0.385, 1.902]
   },
   {
     "id": 181,
     "model": "vwmycr",
     "name": "Punk",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "VWMYCR.txd",
+    "pedtype": "CRIMINAL",
+    "animgroup": "man",
+    "size": [1.002, 0.289, 1.9]
   },
   {
     "id": 182,
     "model": "vbmocd",
     "name": "Cab Driver",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "VBMOCD.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [0.851, 0.372, 1.815]
   },
   {
     "id": 183,
     "model": "vbmycr",
     "name": "Normal Ped",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "VBMYCR.txd",
+    "pedtype": "CRIMINAL",
+    "animgroup": "man",
+    "size": [0.853, 0.357, 1.814]
   },
   {
     "id": 184,
     "model": "vhmycr",
     "name": "Normal Ped",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "VHMYCR.txd",
+    "pedtype": "CRIMINAL",
+    "animgroup": "man",
+    "size": [0.931, 0.369, 1.872]
   },
   {
     "id": 185,
     "model": "sbmyri",
     "name": "Normal Ped",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "SBMYRI.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [0.924, 0.358, 1.885]
   },
   {
     "id": 186,
     "model": "somyri",
     "name": "Normal Ped",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "SOMYRI.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [1.035, 0.38, 1.862]
   },
   {
     "id": 187,
     "model": "somybu",
     "name": "Businessman",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "SOMYBU.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [0.859, 0.338, 1.843]
   },
   {
     "id": 188,
     "model": "swmyst",
     "name": "Normal Ped",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "SWMYST.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [0.933, 0.328, 1.844]
   },
   {
     "id": 189,
     "model": "wmyva",
     "name": "Valet",
     "location": "San Fierro",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "WMYVA.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [0.924, 0.308, 1.894]
   },
   {
     "id": 190,
     "model": "copgrl3",
     "name": "Barbara Schternvart",
     "location": "El Quebrados",
-    "gender": "Female"
+    "gender": "Female",
+    "txd": "COPGRL3.txd",
+    "pedtype": "CIVFEMALE",
+    "animgroup": "busywoman",
+    "size": [0.856, 0.291, 1.824]
   },
   {
     "id": 191,
     "model": "gungrl3",
     "name": "Helena Wankstein",
     "location": "Blueberry",
-    "gender": "Female"
+    "gender": "Female",
+    "txd": "GUNGRL3.txd",
+    "pedtype": "CIVFEMALE",
+    "animgroup": "woman",
+    "size": [0.856, 0.308, 1.83]
   },
   {
     "id": 192,
     "model": "mecgrl3",
     "name": "Michelle Cannes",
     "location": "San Fierro",
-    "gender": "Female"
+    "gender": "Female",
+    "txd": "MECGRL3.txd",
+    "pedtype": "CIVFEMALE",
+    "animgroup": "sexywoman",
+    "size": [0.856, 0.29, 1.817]
   },
   {
     "id": 193,
     "model": "nurgrl3",
     "name": "Katie Zhan",
     "location": "San Fierro",
-    "gender": "Female"
+    "gender": "Female",
+    "txd": "NURGRL3.txd",
+    "pedtype": "CIVFEMALE",
+    "animgroup": "sexywoman",
+    "size": [0.856, 0.287, 1.82]
   },
   {
     "id": 194,
     "model": "crogrl3",
     "name": "Millie Perkins",
     "location": "Las Venturas",
-    "gender": "Female"
+    "gender": "Female",
+    "txd": "CROGRL3.txd",
+    "pedtype": "CIVFEMALE",
+    "animgroup": "sexywoman",
+    "size": [0.612, 0.336, 1.822]
   },
   {
     "id": 195,
     "model": "gangrl3",
     "name": "Denise Robinson",
     "location": "Los Santos",
-    "gender": "Female"
+    "gender": "Female",
+    "txd": "GANGRL3.txd",
+    "pedtype": "CIVFEMALE",
+    "animgroup": "woman",
+    "size": [0.852, 0.384, 1.82]
   },
   {
     "id": 196,
     "model": "cwfofr",
     "name": "Farm-Town inhabitant",
     "location": "San Andreas",
-    "gender": "Female"
+    "gender": "Female",
+    "txd": "CWFOFR.txd",
+    "pedtype": "CIVFEMALE",
+    "animgroup": "oldwoman",
+    "size": [0.706, 0.361, 1.645]
   },
   {
     "id": 197,
     "model": "cwfohb",
     "name": "Hillbilly",
     "location": "San Andreas",
-    "gender": "Female"
+    "gender": "Female",
+    "txd": "CWFOHB.txd",
+    "pedtype": "CIVFEMALE",
+    "animgroup": "oldwoman",
+    "size": [1.229, 0.421, 1.671]
   },
   {
     "id": 198,
     "model": "cwfyfr1",
     "name": "Farm-Town inhabitant",
     "location": "San Andreas",
-    "gender": "Female"
+    "gender": "Female",
+    "txd": "CWFYFR1.txd",
+    "pedtype": "CIVFEMALE",
+    "animgroup": "woman",
+    "size": [0.983, 0.375, 1.816]
   },
   {
     "id": 199,
     "model": "cwfyfr2",
     "name": "Farm-Town inhabitant",
     "location": "San Andreas",
-    "gender": "Female"
+    "gender": "Female",
+    "txd": "CWFYFR2.txd",
+    "pedtype": "CIVFEMALE",
+    "animgroup": "woman",
+    "size": [1.276, 0.344, 1.664]
   },
   {
     "id": 200,
     "model": "cwmyhb2",
     "name": "Hillbilly",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "CWMYHB2.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [1.013, 0.321, 1.858]
   },
   {
     "id": 201,
     "model": "dwfylc2",
     "name": "Farmer",
     "location": "San Andreas",
-    "gender": "Female"
+    "gender": "Female",
+    "txd": "DWFYLC2.txd",
+    "pedtype": "CIVFEMALE",
+    "animgroup": "woman",
+    "size": [0.979, 0.329, 1.79]
   },
   {
     "id": 202,
     "model": "dwmylc2",
     "name": "Farmer",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "DWMYLC2.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [1.014, 0.323, 1.809]
   },
   {
     "id": 203,
     "model": "omykara",
     "name": "Karate Teacher",
     "location": "San Fierro Gym",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "OMYKARA.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [0.942, 0.418, 1.887]
   },
   {
     "id": 204,
     "model": "wmykara",
     "name": "Karate Teacher",
     "location": "San Fierro Gym",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "WMYKARA.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [0.942, 0.418, 1.887]
   },
   {
     "id": 205,
     "model": "wfyburg",
     "name": "Burger Shot Cashier",
     "location": "Burger Shot",
-    "gender": "Female"
+    "gender": "Female",
+    "txd": "WFYBURG.txd",
+    "pedtype": "CIVFEMALE",
+    "animgroup": "woman",
+    "size": [0.931, 0.375, 1.98]
   },
   {
     "id": 206,
     "model": "vwmycd",
     "name": "Cab Driver",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "VWMYCD.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [1.014, 0.323, 1.805]
   },
   {
     "id": 207,
     "model": "vhfypro",
     "name": "Prostitute",
     "location": "San Andreas",
-    "gender": "Female"
+    "gender": "Female",
+    "txd": "VHFYPRO.txd",
+    "pedtype": "PROSTITUTE",
+    "animgroup": "pro",
+    "size": [1.023, 0.324, 1.758]
   },
   {
     "id": 208,
     "model": "suzie",
     "name": "Su Xi Mu (Suzie)",
     "location": "San Fierro",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "suzie.txd",
+    "pedtype": "Special character",
+    "animgroup": "Special character",
+    "size": [1.029, 0.36, 1.829]
   },
   {
     "id": 209,
     "model": "omonood",
     "name": "Oriental Noodle stand vendor",
     "location": "Noodle stands",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "OMONOOD.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "oldman",
+    "size": [0.715, 0.293, 1.726]
   },
   {
     "id": 210,
     "model": "omoboat",
     "name": "Oriental Boating School Instructor",
     "location": "Boating School",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "OMOBOAT.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "oldman",
+    "size": [0.657, 0.301, 1.675]
   },
   {
     "id": 211,
     "model": "wfyclot",
     "name": "Clothes shop staff",
     "location": "Clothes shops",
-    "gender": "Female"
+    "gender": "Female",
+    "txd": "WFYCLOT.txd",
+    "pedtype": "CIVFEMALE",
+    "animgroup": "woman",
+    "size": [0.686, 0.311, 1.799]
   },
   {
     "id": 212,
     "model": "vwmotr1",
     "name": "Homeless",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "VWMOTR1.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [0.737, 0.28, 1.66]
   },
   {
     "id": 213,
     "model": "vwmotr2",
     "name": "Weird old man",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "VWMOTR2.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [0.851, 0.403, 1.838]
   },
   {
     "id": 214,
     "model": "vwfywai",
     "name": "Waitress (Maria Latore)",
     "location": "Caligulas Casino (cutscene only)",
-    "gender": "Female"
+    "gender": "Female",
+    "txd": "VWFYWAI.txd",
+    "pedtype": "CIVFEMALE",
+    "animgroup": "woman",
+    "size": [0.686, 0.316, 1.799]
   },
   {
     "id": 215,
     "model": "sbfori",
     "name": "Normal Ped",
     "location": "San Andreas",
-    "gender": "Female"
+    "gender": "Female",
+    "txd": "SBFORI.txd",
+    "pedtype": "CIVFEMALE",
+    "animgroup": "woman",
+    "size": [0.686, 0.303, 1.798]
   },
   {
     "id": 216,
     "model": "swfyri",
     "name": "Normal Ped",
     "location": "San Andreas",
-    "gender": "Female"
+    "gender": "Female",
+    "txd": "SWFYRI.txd",
+    "pedtype": "CIVFEMALE",
+    "animgroup": "woman",
+    "size": [0.686, 0.316, 1.799]
   },
   {
     "id": 217,
     "model": "wmyclot",
     "name": "Clothes shop staff",
     "location": "Clothes shops",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "WMYCLOT.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [0.933, 0.326, 1.843]
   },
   {
     "id": 218,
     "model": "sbfost",
     "name": "Normal Ped",
     "location": "San Andreas",
-    "gender": "Female"
+    "gender": "Female",
+    "txd": "SBFOST.txd",
+    "pedtype": "CIVFEMALE",
+    "animgroup": "woman",
+    "size": [1.282, 0.423, 1.671]
   },
   {
     "id": 219,
     "model": "sbfyri",
     "name": "Rich Woman",
     "location": "San Andreas",
-    "gender": "Female"
+    "gender": "Female",
+    "txd": "SBFYRI.txd",
+    "pedtype": "CIVFEMALE",
+    "animgroup": "woman",
+    "size": [0.686, 0.319, 1.799]
   },
   {
     "id": 220,
     "model": "sbmocd",
     "name": "Cab Driver",
     "location": "San Fierro",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "SBMOCD.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [0.831, 0.386, 1.827]
   },
   {
     "id": 221,
     "model": "sbmori",
     "name": "Normal Ped",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "SBMORI.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [0.902, 0.35, 1.896]
   },
   {
     "id": 222,
     "model": "sbmost",
     "name": "Normal Ped",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "SBMOST.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [0.902, 0.35, 1.892]
   },
   {
     "id": 223,
     "model": "shmycr",
     "name": "Normal Ped",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "SHMYCR.txd",
+    "pedtype": "CRIMINAL",
+    "animgroup": "man",
+    "size": [1.033, 0.364, 1.866]
   },
   {
     "id": 224,
     "model": "sofori",
     "name": "Normal Ped",
     "location": "San Andreas",
-    "gender": "Female"
+    "gender": "Female",
+    "txd": "SOFORI.txd",
+    "pedtype": "CIVFEMALE",
+    "animgroup": "woman",
+    "size": [0.686, 0.323, 1.8]
   },
   {
     "id": 225,
     "model": "sofost",
     "name": "Normal Ped",
     "location": "San Andreas",
-    "gender": "Female"
+    "gender": "Female",
+    "txd": "SOFOST.txd",
+    "pedtype": "CIVFEMALE",
+    "animgroup": "woman",
+    "size": [0.686, 0.321, 1.8]
   },
   {
     "id": 226,
     "model": "sofyst",
     "name": "Normal Ped",
     "location": "San Andreas",
-    "gender": "Female"
+    "gender": "Female",
+    "txd": "SOFYST.txd",
+    "pedtype": "CIVFEMALE",
+    "animgroup": "woman",
+    "size": [0.686, 0.284, 1.704]
   },
   {
     "id": 227,
     "model": "somobu",
     "name": "Oriental Businessman",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "SOMOBU.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [0.858, 0.343, 1.859]
   },
   {
     "id": 228,
     "model": "somori",
     "name": "Oriental Ped",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "SOMORI.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [0.924, 0.355, 1.816]
   },
   {
     "id": 229,
     "model": "somost",
     "name": "Oriental Ped",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "SOMOST.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [0.691, 0.342, 1.693]
   },
   {
     "id": 230,
     "model": "swmotr5",
     "name": "Homeless",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "SWMOTR5.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [0.737, 0.267, 1.675]
   },
   {
     "id": 231,
     "model": "swfori",
     "name": "Normal Ped",
     "location": "San Andreas",
-    "gender": "Female"
+    "gender": "Female",
+    "txd": "SWFORI.txd",
+    "pedtype": "CIVFEMALE",
+    "animgroup": "woman",
+    "size": [0.702, 0.299, 1.658]
   },
   {
     "id": 232,
     "model": "swfost",
     "name": "Normal Ped",
     "location": "San Andreas",
-    "gender": "Female"
+    "gender": "Female",
+    "txd": "SWFOST.txd",
+    "pedtype": "CIVFEMALE",
+    "animgroup": "woman",
+    "size": [1.221, 0.415, 1.647]
   },
   {
     "id": 233,
     "model": "swfyst",
     "name": "Normal Ped",
     "location": "San Andreas",
-    "gender": "Female"
+    "gender": "Female",
+    "txd": "SWFYST.txd",
+    "pedtype": "CIVFEMALE",
+    "animgroup": "woman",
+    "size": [0.686, 0.311, 1.799]
   },
   {
     "id": 234,
     "model": "swmocd",
     "name": "Cab Driver",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "SWMOCD.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [0.691, 0.303, 1.693]
   },
   {
     "id": 235,
     "model": "swmori",
     "name": "Normal Ped",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "SWMORI.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [0.712, 0.316, 1.671]
   },
   {
     "id": 236,
     "model": "swmost",
     "name": "Normal Ped",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "SWMOST.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [0.691, 0.33, 1.696]
   },
   {
     "id": 237,
     "model": "shfypro",
     "name": "Prostitute",
     "location": "San Andreas",
-    "gender": "Female"
+    "gender": "Female",
+    "txd": "SHFYPRO.txd",
+    "pedtype": "PROSTITUTE",
+    "animgroup": "pro",
+    "size": [0.835, 0.345, 1.763]
   },
   {
     "id": 238,
     "model": "sbfypro",
     "name": "Prostitute",
     "location": "San Andreas",
-    "gender": "Female"
+    "gender": "Female",
+    "txd": "SBFYPRO.txd",
+    "pedtype": "PROSTITUTE",
+    "animgroup": "pro",
+    "size": [0.979, 0.338, 1.777]
   },
   {
     "id": 239,
     "model": "swmotr4",
     "name": "Homeless",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "SWMOTR4.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [0.857, 0.366, 1.865]
   },
   {
     "id": 240,
     "model": "swmyri",
     "name": "The D.A",
     "location": "San Fierro",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "SWMYRI.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [1.012, 0.343, 1.859]
   },
   {
     "id": 241,
     "model": "smyst",
     "name": "Afro-American",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "SMYST.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [0.838, 0.417, 1.904]
   },
   {
     "id": 242,
     "model": "smyst2",
     "name": "Mexican",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "SMYST2.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [0.836, 0.401, 1.868]
   },
   {
     "id": 243,
     "model": "sfypro",
     "name": "Prostitute",
     "location": "San Andreas",
-    "gender": "Female"
+    "gender": "Female",
+    "txd": "SFYPRO.txd",
+    "pedtype": "PROSTITUTE",
+    "animgroup": "pro",
+    "size": [1.023, 0.324, 1.758]
   },
   {
     "id": 244,
     "model": "vbfyst2",
     "name": "Stripper",
     "location": "San Andreas",
-    "gender": "Female"
+    "gender": "Female",
+    "txd": "VBFYST2.txd",
+    "pedtype": "CIVFEMALE",
+    "animgroup": "sexywoman",
+    "size": [1.06, 0.331, 1.762]
   },
   {
     "id": 245,
     "model": "vbfypro",
     "name": "Prostitute",
     "location": "San Andreas",
-    "gender": "Female"
+    "gender": "Female",
+    "txd": "VBFYPRO.txd",
+    "pedtype": "PROSTITUTE",
+    "animgroup": "pro",
+    "size": [0.935, 0.358, 1.886]
   },
   {
     "id": 246,
     "model": "vhfyst3",
     "name": "Stripper",
     "location": "San Andreas",
-    "gender": "Female"
+    "gender": "Female",
+    "txd": "VHFYST3.txd",
+    "pedtype": "CIVFEMALE",
+    "animgroup": "sexywoman",
+    "size": [1.06, 0.428, 1.8]
   },
   {
     "id": 247,
     "model": "bikera",
     "name": "Biker",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "BIKERA.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [0.931, 0.364, 1.887]
   },
   {
     "id": 248,
     "model": "bikerb",
     "name": "Biker",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "BIKERB.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [0.935, 0.345, 1.922]
   },
   {
     "id": 249,
     "model": "bmypimp",
     "name": "Pimp",
     "location": "San Fierro",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "BMYPIMP.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [0.889, 0.376, 1.875]
   },
   {
     "id": 250,
     "model": "swmycr",
     "name": "Normal Ped",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "SWMYCR.txd",
+    "pedtype": "CRIMINAL",
+    "animgroup": "man",
+    "size": [0.931, 0.369, 1.872]
   },
   {
     "id": 251,
     "model": "wfylg",
     "name": "Lifeguard",
     "location": "Beaches",
-    "gender": "Female"
+    "gender": "Female",
+    "txd": "WFYLG.txd",
+    "pedtype": "CIVFEMALE",
+    "animgroup": "woman",
+    "size": [0.863, 0.324, 1.785]
   },
   {
     "id": 252,
     "model": "wmyva2",
     "name": "Naked Valet",
     "location": "San Fierro (mission only)",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "WMYVA2.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [1.35, 0.277, 1.879]
   },
   {
     "id": 253,
     "model": "bmosec",
     "name": "Bus Driver",
     "location": "San Fierro",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "BMOSEC.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [0.719, 0.303, 1.696]
   },
   {
     "id": 254,
     "model": "bikdrug",
     "name": "Biker Drug Dealer",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "BIKDRUG.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [0.931, 0.364, 1.887]
   },
   {
     "id": 255,
     "model": "wmych",
     "name": "Chauffeur (Limo Driver)",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "WMYCH.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [0.847, 0.338, 1.845]
   },
   {
     "id": 256,
     "model": "sbfystr",
     "name": "Stripper",
     "location": "San Andreas",
-    "gender": "Female"
+    "gender": "Female",
+    "txd": "SBFYSTR.txd",
+    "pedtype": "CIVFEMALE",
+    "animgroup": "sexywoman",
+    "size": [0.963, 0.337, 1.798]
   },
   {
     "id": 257,
     "model": "swfystr",
     "name": "Stripper",
     "location": "San Andreas",
-    "gender": "Female"
+    "gender": "Female",
+    "txd": "SWFYSTR.txd",
+    "pedtype": "CIVFEMALE",
+    "animgroup": "sexywoman",
+    "size": [1.038, 0.305, 1.792]
   },
   {
     "id": 258,
     "model": "heck1",
     "name": "Heckler",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "HECK1.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [1.354, 0.414, 1.863]
   },
   {
     "id": 259,
     "model": "heck2",
     "name": "Heckler",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "HECK2.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [1.354, 0.42, 1.863]
   },
   {
     "id": 260,
     "model": "bmycon",
     "name": "Construction Worker",
     "location": "San Fierro",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "BMYCON.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [0.92, 0.359, 1.929]
   },
   {
     "id": 261,
     "model": "wmycd1",
     "name": "Cab driver",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "WMYCD1.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [0.714, 0.31, 1.692]
   },
   {
     "id": 262,
     "model": "bmocd",
     "name": "Cab driver",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "BMOCD.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [0.851, 0.372, 1.809]
   },
   {
     "id": 263,
     "model": "vwfywa2",
     "name": "Normal Ped",
     "location": "San Andreas",
-    "gender": "Female"
+    "gender": "Female",
+    "txd": "VWFYWA2.txd",
+    "pedtype": "CIVFEMALE",
+    "animgroup": "woman",
+    "size": [0.686, 0.303, 1.799]
   },
   {
     "id": 264,
     "model": "wmoice",
     "name": "Clown (Ice-cream Van Driver)",
     "location": "San Andreas (Driving ice-cream vans (Mr.Whoopee))",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "WMOICE.txd",
+    "pedtype": "CIVMALE",
+    "animgroup": "man",
+    "size": [0.837, 0.492, 1.896]
   },
   {
     "id": 265,
     "model": "tenpen",
     "name": "Officer Frank Tenpenny (Corrupt Cop)",
     "location": "Missions",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "tenpen.txd",
+    "pedtype": "Special character",
+    "animgroup": "Special character",
+    "size": [0.841, 0.361, 1.843]
   },
   {
     "id": 266,
     "model": "pulaski",
     "name": "Officer Eddie Pulaski (Corrupt Cop)",
     "location": "Missions",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "pulaski.txd",
+    "pedtype": "Special character",
+    "animgroup": "Special character",
+    "size": [0.834, 0.355, 1.835]
   },
   {
     "id": 267,
     "model": "hern",
     "name": "Officer Jimmy Hernandez",
     "location": "Missions",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "hern.txd",
+    "pedtype": "Special character",
+    "animgroup": "Special character",
+    "size": [0.853, 0.361, 1.822]
   },
   {
     "id": 268,
     "model": "dwayne",
     "name": "Dwaine/Dwayne",
     "location": "San Fierro (Missions)",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "dwayne.txd",
+    "pedtype": "Special character",
+    "animgroup": "Special character",
+    "size": [1.166, 0.363, 1.863]
   },
   {
     "id": 269,
     "model": "smoke",
     "name": "Melvin \"Big Smoke\" Harris (Mission)",
     "location": "Los Santos",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "smoke.txd",
+    "pedtype": "Special character",
+    "animgroup": "Special character",
+    "size": [1.286, 0.44, 1.891]
   },
   {
     "id": 270,
     "model": "sweet",
     "name": "Sean 'Sweet' Johnson",
     "location": "Los Santos/San Fierro (Missions)",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "sweet.txd",
+    "pedtype": "Special character",
+    "animgroup": "Special character",
+    "size": [0.834, 0.363, 1.895]
   },
   {
     "id": 271,
     "model": "ryder",
     "name": "Lance 'Ryder' Wilson",
     "location": "Los Santos/San Fierro (Missions)",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "ryder.txd",
+    "pedtype": "Special character",
+    "animgroup": "Special character",
+    "size": [0.837, 0.388, 1.885]
   },
   {
     "id": 272,
     "model": "forelli",
     "name": "Mafia Boss",
     "location": "Los Santos",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "forelli.txd",
+    "pedtype": "Special character",
+    "animgroup": "Special character",
+    "size": [1.423, 0.392, 1.849]
   },
   {
     "id": 273,
     "model": "tbone",
     "name": "T-Bone Mendez",
     "location": "San Fierro",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "tbone.txd",
+    "pedtype": "Special character",
+    "animgroup": "Special character",
+    "size": [0.875, 0.357, 1.832]
   },
   {
     "id": 274,
     "model": "laemt1",
     "name": "Paramedic (Emergency Medical Technician)",
     "location": "Los Santos",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "laemt1.txd",
+    "pedtype": "MEDIC",
+    "animgroup": "swat",
+    "size": [1.033, 0.348, 1.833]
   },
   {
     "id": 275,
     "model": "lvemt1",
     "name": "Paramedic (Emergency Medical Technician)",
     "location": "Las Venturas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "lvemt1.txd",
+    "pedtype": "MEDIC",
+    "animgroup": "swat",
+    "size": [1.033, 0.348, 1.833]
   },
   {
     "id": 276,
     "model": "sfemt1",
     "name": "Paramedic (Emergency Medical Technician)",
     "location": "San Fierro",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "sfemt1.txd",
+    "pedtype": "MEDIC",
+    "animgroup": "swat",
+    "size": [1.229, 0.353, 1.824]
   },
   {
     "id": 277,
     "model": "lafd1",
     "name": "Firefighter",
     "location": "Los Santos",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "lafd1.txd",
+    "pedtype": "FIREMAN",
+    "animgroup": "swat",
+    "size": [1.016, 0.456, 1.956]
   },
   {
     "id": 278,
     "model": "lvfd1",
     "name": "Firefighter",
     "location": "Las Venturas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "lvfd1.txd",
+    "pedtype": "FIREMAN",
+    "animgroup": "swat",
+    "size": [1.016, 0.456, 1.956]
   },
   {
     "id": 279,
     "model": "sffd1",
     "name": "Firefighter",
     "location": "San Fierro",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "sffd1.txd",
+    "pedtype": "FIREMAN",
+    "animgroup": "swat",
+    "size": [1.016, 0.456, 1.956]
   },
   {
     "id": 280,
     "model": "lapd1",
     "name": "Los Santos Police Officer",
     "location": "Los Santos",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "lapd1.txd",
+    "pedtype": "COP",
+    "animgroup": "swat",
+    "size": [1.033, 0.348, 1.839]
   },
   {
     "id": 281,
     "model": "sfpd1",
     "name": "San Fierro Police Officer",
     "location": "San Fierro",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "sfpd1.txd",
+    "pedtype": "COP",
+    "animgroup": "swat",
+    "size": [1.033, 0.348, 1.833]
   },
   {
     "id": 282,
     "model": "lvpd1",
     "name": "Las Venturas Police Officer",
     "location": "Las Venturas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "lvpd1.txd",
+    "pedtype": "COP",
+    "animgroup": "swat",
+    "size": [1.033, 0.348, 1.84]
   },
   {
     "id": 283,
     "model": "csher",
     "name": "County Sheriff",
     "location": "Countryside",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "csher.txd",
+    "pedtype": "COP",
+    "animgroup": "swat",
+    "size": [1.033, 0.348, 1.876]
   },
   {
     "id": 284,
     "model": "lapdm1",
     "name": "LSPD Motorbike Cop",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "lapdm1.txd",
+    "pedtype": "COP",
+    "animgroup": "swat",
+    "size": [0.935, 0.343, 1.864]
   },
   {
     "id": 285,
     "model": "swat",
     "name": "S.W.A.T Special Forces",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "swat.txd",
+    "pedtype": "COP",
+    "animgroup": "swat",
+    "size": [1.091, 0.434, 1.857]
   },
   {
     "id": 286,
     "model": "fbi",
     "name": "Federal Agent",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "fbi.txd",
+    "pedtype": "COP",
+    "animgroup": "swat",
+    "size": [1.04, 0.37, 1.839]
   },
   {
     "id": 287,
     "model": "army",
     "name": "San Andreas Army",
     "location": "San Andreas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "army.txd",
+    "pedtype": "COP",
+    "animgroup": "swat",
+    "size": [1.079, 0.419, 1.847]
   },
   {
     "id": 288,
     "model": "dsher",
     "name": "Desert Sheriff",
     "location": "Desert",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "dsher.txd",
+    "pedtype": "COP",
+    "animgroup": "swat",
+    "size": [1.033, 0.348, 1.876]
   },
   {
     "id": 289,
     "model": "zero",
     "name": "Zero",
     "location": "San Fierro",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "zero.txd",
+    "pedtype": "Special character",
+    "animgroup": "Special character",
+    "size": [1.153, 0.387, 1.861]
   },
   {
     "id": 290,
     "model": "rose",
     "name": "Ken Rosenberg",
     "location": "Las-Venturas Casino",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "rose.txd",
+    "pedtype": "Special character",
+    "animgroup": "Special character",
+    "size": [1.167, 0.368, 1.829]
   },
   {
     "id": 291,
     "model": "paul",
     "name": "Kent Paul",
     "location": "LV/LS",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "paul.txd",
+    "pedtype": "Special character",
+    "animgroup": "Special character",
+    "size": [1.166, 0.351, 1.86]
   },
   {
     "id": 292,
     "model": "cesar",
     "name": "Cesar Vialpando",
     "location": "LS/SF",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "cesar.txd",
+    "pedtype": "Special character",
+    "animgroup": "Special character",
+    "size": [1.094, 0.342, 1.82]
   },
   {
     "id": 293,
     "model": "ogloc",
     "name": "Jeffery \"OG Loc\" Martin/Cross",
     "location": "Los-Santos, Burger Shot",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "ogloc.txd",
+    "pedtype": "Special character",
+    "animgroup": "Special character",
+    "size": [1.104, 0.348, 1.888]
   },
   {
     "id": 294,
     "model": "wuzimu",
     "name": "Wu Zi Mu (Woozie)",
     "location": "San Fierro and Las Venturas",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "wuzimu.txd",
+    "pedtype": "Special character",
+    "animgroup": "Special character",
+    "size": [1.086, 0.363, 1.856]
   },
   {
     "id": 295,
     "model": "torino",
     "name": "Michael Toreno",
     "location": "Las Venturas and San Fierro",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "torino.txd",
+    "pedtype": "Special character",
+    "animgroup": "Special character",
+    "size": [1.167, 0.375, 1.839]
   },
   {
     "id": 296,
     "model": "jizzy",
     "name": "Jizzy B.",
     "location": "San Fierro, The Pleasure Domes",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "jizzy.txd",
+    "pedtype": "Special character",
+    "animgroup": "Special character",
+    "size": [1.167, 0.375, 1.853]
   },
   {
     "id": 297,
     "model": "maddogg",
     "name": "Madd Dogg",
     "location": "Madd Dogg's Mansion, Los Santos",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "maddogg.txd",
+    "pedtype": "Special character",
+    "animgroup": "Special character",
+    "size": [1.167, 0.346, 1.866]
   },
   {
     "id": 298,
     "model": "cat",
     "name": "Catalina",
     "location": "Fern Ridge",
-    "gender": "Female"
+    "gender": "Female",
+    "txd": "cat.txd",
+    "pedtype": "Special character",
+    "animgroup": "Special character",
+    "size": [1.012, 0.329, 1.775]
   },
   {
     "id": 299,
     "model": "claude",
     "name": "Claude Speed",
     "location": "Cutscene Only",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "claude.txd",
+    "pedtype": "Special character",
+    "animgroup": "Special character",
+    "size": [1.2, 0.376, 1.887]
   },
   {
     "id": 300,
     "model": "lapdna",
     "name": "Los Santos Police Officer (Without gun holster)",
     "location": "-",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "lapd1.txd",
+    "pedtype": "COP",
+    "animgroup": "swat",
+    "size": [0.35, 1.839, 1.033]
   },
   {
     "id": 301,
     "model": "sfpdna",
     "name": "San Fierro Police Officer (Without gun holster)",
     "location": "-",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "sfpd1.txd",
+    "pedtype": "COP",
+    "animgroup": "swat",
+    "size": [0.351, 1.833, 1.033]
   },
   {
     "id": 302,
     "model": "lvpdna",
     "name": "Las Venturas Police Officer (Without gun holster)",
     "location": "-",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "lvpd1.txd",
+    "pedtype": "COP",
+    "animgroup": "swat",
+    "size": [0.351, 1.84, 1.032]
   },
   {
     "id": 303,
     "model": "lapdpc",
     "name": "Los Santos Police Officer (Without uniform)",
     "location": "-",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "lapdpc.txd",
+    "pedtype": "COP",
+    "animgroup": "swat",
+    "size": [0.351, 1.839, 1.033]
   },
   {
     "id": 304,
     "model": "lapdpd",
     "name": "Los Santos Police Officer (Without uniform)",
     "location": "-",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "lapdpd.txd",
+    "pedtype": "COP",
+    "animgroup": "swat",
+    "size": [0.351, 1.839, 1.033]
   },
   {
     "id": 305,
     "model": "lvpdpc",
     "name": "Las Venturas Police Officer (Without uniform)",
     "location": "-",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "lvpdpc.txd",
+    "pedtype": "COP",
+    "animgroup": "swat",
+    "size": [0.351, 1.84, 1.032]
   },
   {
     "id": 306,
     "model": "wfyclpd",
     "name": "Los Santos Police Officer",
     "location": "-",
-    "gender": "Female"
+    "gender": "Female",
+    "txd": "WFYCLPD.txd",
+    "pedtype": "CIVFEMALE",
+    "animgroup": "woman",
+    "size": [0.311, 1.806, 0.686]
   },
   {
     "id": 307,
     "model": "vbfycpd",
     "name": "San Fierro Police Officer",
     "location": "-",
-    "gender": "Female"
+    "gender": "Female",
+    "txd": "VBFYCPD.txd",
+    "pedtype": "CIVFEMALE",
+    "animgroup": "woman",
+    "size": [0.302, 1.798, 0.686]
   },
   {
     "id": 308,
     "model": "wfyclem",
     "name": "San Fierro Paramedic (Emergency Medical Technician)",
     "location": "-",
-    "gender": "Female"
+    "gender": "Female",
+    "txd": "WFYCLEM.txd",
+    "pedtype": "CIVFEMALE",
+    "animgroup": "sexywoman",
+    "size": [0.311, 1.806, 0.686]
   },
   {
     "id": 309,
     "model": "wfycllv",
     "name": "Las Venturas Police Officer",
     "location": "-",
-    "gender": "Female"
+    "gender": "Female",
+    "txd": "WFYCLLV.txd",
+    "pedtype": "CIVFEMALE",
+    "animgroup": "woman",
+    "size": [0.311, 1.806, 0.686]
   },
   {
     "id": 310,
     "model": "csherna",
     "name": "Country Sheriff (Without hat)",
     "location": "-",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "csherna.txd",
+    "pedtype": "COP",
+    "animgroup": "swat",
+    "size": [0.351, 1.833, 1.032]
   },
   {
     "id": 311,
     "model": "dsherna",
     "name": "Desert Sheriff (Without hat)",
     "location": "-",
-    "gender": "Male"
+    "gender": "Male",
+    "txd": "dsherna.txd",
+    "pedtype": "COP",
+    "animgroup": "swat",
+    "size": [0.35, 1.833, 1.033]
   }
 ]

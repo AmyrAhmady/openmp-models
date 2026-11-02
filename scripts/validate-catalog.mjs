@@ -1,5 +1,17 @@
 import { readFile } from 'node:fs/promises';
 
+function isVector3(value) {
+    return (
+        Array.isArray(value) &&
+        value.length === 3 &&
+        value.every((size) => typeof size === 'number' && Number.isFinite(size))
+    );
+}
+
+function hasValidSize(item) {
+    return item.size === undefined || isVector3(item.size);
+}
+
 const catalogs = {
     object: {
         file: '../data/source/catalogs/objects.json',
@@ -12,13 +24,11 @@ const catalogs = {
             anime: 'boolean',
             radius: 'number',
             txd: 'string',
+            ide: 'string',
+            drawdist: 'number',
         },
         validate(item) {
-            return (
-                Array.isArray(item.borderbox) &&
-                item.borderbox.length === 3 &&
-                item.borderbox.every((value) => typeof value === 'number' && Number.isFinite(value))
-            );
+            return isVector3(item.borderbox) && hasValidSize(item);
         },
     },
     skin: {
@@ -29,7 +39,11 @@ const catalogs = {
             name: 'string',
             location: 'string',
             gender: 'string',
+            txd: 'string',
+            pedtype: 'string',
+            animgroup: 'string',
         },
+        validate: hasValidSize,
     },
     vehicle: {
         file: '../data/source/catalogs/vehicles.json',
@@ -39,7 +53,12 @@ const catalogs = {
             name: 'string',
             cat: 'string',
             mods: 'string',
+            txd: 'string',
+            type: 'string',
+            handling: 'string',
+            class: 'string',
         },
+        validate: hasValidSize,
     },
 };
 

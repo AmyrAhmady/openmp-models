@@ -44,6 +44,10 @@ const initialInfo: VehicleInfo = {
     cat: 'Off Road',
     mods: 'Transfender',
     model: 'landstal',
+    txd: 'landstal.txd',
+    type: 'car',
+    handling: 'LANDSTAL',
+    class: 'normal',
 };
 
 function getAssetName(item: CatalogItem | CatalogListItem): string {
