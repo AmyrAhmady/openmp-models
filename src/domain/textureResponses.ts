@@ -24,7 +24,8 @@ function isTextureUsage(value: unknown): value is TextureUsage {
         isRecord(value) &&
         (value.type === 'object' || value.type === 'skin' || value.type === 'vehicle') &&
         Number.isInteger(value.id) &&
-        typeof value.name === 'string'
+        typeof value.name === 'string' &&
+        isNonEmptyString(value.model)
     );
 }
 

@@ -1,9 +1,11 @@
 import React from 'react';
 import { Pressable, ScrollView, Text, View } from 'react-native-web';
 import type { StyleProp, ViewStyle } from 'react-native-web';
+import { getModelPreviewUrl } from 'src/domain/globalSearch';
 import { MODEL_TYPE_LABELS } from 'src/domain/modelType';
 import type { TextureUsage } from 'src/domain/textureCatalog';
 import { useTheme } from 'src/theme/ThemeContext';
+import PreviewImage from '../PreviewImage';
 import RoundCard from '../RoundCard';
 
 interface Props {
@@ -35,6 +37,7 @@ const TextureUsageList = ({ usage, onSelect, style }: Props) => {
                                 paddingVertical: 7,
                             }}
                         >
+                            <PreviewImage uri={getModelPreviewUrl(item.model)} size={32} />
                             <View style={{ flex: 1, minWidth: 0, marginRight: 8 }}>
                                 <Text
                                     numberOfLines={1}

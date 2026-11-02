@@ -75,7 +75,7 @@ test('texture response parsers accept typed list and detail envelopes', async ()
             width: 128,
             height: 128,
             format: 'DXT1',
-            usedBy: [{ type: 'object', id: 1220, name: 'cardboardbox2' }],
+            usedBy: [{ type: 'object', id: 1220, name: 'cardboardbox2', model: 'cardboardbox2' }],
             dictionary: ['crate128', 'cardboxes_128'],
         };
 
@@ -108,7 +108,7 @@ test('texture response parsers reject malformed payloads', async () => {
                     width: 128,
                     height: 128,
                     format: 'DXT1',
-                    usedBy: [{ type: 'texture', id: 1, name: 'crate' }],
+                    usedBy: [{ type: 'texture', id: 1, name: 'crate', model: 'crate' }],
                     dictionary: [],
                 },
             })

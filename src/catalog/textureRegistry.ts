@@ -1,5 +1,6 @@
 import Textures from '../../data/source/catalogs/textures.json';
 import { findCatalogItem } from 'src/catalog/catalogRegistry';
+import { getPreviewName } from 'src/domain/globalSearch';
 import { normalizeSearchText } from 'src/domain/search';
 import { isTextureDictionaryInfo } from 'src/domain/textureCatalog';
 import type {
@@ -47,7 +48,7 @@ function getUsage(texture: TextureInfo): TextureUsage[] {
         ids.forEach((id) => {
             const item = findCatalogItem(type, id);
             if (item) {
-                usage.push({ type, id, name: item.name });
+                usage.push({ type, id, name: item.name, model: getPreviewName(item) });
             }
         });
     };

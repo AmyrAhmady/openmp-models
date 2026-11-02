@@ -26,6 +26,7 @@ export interface TextureUsage {
     type: ModelType;
     id: number;
     name: string;
+    model: string;
 }
 
 export interface TextureDetails extends TextureListItem {
