@@ -1252,11 +1252,12 @@
     "name": "Bloodring Banger",
     "cat": "Saloons",
     "mods": "None",
-    "model": "bloodra / bloodrb",
+    "model": "bloodra",
     "txd": "bloodra.txd",
     "type": "car",
     "handling": "BLOODRA",
-    "class": "ignore"
+    "class": "ignore",
+    "size": [2.457, 5.864, 1.661]
   },
   {
     "id": 505,

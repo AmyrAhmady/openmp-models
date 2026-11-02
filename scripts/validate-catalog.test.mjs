@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import { execFile } from 'node:child_process';
+import { readFile } from 'node:fs/promises';
 import { promisify } from 'node:util';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
@@ -15,4 +16,21 @@ test('catalog validation accepts every checked-in catalog', async () => {
     assert.match(stdout, /skin: 312 valid records/);
     assert.match(stdout, /vehicle: 212 valid records/);
     assert.match(stdout, /texture: 32216 valid records/);
+});
+
+test('vehicle catalog models match the viewer model names', async () => {
+    const [catalogSource, serviceSource] = await Promise.all([
+        readFile(new URL('../data/source/catalogs/vehicles.json', import.meta.url), 'utf8'),
+        readFile(new URL('../src/rendering/Service.ts', import.meta.url), 'utf8'),
+    ]);
+    const table = serviceSource.slice(serviceSource.indexOf('vehicleModelNames = {'));
+    const modelNames = new Map(
+        [...table.slice(0, table.indexOf('};')).matchAll(/'(\d+)': '([^']+)'/g)].map(
+            ([, id, name]) => [Number(id), name]
+        )
+    );
+
+    for (const vehicle of JSON.parse(catalogSource)) {
+        assert.equal(vehicle.model, modelNames.get(vehicle.id), `vehicle ${vehicle.id}`);
+    }
 });
