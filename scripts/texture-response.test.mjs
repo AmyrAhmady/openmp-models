@@ -117,3 +117,22 @@ test('texture response parsers reject malformed payloads', async () => {
         await cleanup();
     }
 });
+
+test('texture URLs keep names with spaces and symbols intact', async () => {
+    const outputDirectory = await mkdtemp(join(tmpdir(), 'omp-texture-url-'));
+    try {
+        await compileResponses(outputDirectory);
+        const { getTextureUrl } = await import(
+            pathToFileURL(join(outputDirectory, 'domain', 'textureCatalog.js')).href
+        );
+        const base = 'https://assets.open.mp/models/exports/';
+
+        assert.equal(getTextureUrl('Cardboxes_128'), `${base}cardboxes_128.png`);
+        assert.equal(getTextureUrl('crazy paving'), `${base}crazy%20paving.png`);
+        assert.equal(getTextureUrl('100%fowl_cb'), `${base}100%25fowl_cb.png`);
+        assert.equal(getTextureUrl('pavegreylod#'), `${base}pavegreylod%23.png`);
+        assert.equal(getTextureUrl('speeder92interior128 '), `${base}speeder92interior128%20.png`);
+    } finally {
+        await rm(outputDirectory, { recursive: true, force: true });
+    }
+});

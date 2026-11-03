@@ -62,7 +62,7 @@ function isIdList(value: unknown): value is number[] {
 }
 
 export function getTextureUrl(name: string): string {
-    return `${TEXTURE_BASE_URL}${name.trim().toLowerCase()}.png`;
+    return `${TEXTURE_BASE_URL}${encodeURIComponent(name.toLowerCase())}.png`;
 }
 
 export function isTextureInfo(value: unknown): value is TextureInfo {

@@ -77,11 +77,15 @@ export function searchTextures(query: string): TextureListItem[] {
         .map(({ item }) => item);
 }
 
+function normalizeTextureName(name: string): string {
+    return name.trim().toLowerCase();
+}
+
 export function findTexture(txd: string, name: string): TextureDetails | undefined {
     const dictionary = dictionaryByName.get(txd.toLowerCase());
-    const normalizedName = name.toLowerCase();
+    const normalizedName = normalizeTextureName(name);
     const texture = dictionary?.textures.find(
-        (candidate) => candidate.name.toLowerCase() === normalizedName
+        (candidate) => normalizeTextureName(candidate.name) === normalizedName
     );
     if (!dictionary || !texture) {
         return undefined;
@@ -104,11 +108,12 @@ export function findModelTextureDictionary(
     name: string
 ): string | undefined {
     const key = type === 'object' ? 'objects' : type === 'skin' ? 'skins' : 'vehicles';
-    const normalizedName = name.toLowerCase();
+    const normalizedName = normalizeTextureName(name);
 
     return dictionaries.find((dictionary) =>
         dictionary.textures.some(
-            (texture) => texture.name.toLowerCase() === normalizedName && texture[key].includes(id)
+            (texture) =>
+                normalizeTextureName(texture.name) === normalizedName && texture[key].includes(id)
         )
     )?.name;
 }

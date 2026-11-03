@@ -110,6 +110,12 @@ try {
         texture.body.item.usedBy.some((usage) => usage.type === 'object' && usage.id === 1220)
     );
 
+    const spacedTexture = await getJson(
+        '/api/textures/item?txd=speeder&name=speeder92interior128%20'
+    );
+    assert.equal(spacedTexture.response.status, 200);
+    assert.equal(spacedTexture.body.item.name, 'speeder92interior128 ');
+
     const vehicleTexture = await getJson('/api/textures/item?txd=infernus&name=infernus92wheel32');
     assert.deepEqual(vehicleTexture.body.item.usedBy, [
         { type: 'vehicle', id: 411, name: 'Infernus', model: 'infernus' },
