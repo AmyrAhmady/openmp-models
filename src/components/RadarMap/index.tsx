@@ -53,16 +53,11 @@ const RadarMap = ({
                     return;
                 }
 
-                const { pageX, pageY } = event.nativeEvent;
-                onPress(
-                    mapToWorld(
-                        {
-                            x: pageX - bounds.left - window.scrollX,
-                            y: pageY - bounds.top - window.scrollY,
-                        },
-                        size
-                    )
-                );
+                const pointer: Partial<typeof event.nativeEvent> | undefined = event.nativeEvent;
+                const x = (pointer?.pageX ?? -1) - bounds.left - window.scrollX;
+                const y = (pointer?.pageY ?? -1) - bounds.top - window.scrollY;
+                const inside = x >= 0 && y >= 0 && x <= size && y <= size;
+                onPress(inside ? mapToWorld({ x, y }, size) : (selectedPoint ?? { x: 0, y: 0 }));
             }}
             style={[
                 {
