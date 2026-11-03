@@ -74,21 +74,21 @@ test('placement parser accepts an item and rejects malformed positions', async (
     try {
         const item = {
             id: 1220,
-            positions: [[2763.09375, 1449.9921875, 10.125]],
-            interiors: [[2178.1953125, 1593.6328125, 1001.15625, 1]],
+            positions: [[2763.09375, 1449.9921875, 10.125, 0, 0, 0]],
+            interiors: [[2178.1953125, 1593.6328125, 1001.15625, 0, 0, 90, 1]],
         };
         assert.deepEqual(responses.parsePlacementsResponse({ item }), { item });
         assert.throws(
             () =>
                 responses.parsePlacementsResponse({
-                    item: { ...item, positions: [[2763.09375, 1449.9921875]] },
+                    item: { ...item, positions: [[2763.09375, 1449.9921875, 10.125]] },
                 }),
             /Invalid placements response/
         );
         assert.throws(
             () =>
                 responses.parsePlacementsResponse({
-                    item: { ...item, interiors: [[2178.1953125, 1593.6328125, 1001.15625]] },
+                    item: { ...item, interiors: [[2178.1953125, 1593.6328125, 1001.15625, 1]] },
                 }),
             /Invalid placements response/
         );

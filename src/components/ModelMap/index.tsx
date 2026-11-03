@@ -140,7 +140,7 @@ const ModelMap = ({
                             ))}
                         {placements.interiors.length > 0 && (
                             <ScrollView style={{ maxHeight: 160, marginTop: 12 }}>
-                                {placements.interiors.map(([x, y, z, interior], index) => (
+                                {placements.interiors.map((placement, index) => (
                                     <View
                                         key={index}
                                         style={{
@@ -156,10 +156,10 @@ const ModelMap = ({
                                                 fontWeight: '700',
                                             }}
                                         >
-                                            Interior {interior}
+                                            Interior {placement[6]}
                                         </Text>
                                         <Text style={{ color: theme.normalText, fontSize: 12 }}>
-                                            {[x, y, z].map(formatCoordinate).join(', ')}
+                                            {placement.slice(0, 3).map(formatCoordinate).join(', ')}
                                         </Text>
                                     </View>
                                 ))}

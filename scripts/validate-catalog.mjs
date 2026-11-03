@@ -192,9 +192,12 @@ function validatePlacements(records) {
 
         const valid =
             Array.isArray(record.positions) &&
-            record.positions.every((position) => isPosition(position, 3)) &&
+            record.positions.every((position) => isPosition(position, 6)) &&
             Array.isArray(record.interiors) &&
-            record.interiors.every((position) => isPosition(position, 4));
+            record.interiors.every((position) => isPosition(position, 7)) &&
+            [...record.positions, ...record.interiors].every((placement) =>
+                placement.slice(3, 6).every((angle) => angle >= 0 && angle < 360)
+            );
         if (!valid) {
             throw new Error(`Catalog "placement" record ${index} has an invalid shape`);
         }

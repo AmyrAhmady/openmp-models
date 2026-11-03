@@ -132,7 +132,14 @@ try {
     const placements = await getJson('/api/placements/item?id=1220');
     assert.equal(placements.response.status, 200);
     assert.equal(placements.body.item.positions.length, 45);
-    assert.deepEqual(placements.body.item.interiors, [[2178.1953125, 1593.6328125, 1001.15625, 1]]);
+    assert.deepEqual(placements.body.item.interiors, [
+        [2178.1953125, 1593.6328125, 1001.15625, 0, 0, 90, 1],
+    ]);
+    const treePlacements = await getJson('/api/placements/item?id=615');
+    assert.deepEqual(
+        treePlacements.body.item.positions[0],
+        [346.921875, 37.609375, 4.859375, 0, 0, 270]
+    );
     assert.equal((await getJson('/api/placements/item?id=400')).response.status, 404);
     assert.equal((await getJson('/api/placements/item?id=abc')).response.status, 400);
 

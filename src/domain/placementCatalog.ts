@@ -6,13 +6,13 @@ export const NEARBY_RADIUS = 50;
 export const WORLD_SIZE = 6000;
 const WORLD_EDGE = WORLD_SIZE / 2;
 
-export type WorldPosition = [number, number, number];
-export type InteriorPosition = [number, number, number, number];
+export type WorldPlacement = [number, number, number, number, number, number];
+export type InteriorPlacement = [number, number, number, number, number, number, number];
 
 export interface ModelPlacements {
     id: number;
-    positions: WorldPosition[];
-    interiors: InteriorPosition[];
+    positions: WorldPlacement[];
+    interiors: InteriorPlacement[];
 }
 
 export interface PlacementsResponse {
@@ -53,9 +53,9 @@ export function isModelPlacements(value: unknown): value is ModelPlacements {
         isRecord(value) &&
         Number.isInteger(value.id) &&
         Array.isArray(value.positions) &&
-        value.positions.every((position) => isPosition(position, 3)) &&
+        value.positions.every((position) => isPosition(position, 6)) &&
         Array.isArray(value.interiors) &&
-        value.interiors.every((position) => isPosition(position, 4))
+        value.interiors.every((position) => isPosition(position, 7))
     );
 }
 
