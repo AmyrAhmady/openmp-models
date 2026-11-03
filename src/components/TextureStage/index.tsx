@@ -1,16 +1,10 @@
 import React from 'react';
-import {
-    ActivityIndicator,
-    Image,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
-} from 'react-native-web';
+import { ActivityIndicator, StyleSheet, Text, TouchableOpacity, View } from 'react-native-web';
 import { getTextureUrl } from 'src/domain/textureCatalog';
 import type { TextureDetails } from 'src/domain/textureCatalog';
 import type { TextureLoadStatus } from 'src/hooks/useTextureSelection';
 import { useTheme } from 'src/theme/ThemeContext';
+import TextureImage from '../TextureImage';
 
 interface Props {
     texture: TextureDetails | null;
@@ -68,11 +62,11 @@ const TextureStage = ({ texture, status, error, backgroundColor, retry, isMobile
                     </View>
                 ) : texture ? (
                     <View style={styles.imageFrame}>
-                        <Image
-                            source={{ uri: getTextureUrl(texture.name) }}
-                            resizeMode="contain"
-                            style={styles.image}
-                            accessibilityLabel={texture.name}
+                        <TextureImage
+                            uri={getTextureUrl(texture.name)}
+                            alt={texture.name}
+                            fit="contain"
+                            style={{ width: '100%', height: '100%', maxWidth: 512, maxHeight: 512 }}
                         />
                     </View>
                 ) : (
@@ -136,12 +130,6 @@ const styles = StyleSheet.create({
         paddingTop: 110,
         paddingBottom: 40,
         paddingHorizontal: 40,
-    },
-    image: {
-        width: '100%',
-        height: '100%',
-        maxWidth: 512,
-        maxHeight: 512,
     },
     stageMessage: {
         flex: 1,

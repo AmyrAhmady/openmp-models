@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Image, View } from 'react-native-web';
 import { useTheme } from 'src/theme/ThemeContext';
+import TextureImage from '../TextureImage';
 
 const FALLBACK_LOGO_URL = 'https://assets.open.mp/assets/images/assets/logo-dark-trans.png';
 
@@ -36,11 +37,12 @@ const PreviewImage = ({ uri, size, marginRight = 10 }: Props) => {
     }
 
     return (
-        <Image
-            source={{ uri }}
-            resizeMode="contain"
+        <TextureImage
+            uri={uri}
+            alt=""
+            fit="contain"
             onError={() => setFailedUri(uri)}
-            style={{ width: size, height: size, borderRadius: 6, marginRight }}
+            style={{ width: size, height: size, borderRadius: 6, marginRight, flexShrink: 0 }}
         />
     );
 };

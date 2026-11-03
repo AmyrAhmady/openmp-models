@@ -1,11 +1,12 @@
 import React from 'react';
-import { View, TouchableOpacity, Text, FlatList, TextInput, Image } from 'react-native-web';
+import { View, TouchableOpacity, Text, FlatList, TextInput } from 'react-native-web';
 import { useTheme } from 'src/theme/ThemeContext';
 import { getTextureUrl } from 'src/domain/textureCatalog';
 import type { TextureListItem } from 'src/domain/textureCatalog';
 import type { UseTextureQueryResult } from 'src/hooks/useTextureQuery';
 import CatalogStatus from '../CatalogStatus';
 import Row from '../Row';
+import TextureImage from '../TextureImage';
 
 interface Props {
     selectedTexture: TextureListItem | null;
@@ -42,10 +43,16 @@ const TextureRow = React.memo(({ item, selected, onSelect }: TextureRowProps) =>
                     backgroundColor: selected ? theme.accentSoft : 'transparent',
                 }}
             >
-                <Image
-                    source={{ uri: getTextureUrl(item.name) }}
-                    style={{ width: 32, height: 32, borderRadius: 4, marginRight: 12 }}
-                    accessibilityLabel={item.name}
+                <TextureImage
+                    uri={getTextureUrl(item.name)}
+                    alt={item.name}
+                    style={{
+                        width: 32,
+                        height: 32,
+                        borderRadius: 4,
+                        marginRight: 12,
+                        flexShrink: 0,
+                    }}
                 />
                 <View style={{ flex: 1, minWidth: 0 }}>
                     <Text

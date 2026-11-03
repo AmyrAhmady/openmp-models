@@ -1,10 +1,11 @@
 import React from 'react';
-import { Image, Pressable, ScrollView, Text, View } from 'react-native-web';
+import { Pressable, ScrollView, Text, View } from 'react-native-web';
 import type { StyleProp, ViewStyle } from 'react-native-web';
 import { getTextureUrl } from 'src/domain/textureCatalog';
 import { useTheme } from 'src/theme/ThemeContext';
 import ModalCloseButton from '../ModalCloseButton';
 import RoundCard from '../RoundCard';
+import TextureImage from '../TextureImage';
 
 interface Props {
     title: string;
@@ -89,18 +90,17 @@ const TextureGrid = ({
                                         onPress={() => onSelect(name)}
                                         style={{ width: 64, marginRight: 8, marginBottom: 10 }}
                                     >
-                                        <Image
-                                            source={{ uri: getTextureUrl(name) }}
+                                        <TextureImage
+                                            uri={getTextureUrl(name)}
+                                            alt={name}
                                             style={{
                                                 width: 64,
                                                 height: 64,
                                                 borderRadius: 6,
-                                                borderWidth: 2,
-                                                borderColor: selected
-                                                    ? theme.accent
-                                                    : 'transparent',
+                                                border: `2px solid ${
+                                                    selected ? theme.accent : 'transparent'
+                                                }`,
                                             }}
-                                            accessibilityLabel={name}
                                         />
                                         <Text
                                             numberOfLines={1}
