@@ -35,3 +35,14 @@ test('vehicle catalog models match the viewer model names', async () => {
         assert.equal(vehicle.model, modelNames.get(vehicle.id), `vehicle ${vehicle.id}`);
     }
 });
+
+test('skin sizes stand upright', async () => {
+    const skins = JSON.parse(
+        await readFile(new URL('../data/source/catalogs/skins.json', import.meta.url), 'utf8')
+    );
+
+    for (const skin of skins.filter((item) => item.size)) {
+        const [width, depth, height] = skin.size;
+        assert.ok(height > width && height > depth, `skin ${skin.id}`);
+    }
+});
