@@ -208,7 +208,7 @@ export function useModelSelection(
         } else if (modelType === 'vehicle') {
             setInfo(initialInfo);
             setSelectedModelType('vehicle');
-            if (loadModelsRef.current) {
+            if (loadModels) {
                 void loadModel(getAssetName(initialInfo), 'vehicle');
             }
         } else {
@@ -222,6 +222,7 @@ export function useModelSelection(
         initialSelection?.ready,
         initialSelection?.type,
         loadModel,
+        loadModels,
         loadSelectedItem,
         modelType,
     ]);
@@ -243,7 +244,13 @@ export function useModelSelection(
             modelLoadGeneration.current++;
             setModels([]);
             setModelStatus((current) => (current === 'loading' && !info ? current : 'idle'));
-        } else if (info && selectedModelType === modelType && !models.length) {
+        } else if (
+            initialLoadHandled.current &&
+            !selectedItemAbortController.current &&
+            info &&
+            selectedModelType === modelType &&
+            !models.length
+        ) {
             void loadModel(getAssetName(info), modelType);
         }
     }, [loadModels]);

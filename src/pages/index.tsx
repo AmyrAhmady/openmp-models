@@ -129,7 +129,12 @@ const Main: NextPage<MainProps> = ({ initialMetadata }) => {
             type: shareableUrlState.modelType,
             modelId: shareableUrlState.modelId,
         },
-        previewMode === 'model'
+        shareableUrlReady &&
+            previewMode === 'model' &&
+            !texturesSelected &&
+            !mapSelected &&
+            !shareableUrlState.texturesSelected &&
+            !shareableUrlState.mapSelected
     );
 
     const pushLocalState = useCallback(
