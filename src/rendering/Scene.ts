@@ -7,6 +7,7 @@ import { getModelExport, isModelAssetAbortError } from 'src/domain/modelAssetCli
 import type { ModelAssetLoader } from 'src/domain/modelAssetClient';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { buildIndexedGeometry } from './geometryBuilder';
+import { alignSkinRestPose } from './skinPose';
 import RenderScheduler from './renderScheduler';
 import { createTextureUrlLookup, normalizeTextureName } from './textureLookup';
 import type { AnimationKeyframe, ParsedAnimation } from 'src/animation/ifpParser';
@@ -1005,7 +1006,9 @@ export default class Scene implements SceneController {
             return;
         }
 
-        if (modelData.type !== 'skin') {
+        if (modelData.type === 'skin') {
+            model.object = alignSkinRestPose(model.object);
+        } else {
             const keyLight = new THREE.DirectionalLight(0xffffff, 2.5);
             keyLight.position.set(4, 8, 10);
             configureShadowLight(keyLight);

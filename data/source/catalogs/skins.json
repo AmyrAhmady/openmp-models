@@ -3306,7 +3306,7 @@
     "txd": "lapd1.txd",
     "pedtype": "COP",
     "animgroup": "swat",
-    "size": [1.033, 0.35, 1.839]
+    "size": [1.033, 0.348, 1.839]
   },
   {
     "id": 301,
@@ -3317,7 +3317,7 @@
     "txd": "sfpd1.txd",
     "pedtype": "COP",
     "animgroup": "swat",
-    "size": [1.033, 0.351, 1.833]
+    "size": [1.033, 0.348, 1.833]
   },
   {
     "id": 302,
@@ -3328,7 +3328,7 @@
     "txd": "lvpd1.txd",
     "pedtype": "COP",
     "animgroup": "swat",
-    "size": [1.032, 0.351, 1.84]
+    "size": [1.033, 0.348, 1.84]
   },
   {
     "id": 303,
@@ -3339,7 +3339,7 @@
     "txd": "lapdpc.txd",
     "pedtype": "COP",
     "animgroup": "swat",
-    "size": [1.033, 0.351, 1.839]
+    "size": [1.033, 0.348, 1.839]
   },
   {
     "id": 304,
@@ -3350,7 +3350,7 @@
     "txd": "lapdpd.txd",
     "pedtype": "COP",
     "animgroup": "swat",
-    "size": [1.033, 0.351, 1.839]
+    "size": [1.033, 0.348, 1.839]
   },
   {
     "id": 305,
@@ -3361,7 +3361,7 @@
     "txd": "lvpdpc.txd",
     "pedtype": "COP",
     "animgroup": "swat",
-    "size": [1.032, 0.351, 1.84]
+    "size": [1.033, 0.348, 1.84]
   },
   {
     "id": 306,
@@ -3416,7 +3416,7 @@
     "txd": "csherna.txd",
     "pedtype": "COP",
     "animgroup": "swat",
-    "size": [1.032, 0.351, 1.833]
+    "size": [1.033, 0.348, 1.833]
   },
   {
     "id": 311,
@@ -3427,6 +3427,6 @@
     "txd": "dsherna.txd",
     "pedtype": "COP",
     "animgroup": "swat",
-    "size": [1.033, 0.35, 1.833]
+    "size": [1.033, 0.348, 1.833]
   }
 ]
