@@ -28,6 +28,11 @@ const clientModules = [
     '../src/components/RadarMap/index.tsx',
     '../src/components/ModelMap/index.tsx',
     '../src/components/Menu/Mobile/ModelMapMobile.tsx',
+    '../src/hooks/useNearbyObjects.ts',
+    '../src/components/NearbyList/index.tsx',
+    '../src/components/Menu/MapDesktop.tsx',
+    '../src/components/MapStage/index.tsx',
+    '../src/components/Menu/Mobile/MapMenuMobile.tsx',
 ];
 const catalogClientSource = await readFile(
     new URL('../src/catalog/catalogClient.ts', import.meta.url),

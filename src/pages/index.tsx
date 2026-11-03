@@ -7,6 +7,9 @@ import Header from 'src/components/Header';
 import MenuDesktop from 'src/components/Menu/Desktop';
 import MenuMobile from 'src/components/Menu/Mobile';
 import TextureMenuMobile from 'src/components/Menu/Mobile/TextureMenuMobile';
+import MapMenuMobile from 'src/components/Menu/Mobile/MapMenuMobile';
+import MapMenuDesktop from 'src/components/Menu/MapDesktop';
+import MapStage from 'src/components/MapStage';
 import ModelInfo from 'src/components/ModelInfo';
 import ModelMap from 'src/components/ModelMap';
 import ModelStage from 'src/components/ModelStage';
@@ -32,6 +35,8 @@ import { useThemeController } from 'src/hooks/useThemeController';
 import { useTextureQuery } from 'src/hooks/useTextureQuery';
 import { usePreviewMode } from 'src/hooks/usePreviewMode';
 import { useTextureSelection } from 'src/hooks/useTextureSelection';
+import { useNearbyObjects } from 'src/hooks/useNearbyObjects';
+import type { MapPoint, NearbyObject } from 'src/domain/placementCatalog';
 import type { TextureListItem, TextureUsage } from 'src/domain/textureCatalog';
 import type { CatalogListItem } from 'src/domain/catalog';
 import type { ParsedAnimation } from 'src/animation/ifpParser';
@@ -53,6 +58,8 @@ const Main: NextPage<MainProps> = ({ initialMetadata }) => {
     const isMobileView = useResponsiveView();
     const [modelType, setModelType] = useState<ModelType>('vehicle');
     const [texturesSelected, setTexturesSelected] = useState(false);
+    const [mapSelected, setMapSelected] = useState(false);
+    const [mapPoint, setMapPoint] = useState<MapPoint | null>(null);
     const [searchVisible, setSearchVisible] = useState(false);
     const [selectedAnimation, setSelectedAnimation] = useState<ParsedAnimation | null>(null);
     const [animationSelection, setAnimationSelection] = useState<AnimationSelection>({
@@ -89,6 +96,7 @@ const Main: NextPage<MainProps> = ({ initialMetadata }) => {
     const { previewMode, onPreviewModeChange } = usePreviewMode();
     const catalogQuery = useCatalogQuery(modelType);
     const textureQuery = useTextureQuery(texturesSelected);
+    const nearby = useNearbyObjects(mapSelected ? mapPoint : null);
     const {
         request: textureRequest,
         texture,
@@ -177,6 +185,7 @@ const Main: NextPage<MainProps> = ({ initialMetadata }) => {
     const handleModelTypeChange = useCallback(
         (type: { value: ModelType }): void => {
             setTexturesSelected(false);
+            setMapSelected(false);
             setSelectedAnimation(null);
             setAnimationSelection({ libraryId: null, animationName: null, animation: null });
             setAnimationTarget({ libraryId: null, animationName: null });
@@ -199,6 +208,9 @@ const Main: NextPage<MainProps> = ({ initialMetadata }) => {
                 texturesSelected: false,
                 textureDictionary: null,
                 textureName: null,
+                mapSelected: false,
+                mapX: null,
+                mapY: null,
             });
         },
         [backgroundSelection, onModelTypeChange, pushState]
@@ -226,6 +238,9 @@ const Main: NextPage<MainProps> = ({ initialMetadata }) => {
                 texturesSelected: false,
                 textureDictionary: null,
                 textureName: null,
+                mapSelected: false,
+                mapX: null,
+                mapY: null,
             });
         },
         [backgroundSelection, modelType, onSelectItem, pushState]
@@ -253,9 +268,40 @@ const Main: NextPage<MainProps> = ({ initialMetadata }) => {
         [backgroundSelection, modelType, pushState]
     );
     const handleSelectTexturesTab = useCallback((): void => {
+        setMapSelected(false);
         setTexturesSelected(true);
         pushTextureState(urlTexture);
     }, [pushTextureState, urlTexture]);
+    const pushMapState = useCallback(
+        (point: MapPoint | null): void => {
+            localUrlChange.current = true;
+            restoringUrl.current = false;
+            syncUrlEnabled.current = true;
+            pushState({
+                ...DEFAULT_SHAREABLE_URL_STATE,
+                modelType,
+                backgroundColor:
+                    backgroundSelection.source === 'custom' ? backgroundSelection.color : null,
+                mapSelected: true,
+                mapX: point?.x ?? null,
+                mapY: point?.y ?? null,
+            });
+        },
+        [backgroundSelection, modelType, pushState]
+    );
+    const handleSelectMapTab = useCallback((): void => {
+        setTexturesSelected(false);
+        setMapSelected(true);
+        pushMapState(mapPoint);
+    }, [mapPoint, pushMapState]);
+    const handleSelectMapPoint = useCallback(
+        (point: MapPoint): void => {
+            const rounded = { x: Math.round(point.x), y: Math.round(point.y) };
+            setMapPoint(rounded);
+            pushMapState(rounded);
+        },
+        [pushMapState]
+    );
     const handleSelectTexture = useCallback(
         (item: TextureListItem): void => {
             if (item.txd === urlTexture?.txd && item.name === urlTexture.name) {
@@ -283,6 +329,7 @@ const Main: NextPage<MainProps> = ({ initialMetadata }) => {
                     }
 
                     openModelTexture.current = null;
+                    setMapSelected(false);
                     setTexturesSelected(true);
                     if (item.txd !== urlTexture?.txd || item.name !== urlTexture.name) {
                         selectTexture({ name: item.name, txd: item.txd });
@@ -295,6 +342,7 @@ const Main: NextPage<MainProps> = ({ initialMetadata }) => {
                     }
 
                     openModelTexture.current = null;
+                    setMapSelected(false);
                     setTexturesSelected(true);
                     selectTexture({ name, ...source });
                     pushTextureState(null);
@@ -320,6 +368,10 @@ const Main: NextPage<MainProps> = ({ initialMetadata }) => {
     );
     const handleOpenTextureUsage = useCallback(
         (usage: TextureUsage): void => handleOpenModel(usage.type, usage.id),
+        [handleOpenModel]
+    );
+    const handleOpenNearbyObject = useCallback(
+        (item: NearbyObject): void => handleOpenModel('object', item.id),
         [handleOpenModel]
     );
     const modelTextureNames = useMemo(
@@ -348,11 +400,16 @@ const Main: NextPage<MainProps> = ({ initialMetadata }) => {
             texturesSelected,
             textureDictionary: texturesSelected ? (urlTexture?.txd ?? null) : null,
             textureName: texturesSelected ? (urlTexture?.name ?? null) : null,
+            mapSelected,
+            mapX: mapSelected ? (mapPoint?.x ?? null) : null,
+            mapY: mapSelected ? (mapPoint?.y ?? null) : null,
         }),
         [
             animationSelection,
             backgroundSelection,
             info,
+            mapPoint,
+            mapSelected,
             modelType,
             selectedModelType,
             selectedModificationIds,
@@ -364,12 +421,13 @@ const Main: NextPage<MainProps> = ({ initialMetadata }) => {
     );
     const handleModelTabChange = useCallback(
         (type: { value: ModelType }): void => {
-            if (!texturesSelected || type.value !== modelType) {
+            if (!(texturesSelected || mapSelected) || type.value !== modelType) {
                 handleModelTypeChange(type);
                 return;
             }
 
             setTexturesSelected(false);
+            setMapSelected(false);
             localUrlChange.current = true;
             restoringUrl.current = false;
             syncUrlEnabled.current = true;
@@ -378,22 +436,26 @@ const Main: NextPage<MainProps> = ({ initialMetadata }) => {
                 texturesSelected: false,
                 textureDictionary: null,
                 textureName: null,
+                mapSelected: false,
+                mapX: null,
+                mapY: null,
             });
         },
-        [handleModelTypeChange, modelType, pushState, shareableState, texturesSelected]
+        [handleModelTypeChange, mapSelected, modelType, pushState, shareableState, texturesSelected]
     );
     const handleSearchModel = useCallback(
         (type: ModelType, item: CatalogListItem): void => {
-            if (type === modelType && !texturesSelected) {
+            if (type === modelType && !texturesSelected && !mapSelected) {
                 handleSelectItem(item);
             } else {
                 handleOpenModel(type, item.id);
             }
         },
-        [handleOpenModel, handleSelectItem, modelType, texturesSelected]
+        [handleOpenModel, handleSelectItem, mapSelected, modelType, texturesSelected]
     );
     const handleSearchTexture = useCallback(
         (item: TextureListItem): void => {
+            setMapSelected(false);
             setTexturesSelected(true);
             if (item.txd === urlTexture?.txd && item.name === urlTexture.name) {
                 pushTextureState(item);
@@ -472,6 +534,12 @@ const Main: NextPage<MainProps> = ({ initialMetadata }) => {
         );
 
         setTexturesSelected(shareableUrlState.texturesSelected);
+        setMapSelected(shareableUrlState.mapSelected);
+        if (shareableUrlState.mapSelected) {
+            const { mapX, mapY } = shareableUrlState;
+            setMapPoint(mapX !== null && mapY !== null ? { x: mapX, y: mapY } : null);
+            return;
+        }
         if (shareableUrlState.texturesSelected) {
             selectTexture(
                 shareableUrlState.textureDictionary && shareableUrlState.textureName
@@ -507,6 +575,13 @@ const Main: NextPage<MainProps> = ({ initialMetadata }) => {
     useEffect(() => {
         const pending = pendingUrlState.current;
         if (!shareableUrlReady || !pending) {
+            return;
+        }
+        if (pending.mapSelected) {
+            if (mapSelected) {
+                restoringUrl.current = false;
+                pendingUrlState.current = null;
+            }
             return;
         }
         if (pending.texturesSelected) {
@@ -593,6 +668,7 @@ const Main: NextPage<MainProps> = ({ initialMetadata }) => {
         availableModifications,
         backgroundSelection,
         info,
+        mapSelected,
         modelStatus,
         modelType,
         onSelectColor,
@@ -614,6 +690,7 @@ const Main: NextPage<MainProps> = ({ initialMetadata }) => {
             !shareableUrlReady ||
             !syncUrlEnabled.current ||
             restoringUrl.current ||
+            mapSelected ||
             (texturesSelected ? !urlTexture : !info)
         ) {
             return;
@@ -625,7 +702,15 @@ const Main: NextPage<MainProps> = ({ initialMetadata }) => {
         }
 
         pushState(shareableState);
-    }, [info, pushState, shareableState, shareableUrlReady, texturesSelected, urlTexture]);
+    }, [
+        info,
+        mapSelected,
+        pushState,
+        shareableState,
+        shareableUrlReady,
+        texturesSelected,
+        urlTexture,
+    ]);
     const infoRows = useMemo(() => (info ? getCatalogInfoRows(info) : []), [info]);
     const metadataItem =
         shareableUrlState.modelId !== null &&
@@ -654,7 +739,9 @@ const Main: NextPage<MainProps> = ({ initialMetadata }) => {
                     isMobile={isMobileView}
                     modelType={modelType}
                     texturesSelected={texturesSelected}
+                    mapSelected={mapSelected}
                     onSelectTextures={handleSelectTexturesTab}
+                    onSelectMap={handleSelectMapTab}
                     previewMode={previewMode}
                     onPreviewModeChange={onPreviewModeChange}
                     search={
@@ -699,7 +786,15 @@ const Main: NextPage<MainProps> = ({ initialMetadata }) => {
                         backgroundColor: theme.mainBg,
                     }}
                 >
-                    {isMobileView && texturesSelected ? (
+                    {isMobileView && mapSelected ? (
+                        <MapMenuMobile
+                            point={mapPoint}
+                            results={nearby.results}
+                            status={nearby.status}
+                            onSelect={handleOpenNearbyObject}
+                            onOpenSearch={() => setSearchVisible(true)}
+                        />
+                    ) : isMobileView && texturesSelected ? (
                         <TextureMenuMobile
                             texture={texture}
                             textureData={textureRows}
@@ -735,6 +830,15 @@ const Main: NextPage<MainProps> = ({ initialMetadata }) => {
                             onPreviewModeChange={onPreviewModeChange}
                             onOpenSearch={() => setSearchVisible(true)}
                         />
+                    ) : mapSelected ? (
+                        <View style={styles.desktopMenuColumn}>
+                            <MapMenuDesktop
+                                point={mapPoint}
+                                results={nearby.results}
+                                status={nearby.status}
+                                onSelect={handleOpenNearbyObject}
+                            />
+                        </View>
                     ) : texturesSelected ? (
                         <View style={styles.desktopMenuColumn}>
                             <TextureMenuDesktop
@@ -755,7 +859,14 @@ const Main: NextPage<MainProps> = ({ initialMetadata }) => {
                             />
                         </View>
                     )}
-                    {texturesSelected ? (
+                    {mapSelected ? (
+                        <MapStage
+                            point={mapPoint}
+                            results={nearby.results}
+                            onSelectPoint={handleSelectMapPoint}
+                            isMobileView={isMobileView}
+                        />
+                    ) : texturesSelected ? (
                         <TextureStage
                             texture={texture}
                             status={textureStatus}
@@ -778,7 +889,7 @@ const Main: NextPage<MainProps> = ({ initialMetadata }) => {
                             previewMode={previewMode}
                         />
                     )}
-                    {isMobileView ? null : texturesSelected ? (
+                    {isMobileView || mapSelected ? null : texturesSelected ? (
                         <View style={styles.desktopDetailsColumn}>
                             <ColorPicker
                                 isMobileView={isMobileView}

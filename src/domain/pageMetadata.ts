@@ -36,6 +36,16 @@ export function getPageMetadata(
         };
     }
 
+    if (state.mapSelected) {
+        return {
+            title: `${siteTitle} | Map`,
+            description:
+                state.mapX !== null && state.mapY !== null
+                    ? `Objects placed near ${state.mapX}, ${state.mapY} in San Andreas.`
+                    : 'Find the objects placed anywhere in San Andreas.',
+        };
+    }
+
     const categoryLabel = MODEL_TYPE_LABELS[state.modelType];
     const title = item
         ? `${siteTitle} | ${categoryLabel} | ${item.name} (${item.id})`

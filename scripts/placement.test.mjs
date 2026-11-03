@@ -117,3 +117,30 @@ test('map projection puts radar00 in the north-west corner', async () => {
         await cleanup();
     }
 });
+
+test('nearby parser accepts results and rejects malformed entries', async () => {
+    const { responses, cleanup } = await loadModules();
+    try {
+        const result = {
+            id: 1220,
+            name: 'cardboardbox2',
+            distance: 0.62,
+            count: 2,
+            position: [1092.84375, -1879.6015625],
+        };
+        assert.deepEqual(responses.parseNearbyResponse({ results: [result] }), {
+            results: [result],
+        });
+        assert.throws(
+            () => responses.parseNearbyResponse({ results: [{ ...result, position: [1092.8] }] }),
+            /Invalid nearby response/
+        );
+        assert.throws(
+            () => responses.parseNearbyResponse({ results: [{ ...result, count: 1.5 }] }),
+            /Invalid nearby response/
+        );
+        assert.throws(() => responses.parseNearbyResponse({}), /Invalid nearby response/);
+    } finally {
+        await cleanup();
+    }
+});

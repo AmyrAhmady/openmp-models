@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Image, Pressable, StyleSheet, View } from 'react-native-web';
 import type { StyleProp, ViewStyle } from 'react-native-web';
 import {
     MAP_TILE_COUNT,
+    WORLD_SIZE,
     getRadarTileUrl,
     mapToWorld,
     worldToMap,
@@ -13,6 +14,8 @@ import { useTheme } from 'src/theme/ThemeContext';
 interface Props {
     markers: MapPoint[];
     markerSize?: number;
+    selectedPoint?: MapPoint | null;
+    selectedRadius?: number;
     accessibilityLabel?: string;
     onPress?: (point: MapPoint) => void;
     style?: StyleProp<ViewStyle>;
@@ -25,13 +28,18 @@ const MARKER_COLOR = '#e5484d';
 const RadarMap = ({
     markers,
     markerSize = 7,
+    selectedPoint = null,
+    selectedRadius = 0,
     accessibilityLabel = 'San Andreas map',
     onPress,
     style,
 }: Props) => {
     const { theme } = useTheme();
     const [size, setSize] = useState(0);
+    const frame = useRef<HTMLDivElement | null>(null);
     const edge = (index: number) => Math.round((index * size) / MAP_TILE_COUNT);
+    const selected = selectedPoint ? worldToMap(selectedPoint, size) : null;
+    const ringSize = Math.max(14, (selectedRadius * 2 * size) / WORLD_SIZE);
 
     return (
         <Pressable
@@ -39,14 +47,23 @@ const RadarMap = ({
             accessibilityLabel={accessibilityLabel}
             disabled={!onPress}
             onLayout={(event) => setSize(event.nativeEvent.layout.width)}
-            onPress={(event) =>
-                onPress?.(
+            onPress={(event) => {
+                const bounds = frame.current?.getBoundingClientRect();
+                if (!bounds || !onPress) {
+                    return;
+                }
+
+                const { pageX, pageY } = event.nativeEvent;
+                onPress(
                     mapToWorld(
-                        { x: event.nativeEvent.locationX, y: event.nativeEvent.locationY },
+                        {
+                            x: pageX - bounds.left - window.scrollX,
+                            y: pageY - bounds.top - window.scrollY,
+                        },
                         size
                     )
-                )
-            }
+                );
+            }}
             style={[
                 {
                     width: '100%',
@@ -58,7 +75,13 @@ const RadarMap = ({
                 style,
             ]}
         >
-            <View pointerEvents="none" style={StyleSheet.absoluteFill}>
+            <View
+                ref={(node) => {
+                    frame.current = node instanceof HTMLDivElement ? node : null;
+                }}
+                pointerEvents="none"
+                style={StyleSheet.absoluteFill}
+            >
                 {size > 0 &&
                     TILE_INDEXES.map((index) => {
                         const column = index % MAP_TILE_COUNT;
@@ -97,6 +120,22 @@ const RadarMap = ({
                             />
                         );
                     })}
+                {size > 0 && selected && (
+                    <View
+                        style={{
+                            position: 'absolute',
+                            left: selected.x - ringSize / 2,
+                            top: selected.y - ringSize / 2,
+                            width: ringSize,
+                            height: ringSize,
+                            borderRadius: ringSize / 2,
+                            borderWidth: 2,
+                            borderColor: theme.accent,
+                            backgroundColor: theme.accentSoft,
+                            opacity: 0.85,
+                        }}
+                    />
+                )}
             </View>
         </Pressable>
     );

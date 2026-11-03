@@ -66,6 +66,9 @@ test('shareable URL state round-trips model features and ignores invalid IDs', a
             texturesSelected: false,
             textureDictionary: null,
             textureName: null,
+            mapSelected: false,
+            mapX: null,
+            mapY: null,
         });
         assert.equal(
             module.serializeShareableUrl(state),
@@ -102,6 +105,28 @@ test('shareable URL state round-trips textures and ignores a missing texture fil
         );
         assert.equal(model.texturesSelected, false);
         assert.equal(model.textureDictionary, null);
+        assert.equal(module.serializeShareableUrl(model), '?cat=objects&model=1220');
+    } finally {
+        await cleanup();
+    }
+});
+
+test('shareable URL state round-trips a map position and ignores one off the map', async () => {
+    const { module, cleanup } = await loadUrlState();
+    try {
+        const state = module.parseShareableUrl('?cat=map&x=1093&y=-1879&model=1220');
+        assert.equal(state.mapSelected, true);
+        assert.equal(state.mapX, 1093);
+        assert.equal(state.mapY, -1879);
+        assert.equal(module.serializeShareableUrl(state), '?cat=map&x=1093&y=-1879');
+
+        const offMap = module.parseShareableUrl('?cat=map&x=3500&y=0');
+        assert.equal(offMap.mapX, null);
+        assert.equal(offMap.mapY, null);
+        assert.equal(module.serializeShareableUrl(offMap), '?cat=map');
+
+        const model = module.parseShareableUrl('?cat=objects&model=1220&x=1093&y=-1879');
+        assert.equal(model.mapSelected, false);
         assert.equal(module.serializeShareableUrl(model), '?cat=objects&model=1220');
     } finally {
         await cleanup();

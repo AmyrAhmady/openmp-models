@@ -122,6 +122,21 @@ try {
     assert.equal((await getJson('/api/placements/item?id=400')).response.status, 404);
     assert.equal((await getJson('/api/placements/item?id=abc')).response.status, 400);
 
+    const nearby = await getJson('/api/placements/nearby?x=1093&y=-1879');
+    assert.equal(nearby.response.status, 200);
+    assert.equal(nearby.body.results[0].id, 1220);
+    assert.equal(nearby.body.results[0].count, 2);
+    assert.ok(nearby.body.results.every((result) => result.distance <= 50));
+    assert.ok(
+        nearby.body.results.every(
+            (result, index, results) =>
+                index === 0 || results[index - 1].distance <= result.distance
+        )
+    );
+    assert.deepEqual((await getJson('/api/placements/nearby?x=0&y=-2900')).body.results, []);
+    assert.equal((await getJson('/api/placements/nearby?x=3500&y=0')).response.status, 400);
+    assert.equal((await getJson('/api/placements/nearby?x=1093')).response.status, 400);
+
     const modelTexture = await getJson('/api/textures/item?name=cardboxes_128&type=object&id=1220');
     assert.equal(modelTexture.response.status, 200);
     assert.equal(modelTexture.body.item.txd, 'boxes');

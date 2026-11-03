@@ -19,20 +19,23 @@ import type { PreviewMode } from 'src/domain/previewMode';
 
 interface HeaderOption {
     label: string;
-    value: ModelType | 'textures';
+    value: ModelType | 'textures' | 'map';
 }
 
 const HEADER_OPTIONS: HeaderOption[] = [
     ...MODEL_TYPE_OPTIONS,
     { label: 'Textures', value: 'textures' },
+    { label: 'Map', value: 'map' },
 ];
 
 interface Props {
     modelType: ModelType;
     texturesSelected: boolean;
+    mapSelected: boolean;
     isMobile?: boolean;
     onModelTypeChange: (type: ModelTypeOption) => void;
     onSelectTextures: () => void;
+    onSelectMap: () => void;
     search?: React.ReactNode;
     previewMode: PreviewMode;
     onPreviewModeChange: (mode: PreviewMode) => void;
@@ -45,8 +48,10 @@ const Header = (props: Props) => {
     const {
         modelType,
         texturesSelected,
+        mapSelected,
         onModelTypeChange,
         onSelectTextures,
+        onSelectMap,
         search,
         previewMode,
         onPreviewModeChange,
@@ -55,11 +60,17 @@ const Header = (props: Props) => {
         themeMode,
     } = props;
     const darkMode = themeMode === 'dark';
-    const selectedValue = texturesSelected ? 'textures' : modelType;
-    const selectedLabel = texturesSelected ? 'Textures' : MODEL_TYPE_LABELS[modelType];
+    const selectedValue = texturesSelected ? 'textures' : mapSelected ? 'map' : modelType;
+    const selectedLabel = texturesSelected
+        ? 'Textures'
+        : mapSelected
+          ? 'Map'
+          : MODEL_TYPE_LABELS[modelType];
     const onSelectOption = (item: HeaderOption) => {
         if (item.value === 'textures') {
             onSelectTextures();
+        } else if (item.value === 'map') {
+            onSelectMap();
         } else {
             onModelTypeChange({ label: item.label, value: item.value });
         }

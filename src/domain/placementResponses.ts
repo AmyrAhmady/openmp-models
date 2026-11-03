@@ -1,5 +1,5 @@
-import { isModelPlacements } from './placementCatalog';
-import type { PlacementsResponse } from './placementCatalog';
+import { isModelPlacements, isNearbyObject } from './placementCatalog';
+import type { NearbyResponse, PlacementsResponse } from './placementCatalog';
 
 export function parsePlacementsResponse(value: unknown): PlacementsResponse {
     if (
@@ -12,4 +12,18 @@ export function parsePlacementsResponse(value: unknown): PlacementsResponse {
     }
 
     return { item: value.item };
+}
+
+export function parseNearbyResponse(value: unknown): NearbyResponse {
+    if (
+        typeof value !== 'object' ||
+        value === null ||
+        !('results' in value) ||
+        !Array.isArray(value.results) ||
+        !value.results.every(isNearbyObject)
+    ) {
+        throw new Error('Invalid nearby response: expected a results array.');
+    }
+
+    return { results: value.results };
 }
