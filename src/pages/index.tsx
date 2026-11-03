@@ -132,6 +132,16 @@ const Main: NextPage<MainProps> = ({ initialMetadata }) => {
         previewMode === 'model'
     );
 
+    const pushLocalState = useCallback(
+        (state: ShareableUrlState): void => {
+            localUrlChange.current = window.location.search !== serializeShareableUrl(state);
+            restoringUrl.current = false;
+            syncUrlEnabled.current = true;
+            pushState(state);
+        },
+        [pushState]
+    );
+
     const handleAnimationSelection = useCallback((selection: AnimationSelection): void => {
         const pending = pendingUrlState.current;
         const isPendingUrlSelection =
@@ -192,10 +202,7 @@ const Main: NextPage<MainProps> = ({ initialMetadata }) => {
             setVehicleColorsChanged(false);
             onModelTypeChange(type);
             setModelType(type.value);
-            localUrlChange.current = true;
-            restoringUrl.current = false;
-            syncUrlEnabled.current = true;
-            pushState({
+            pushLocalState({
                 modelType: type.value,
                 modelId: null,
                 animationLibraryId: null,
@@ -213,7 +220,7 @@ const Main: NextPage<MainProps> = ({ initialMetadata }) => {
                 mapY: null,
             });
         },
-        [backgroundSelection, onModelTypeChange, pushState]
+        [backgroundSelection, onModelTypeChange, pushLocalState]
     );
     const handleSelectItem = useCallback(
         (item: CatalogListItem): void => {
@@ -222,10 +229,7 @@ const Main: NextPage<MainProps> = ({ initialMetadata }) => {
             setAnimationTarget({ libraryId: null, animationName: null });
             setVehicleColorsChanged(false);
             onSelectItem(item);
-            localUrlChange.current = true;
-            restoringUrl.current = false;
-            syncUrlEnabled.current = true;
-            pushState({
+            pushLocalState({
                 modelType,
                 modelId: item.id,
                 animationLibraryId: null,
@@ -243,7 +247,7 @@ const Main: NextPage<MainProps> = ({ initialMetadata }) => {
                 mapY: null,
             });
         },
-        [backgroundSelection, modelType, onSelectItem, pushState]
+        [backgroundSelection, modelType, onSelectItem, pushLocalState]
     );
 
     const urlTexture = useMemo<TextureListItem | null>(
@@ -252,10 +256,7 @@ const Main: NextPage<MainProps> = ({ initialMetadata }) => {
     );
     const pushTextureState = useCallback(
         (item: TextureListItem | null): void => {
-            localUrlChange.current = true;
-            restoringUrl.current = false;
-            syncUrlEnabled.current = true;
-            pushState({
+            pushLocalState({
                 ...DEFAULT_SHAREABLE_URL_STATE,
                 modelType,
                 backgroundColor:
@@ -265,7 +266,7 @@ const Main: NextPage<MainProps> = ({ initialMetadata }) => {
                 textureName: item?.name ?? null,
             });
         },
-        [backgroundSelection, modelType, pushState]
+        [backgroundSelection, modelType, pushLocalState]
     );
     const handleSelectTexturesTab = useCallback((): void => {
         setMapSelected(false);
@@ -274,10 +275,7 @@ const Main: NextPage<MainProps> = ({ initialMetadata }) => {
     }, [pushTextureState, urlTexture]);
     const pushMapState = useCallback(
         (point: MapPoint | null): void => {
-            localUrlChange.current = true;
-            restoringUrl.current = false;
-            syncUrlEnabled.current = true;
-            pushState({
+            pushLocalState({
                 ...DEFAULT_SHAREABLE_URL_STATE,
                 modelType,
                 backgroundColor:
@@ -287,7 +285,7 @@ const Main: NextPage<MainProps> = ({ initialMetadata }) => {
                 mapY: point?.y ?? null,
             });
         },
-        [backgroundSelection, modelType, pushState]
+        [backgroundSelection, modelType, pushLocalState]
     );
     const handleSelectMapTab = useCallback((): void => {
         setTexturesSelected(false);
@@ -421,17 +419,17 @@ const Main: NextPage<MainProps> = ({ initialMetadata }) => {
     );
     const handleModelTabChange = useCallback(
         (type: { value: ModelType }): void => {
-            if (!(texturesSelected || mapSelected) || type.value !== modelType) {
+            if (!texturesSelected && !mapSelected && type.value === modelType) {
+                return;
+            }
+            if (type.value !== modelType) {
                 handleModelTypeChange(type);
                 return;
             }
 
             setTexturesSelected(false);
             setMapSelected(false);
-            localUrlChange.current = true;
-            restoringUrl.current = false;
-            syncUrlEnabled.current = true;
-            pushState({
+            pushLocalState({
                 ...shareableState,
                 texturesSelected: false,
                 textureDictionary: null,
@@ -441,7 +439,14 @@ const Main: NextPage<MainProps> = ({ initialMetadata }) => {
                 mapY: null,
             });
         },
-        [handleModelTypeChange, mapSelected, modelType, pushState, shareableState, texturesSelected]
+        [
+            handleModelTypeChange,
+            mapSelected,
+            modelType,
+            pushLocalState,
+            shareableState,
+            texturesSelected,
+        ]
     );
     const handleSearchModel = useCallback(
         (type: ModelType, item: CatalogListItem): void => {
