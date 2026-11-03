@@ -115,6 +115,13 @@ try {
         { type: 'vehicle', id: 411, name: 'Infernus', model: 'infernus' },
     ]);
 
+    const placements = await getJson('/api/placements/item?id=1220');
+    assert.equal(placements.response.status, 200);
+    assert.equal(placements.body.item.positions.length, 45);
+    assert.deepEqual(placements.body.item.interiors, [[2178.1953125, 1593.6328125, 1001.15625, 1]]);
+    assert.equal((await getJson('/api/placements/item?id=400')).response.status, 404);
+    assert.equal((await getJson('/api/placements/item?id=abc')).response.status, 400);
+
     const modelTexture = await getJson('/api/textures/item?name=cardboxes_128&type=object&id=1220');
     assert.equal(modelTexture.response.status, 200);
     assert.equal(modelTexture.body.item.txd, 'boxes');

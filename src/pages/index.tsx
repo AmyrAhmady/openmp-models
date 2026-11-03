@@ -8,6 +8,7 @@ import MenuDesktop from 'src/components/Menu/Desktop';
 import MenuMobile from 'src/components/Menu/Mobile';
 import TextureMenuMobile from 'src/components/Menu/Mobile/TextureMenuMobile';
 import ModelInfo from 'src/components/ModelInfo';
+import ModelMap from 'src/components/ModelMap';
 import ModelStage from 'src/components/ModelStage';
 import VehicleModPicker from 'src/components/VehicleModPicker';
 import VehicleColorPicker from 'src/components/VehicleColorPicker';
@@ -881,6 +882,16 @@ const Main: NextPage<MainProps> = ({ initialMetadata }) => {
                                 collapsible
                                 initiallyExpanded={false}
                             />
+                            {modelType === 'object' && (
+                                <ModelMap
+                                    style={{ marginBottom: 14 }}
+                                    objectId={
+                                        selectedModelType === 'object' && info ? info.id : null
+                                    }
+                                    collapsible
+                                    initiallyExpanded={false}
+                                />
+                            )}
                         </View>
                     )}
                 </View>

@@ -10,6 +10,7 @@ import VehicleModPickerMobile from './VehicleModPickerMobile';
 import VehicleColorPickerMobile from './VehicleColorPickerMobile';
 import AnimationBrowserMobile from './AnimationBrowserMobile';
 import ModelTexturesMobile from './ModelTexturesMobile';
+import ModelMapMobile from './ModelMapMobile';
 import type { PreviewMode } from 'src/domain/previewMode';
 import type { VehicleModification } from 'src/domain/vehicleModifications';
 import { vehicleColorOptions } from 'src/domain/vehicleColors';
@@ -72,11 +73,15 @@ const MenuMobile = ({
     const [vehicleColorModalVisible, setVehicleColorModalVisible] = useState(false);
     const [animationBrowserVisible, setAnimationBrowserVisible] = useState(false);
     const [texturesVisible, setTexturesVisible] = useState(false);
+    const [mapVisible, setMapVisible] = useState(false);
     const { theme } = useTheme();
 
     useEffect(() => {
         if (modelType !== 'skin') {
             setAnimationBrowserVisible(false);
+        }
+        if (modelType !== 'object') {
+            setMapVisible(false);
         }
     }, [modelType]);
 
@@ -263,6 +268,26 @@ const MenuMobile = ({
                 >
                     <Text style={{ color: theme.button }}>Textures</Text>
                 </TouchableOpacity>
+                {modelType === 'object' && (
+                    <TouchableOpacity
+                        style={{
+                            alignItems: 'center',
+                            borderColor: theme.button,
+                            borderRadius: 100,
+                            borderWidth: 1.8,
+                            height: '2.5rem',
+                            justifyContent: 'center',
+                            marginBottom: 4,
+                            marginRight: 4,
+                            paddingHorizontal: 8,
+                        }}
+                        onPress={() => setMapVisible(true)}
+                        accessibilityRole="button"
+                        accessibilityLabel="Open model map"
+                    >
+                        <Text style={{ color: theme.button }}>Map</Text>
+                    </TouchableOpacity>
+                )}
                 <TouchableOpacity
                     style={{
                         alignItems: 'center',
@@ -341,6 +366,11 @@ const MenuMobile = ({
                         : 'No model selected.'
                 }
                 onSelect={onOpenTexture}
+            />
+            <ModelMapMobile
+                visible={mapVisible}
+                onRequestClose={() => setMapVisible(false)}
+                objectId={modelType === 'object' && selectedItemId >= 0 ? selectedItemId : null}
             />
             <AnimationBrowserMobile
                 key={`animation-browser-${selectedItemId}`}

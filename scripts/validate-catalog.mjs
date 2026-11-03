@@ -169,3 +169,44 @@ const textureSource = await readFile(
     'utf8'
 );
 console.log(`texture: ${validateTextures(parseCatalog(textureSource, 'texture'))} valid records`);
+
+function isPosition(value, length) {
+    return (
+        Array.isArray(value) &&
+        value.length === length &&
+        value.every((part) => typeof part === 'number' && Number.isFinite(part))
+    );
+}
+
+function validatePlacements(records) {
+    if (!Array.isArray(records) || records.length === 0) {
+        throw new Error('Catalog "placement" must be a non-empty array');
+    }
+
+    const ids = new Set();
+    records.forEach((record, index) => {
+        if (!record || !catalogIds.object.has(record.id) || ids.has(record.id)) {
+            throw new Error(`Catalog "placement" record ${index} has an unknown or duplicate id`);
+        }
+        ids.add(record.id);
+
+        const valid =
+            Array.isArray(record.positions) &&
+            record.positions.every((position) => isPosition(position, 3)) &&
+            Array.isArray(record.interiors) &&
+            record.interiors.every((position) => isPosition(position, 4));
+        if (!valid) {
+            throw new Error(`Catalog "placement" record ${index} has an invalid shape`);
+        }
+    });
+
+    return records.length;
+}
+
+const placementSource = await readFile(
+    new URL('../data/source/catalogs/placements.json', import.meta.url),
+    'utf8'
+);
+console.log(
+    `placement: ${validatePlacements(parseCatalog(placementSource, 'placement'))} valid records`
+);

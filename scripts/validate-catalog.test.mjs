@@ -16,6 +16,7 @@ test('catalog validation accepts every checked-in catalog', async () => {
     assert.match(stdout, /skin: 312 valid records/);
     assert.match(stdout, /vehicle: 212 valid records/);
     assert.match(stdout, /texture: 32216 valid records/);
+    assert.match(stdout, /placement: 8406 valid records/);
 });
 
 test('vehicle catalog models match the viewer model names', async () => {

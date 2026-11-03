@@ -23,6 +23,11 @@ const clientModules = [
     '../src/components/Menu/Mobile/ModelTexturesMobile.tsx',
     '../src/components/GlobalSearch/index.tsx',
     '../src/hooks/useGlobalSearch.ts',
+    '../src/catalog/placementClient.ts',
+    '../src/hooks/usePlacements.ts',
+    '../src/components/RadarMap/index.tsx',
+    '../src/components/ModelMap/index.tsx',
+    '../src/components/Menu/Mobile/ModelMapMobile.tsx',
 ];
 const catalogClientSource = await readFile(
     new URL('../src/catalog/catalogClient.ts', import.meta.url),
@@ -53,6 +58,11 @@ test('client-facing modules import catalog contracts as types only', async () =>
             source,
             /src\/catalog\/textureRegistry/,
             `${modulePath} must not import the server texture registry`
+        );
+        assert.doesNotMatch(
+            source,
+            /src\/catalog\/placementRegistry/,
+            `${modulePath} must not import the server placement registry`
         );
     }
     assert.match(catalogClientSource, /from 'src\/api\/request'/);
