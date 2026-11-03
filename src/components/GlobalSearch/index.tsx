@@ -1,5 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { ActivityIndicator, Pressable, ScrollView, Text, TextInput, View } from 'react-native-web';
+import {
+    ActivityIndicator,
+    Pressable,
+    ScrollView,
+    Text,
+    TextInput,
+    View,
+    useWindowDimensions,
+} from 'react-native-web';
 import type { StyleProp, ViewStyle } from 'react-native-web';
 import type { CatalogListItem, ModelType } from 'src/domain/catalog';
 import { getModelPreviewUrl, getPreviewName } from 'src/domain/globalSearch';
@@ -61,6 +69,7 @@ const ResultRow = ({ title, subtitle, imageUrl, onPress }: ResultRowProps) => {
 const GlobalSearch = ({ onSelectModel, onSelectTexture, onShowAll, style }: Props) => {
     const { theme } = useTheme();
     const { query, results, status, search } = useGlobalSearch();
+    const { height } = useWindowDimensions();
     const [open, setOpen] = useState(false);
     const containerRef = useRef<HTMLDivElement | null>(null);
     const groups = results
@@ -160,7 +169,7 @@ const GlobalSearch = ({ onSelectModel, onSelectTexture, onShowAll, style }: Prop
                             No results found.
                         </Text>
                     ) : (
-                        <ScrollView style={{ maxHeight: 560 }}>
+                        <ScrollView style={{ maxHeight: Math.min(560, height - 160) }}>
                             {groups
                                 .filter((group) => group.total > 0)
                                 .map((group) => (

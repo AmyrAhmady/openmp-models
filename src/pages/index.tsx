@@ -763,6 +763,7 @@ const Main: NextPage<MainProps> = ({ initialMetadata }) => {
                 <MobileModal
                     visible={isMobileView && searchVisible}
                     accessibilityLabel="Search dialog"
+                    placement="top"
                     onRequestClose={() => setSearchVisible(false)}
                     contentStyle={{ width: '100%', maxWidth: 480 }}
                 >
