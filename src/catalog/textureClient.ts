@@ -33,11 +33,16 @@ export const textureClient = {
         );
     },
 
-    search(query: string, signal?: AbortSignal): Promise<TextureSearchResponse> {
-        return request<{ q: string }, TextureSearchResponse>(
+    search(
+        query: string,
+        offset: number,
+        limit: number,
+        signal?: AbortSignal
+    ): Promise<TextureSearchResponse> {
+        return request<{ q: string; offset: number; limit: number }, TextureSearchResponse>(
             'GET',
             '/api/textures/search',
-            { q: query },
+            { q: query, offset, limit },
             signal
                 ? { signal, parse: parseTextureSearchResponse }
                 : { parse: parseTextureSearchResponse }

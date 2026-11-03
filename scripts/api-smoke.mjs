@@ -102,6 +102,14 @@ try {
         )
     );
 
+    const firstSearchPage = await getJson('/api/textures/search?q=a');
+    const secondSearchPage = await getJson('/api/textures/search?q=a&offset=500');
+    assert.equal(firstSearchPage.body.results.length, 500);
+    assert.equal(secondSearchPage.body.results.length, 500);
+    assert.notDeepEqual(secondSearchPage.body.results[0], firstSearchPage.body.results[0]);
+    assert.equal((await getJson('/api/textures/search?q=a&limit=501')).response.status, 400);
+    assert.equal((await getJson('/api/textures/search?q=a&offset=-1')).response.status, 400);
+
     const texture = await getJson('/api/textures/item?txd=boxes&name=cardboxes_128');
     assert.equal(texture.response.status, 200);
     assert.equal(texture.body.item.width, 128);

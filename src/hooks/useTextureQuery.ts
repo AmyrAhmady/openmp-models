@@ -95,6 +95,47 @@ export function useTextureQuery(enabled: boolean): UseTextureQueryResult {
         [startRequest]
     );
 
+    const loadSearchPage = useCallback(
+        (query: string, offset: number) => {
+            const { generation, signal } = startRequest();
+            setState((current) => ({
+                ...current,
+                status: 'loading',
+                error: null,
+                loadMoreError: null,
+            }));
+
+            textureClient
+                .search(query, offset, CATALOG_PAGE_SIZE, signal)
+                .then(({ results }) => {
+                    if (generation !== requestGeneration.current) {
+                        return;
+                    }
+
+                    setState((current) => ({
+                        ...current,
+                        list: offset === 0 ? results : [...current.list, ...results],
+                        status: 'ready',
+                        error: null,
+                        hasMore: results.length === CATALOG_PAGE_SIZE,
+                        loadMoreError: null,
+                    }));
+                })
+                .catch((error: unknown) => {
+                    if (generation !== requestGeneration.current || isAbortError(error)) {
+                        return;
+                    }
+
+                    setState((current) =>
+                        offset === 0
+                            ? { ...current, status: 'error', error: LOAD_ERROR_MESSAGE }
+                            : { ...current, status: 'ready', loadMoreError: LOAD_ERROR_MESSAGE }
+                    );
+                });
+        },
+        [startRequest]
+    );
+
     useEffect(() => {
         if (enabled && state.status === 'idle') {
             loadPage(0);
@@ -115,7 +156,7 @@ export function useTextureQuery(enabled: boolean): UseTextureQueryResult {
     const search = useCallback(
         (query: string) => {
             const normalizedQuery = normalizeSearchText(query.trim());
-            const { generation, signal } = startRequest();
+            startRequest();
 
             if (!normalizedQuery && !fullList.current.length) {
                 loadPage(0);
@@ -146,55 +187,51 @@ export function useTextureQuery(enabled: boolean): UseTextureQueryResult {
 
             searchTimer.current = setTimeout(() => {
                 searchTimer.current = undefined;
-                textureClient
-                    .search(normalizedQuery, signal)
-                    .then(({ results }) => {
-                        if (generation !== requestGeneration.current) {
-                            return;
-                        }
-
-                        setState({
-                            list: results,
-                            searchInput: query,
-                            status: 'ready',
-                            error: null,
-                            hasMore: false,
-                            loadMoreError: null,
-                        });
-                    })
-                    .catch((error: unknown) => {
-                        if (generation !== requestGeneration.current || isAbortError(error)) {
-                            return;
-                        }
-
-                        setState((current) => ({
-                            ...current,
-                            status: 'error',
-                            error: LOAD_ERROR_MESSAGE,
-                        }));
-                    });
+                loadSearchPage(normalizedQuery, 0);
             }, 180);
         },
-        [loadPage, startRequest]
+        [loadPage, loadSearchPage, startRequest]
     );
 
     const clearSearch = useCallback(() => search(''), [search]);
 
     const loadMore = useCallback(() => {
-        if (!hasMore.current || state.searchInput.trim() || state.status !== 'ready') {
+        if (!state.hasMore || state.status !== 'ready') {
             return;
         }
 
-        loadPage(fullList.current.length);
-    }, [loadPage, state.searchInput, state.status]);
+        const query = normalizeSearchText(state.searchInput.trim());
+        if (query) {
+            loadSearchPage(query, state.list.length);
+        } else {
+            loadPage(fullList.current.length);
+        }
+    }, [
+        loadPage,
+        loadSearchPage,
+        state.hasMore,
+        state.list.length,
+        state.searchInput,
+        state.status,
+    ]);
 
     const retry = useCallback(() => {
-        if (state.searchInput.trim()) {
+        const query = normalizeSearchText(state.searchInput.trim());
+        if (query && state.loadMoreError) {
+            loadSearchPage(query, state.list.length);
+        } else if (query) {
             search(state.searchInput);
         } else {
             loadPage(state.loadMoreError ? fullList.current.length : 0);
         }
-    }, [loadPage, search, state.loadMoreError, state.searchInput]);
+    }, [
+        loadPage,
+        loadSearchPage,
+        search,
+        state.list.length,
+        state.loadMoreError,
+        state.searchInput,
+    ]);
 
     return { ...state, search, clearSearch, loadMore, retry };
 }
