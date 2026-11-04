@@ -711,11 +711,11 @@ const Main: NextPage<MainProps> = ({ initialMetadata }) => {
             return;
         }
 
-        pushState(shareableState);
+        pushLocalState(shareableState);
     }, [
         info,
         mapSelected,
-        pushState,
+        pushLocalState,
         shareableState,
         shareableUrlReady,
         texturesSelected,
