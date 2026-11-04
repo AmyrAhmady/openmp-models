@@ -12,6 +12,8 @@ interface Props {
 const TextureImage = ({ uri, alt, fit = 'cover', style, onError }: Props) => (
     <img
         crossOrigin="anonymous"
+        loading="lazy"
+        decoding="async"
         src={uri}
         alt={alt}
         draggable={false}
