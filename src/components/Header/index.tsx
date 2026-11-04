@@ -15,19 +15,66 @@ import type { ModelTypeOption } from 'src/domain/modelType';
 import type { ThemeMode } from 'src/theme/themeTokens';
 import { useTheme } from 'src/theme/ThemeContext';
 import ModalList from '../ModalList';
+import type { PreviewMode } from 'src/domain/previewMode';
+
+interface HeaderOption {
+    label: string;
+    value: ModelType | 'textures' | 'map';
+}
+
+const HEADER_OPTIONS: HeaderOption[] = [
+    ...MODEL_TYPE_OPTIONS,
+    { label: 'Textures', value: 'textures' },
+    { label: 'Map', value: 'map' },
+];
 
 interface Props {
     modelType: ModelType;
+    texturesSelected: boolean;
+    mapSelected: boolean;
     isMobile?: boolean;
     onModelTypeChange: (type: ModelTypeOption) => void;
+    onSelectTextures: () => void;
+    onSelectMap: () => void;
+    search?: React.ReactNode;
+    previewMode: PreviewMode;
+    onPreviewModeChange: (mode: PreviewMode) => void;
     themeMode: ThemeMode;
     onThemeModeChange: (mode: ThemeMode) => void;
 }
 
 const Header = (props: Props) => {
     const { theme } = useTheme();
-    const { modelType, onModelTypeChange, onThemeModeChange, isMobile, themeMode } = props;
+    const {
+        modelType,
+        texturesSelected,
+        mapSelected,
+        onModelTypeChange,
+        onSelectTextures,
+        onSelectMap,
+        search,
+        previewMode,
+        onPreviewModeChange,
+        onThemeModeChange,
+        isMobile,
+        themeMode,
+    } = props;
     const darkMode = themeMode === 'dark';
+    const selectedValue = texturesSelected ? 'textures' : mapSelected ? 'map' : modelType;
+    const selectedLabel = texturesSelected
+        ? 'Textures'
+        : mapSelected
+          ? 'Map'
+          : MODEL_TYPE_LABELS[modelType];
+    const onSelectOption = (item: HeaderOption) => {
+        if (item.value === 'textures') {
+            onSelectTextures();
+        } else if (item.value === 'map') {
+            onSelectMap();
+        } else {
+            onModelTypeChange({ label: item.label, value: item.value });
+        }
+    };
 
     return (
         <>
@@ -62,12 +109,12 @@ const Header = (props: Props) => {
 
                 {isMobile ? (
                     <View style={styles.mobileHeaderActions}>
-                        <ModalList<ModelTypeOption>
+                        <ModalList<HeaderOption>
                             style={styles.mobilePicker}
                             isMobile={isMobile}
-                            data={MODEL_TYPE_OPTIONS}
-                            selectedValue={modelType}
-                            onPress={(item) => onModelTypeChange(item)}
+                            data={HEADER_OPTIONS}
+                            selectedValue={selectedValue}
+                            onPress={onSelectOption}
                             buttonComponent={
                                 <View
                                     style={[
@@ -79,7 +126,7 @@ const Header = (props: Props) => {
                                     <Text
                                         style={[styles.mobilePickerText, { color: theme.accent }]}
                                     >
-                                        {MODEL_TYPE_LABELS[modelType]} ▾
+                                        {selectedLabel} ▾
                                     </Text>
                                 </View>
                             }
@@ -100,41 +147,57 @@ const Header = (props: Props) => {
                         </View>
                     </View>
                 ) : (
-                    <View style={styles.tabs}>
-                        {MODEL_TYPE_OPTIONS.map((item) => (
-                            <TouchableOpacity
-                                key={item.value}
-                                accessibilityRole="button"
-                                accessibilityLabel={item.label}
-                                accessibilityState={{ selected: item.value === modelType }}
-                                onPress={() => onModelTypeChange(item)}
-                                style={[
-                                    styles.tab,
-                                    item.value === modelType && {
-                                        backgroundColor: theme.accentSoft,
-                                    },
-                                ]}
-                            >
-                                <Text
+                    <>
+                        <View style={styles.tabs}>
+                            {HEADER_OPTIONS.map((item) => (
+                                <TouchableOpacity
+                                    key={item.value}
+                                    accessibilityRole="button"
+                                    accessibilityLabel={item.label}
+                                    accessibilityState={{ selected: item.value === selectedValue }}
+                                    onPress={() => onSelectOption(item)}
                                     style={[
-                                        styles.tabText,
-                                        {
-                                            color:
-                                                item.value === modelType
-                                                    ? theme.accent
-                                                    : theme.mutedText,
+                                        styles.tab,
+                                        item.value === selectedValue && {
+                                            backgroundColor: theme.accentSoft,
                                         },
                                     ]}
                                 >
-                                    {item.label}
-                                </Text>
-                            </TouchableOpacity>
-                        ))}
-                    </View>
+                                    <Text
+                                        style={[
+                                            styles.tabText,
+                                            {
+                                                color:
+                                                    item.value === selectedValue
+                                                        ? theme.accent
+                                                        : theme.mutedText,
+                                            },
+                                        ]}
+                                    >
+                                        {item.label}
+                                    </Text>
+                                </TouchableOpacity>
+                            ))}
+                        </View>
+                        {search && <View style={styles.search}>{search}</View>}
+                    </>
                 )}
 
                 {!isMobile && (
                     <View style={styles.actions}>
+                        <Text style={[styles.modeLabel, { color: theme.mutedText }]}>
+                            {previewMode === 'thumbnail' ? 'Thumbnail' : '3D view'}
+                        </Text>
+                        <Switch
+                            accessibilityLabel="Toggle thumbnail view"
+                            trackColor={{ false: theme.lines, true: theme.accent }}
+                            thumbColor="#ffffff"
+                            onValueChange={(value) =>
+                                onPreviewModeChange(value ? 'thumbnail' : 'model')
+                            }
+                            value={previewMode === 'thumbnail'}
+                            style={styles.previewSwitch}
+                        />
                         <Text style={[styles.modeLabel, { color: theme.mutedText }]}>
                             {darkMode ? 'Dark' : 'Light'}
                         </Text>
@@ -154,6 +217,7 @@ const Header = (props: Props) => {
 
 const styles = StyleSheet.create({
     container: {
+        zIndex: 10,
         paddingHorizontal: 24,
         width: '100%',
         height: 76,
@@ -169,7 +233,7 @@ const styles = StyleSheet.create({
     brand: {
         flexDirection: 'row',
         alignItems: 'center',
-        width: 250,
+        marginRight: 24,
     },
     mobileBrand: {
         width: 150,
@@ -192,8 +256,10 @@ const styles = StyleSheet.create({
     tabs: {
         flexDirection: 'row',
         alignItems: 'center',
+    },
+    search: {
         flex: 1,
-        justifyContent: 'center',
+        marginHorizontal: 24,
     },
     tab: {
         paddingHorizontal: 20,
@@ -206,7 +272,6 @@ const styles = StyleSheet.create({
         fontWeight: '700',
     },
     actions: {
-        width: 250,
         flexDirection: 'row',
         justifyContent: 'flex-end',
         alignItems: 'center',
@@ -221,6 +286,9 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginLeft: 8,
         flexShrink: 0,
+    },
+    previewSwitch: {
+        marginRight: 20,
     },
     modeLabel: {
         fontSize: 12,

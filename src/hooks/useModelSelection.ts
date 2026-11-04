@@ -20,6 +20,7 @@ export interface UseModelSelectionResult {
     modelStatus: ModelLoadStatus;
     modelError: string | null;
     onModelTypeChange: (type: ModelTypeSelection) => void;
+    onClearSelection: () => void;
     onSelectItem: (model: CatalogListItem) => void;
     onSelectModelId: (modelId: number) => void;
     retryModel: () => void;
@@ -43,6 +44,10 @@ const initialInfo: VehicleInfo = {
     cat: 'Off Road',
     mods: 'Transfender',
     model: 'landstal',
+    txd: 'landstal.txd',
+    type: 'car',
+    handling: 'LANDSTAL',
+    class: 'normal',
 };
 
 function getAssetName(item: CatalogItem | CatalogListItem): string {
@@ -61,7 +66,8 @@ function getModelErrorMessage(error: unknown, selected: boolean): string {
 
 export function useModelSelection(
     modelType: ModelType,
-    initialSelection?: InitialModelSelection
+    initialSelection?: InitialModelSelection,
+    loadModels = true
 ): UseModelSelectionResult {
     const [info, setInfo] = useState<CatalogItem | null>(initialInfo);
     const [selectedModelType, setSelectedModelType] = useState<ModelType | null>('vehicle');
@@ -69,6 +75,7 @@ export function useModelSelection(
     const [modelStatus, setModelStatus] = useState<ModelLoadStatus>('idle');
     const [modelError, setModelError] = useState<string | null>(null);
     const modelLoadGeneration = useRef(0);
+    const loadModelsRef = useRef(loadModels);
     const modelLoadAbortController = useRef<AbortController | null>(null);
     const selectedItemGeneration = useRef(0);
     const selectedItemAbortController = useRef<AbortController | null>(null);
@@ -154,7 +161,11 @@ export function useModelSelection(
 
                 setInfo(response.item);
                 setSelectedModelType(modelType);
-                await loadModel(getAssetName(response.item), modelType);
+                if (loadModelsRef.current) {
+                    await loadModel(getAssetName(response.item), modelType);
+                } else {
+                    setModelStatus('idle');
+                }
             } catch (error) {
                 if (abortController.signal.aborted || isAbortError(error)) {
                     return;
@@ -197,28 +208,52 @@ export function useModelSelection(
         } else if (modelType === 'vehicle') {
             setInfo(initialInfo);
             setSelectedModelType('vehicle');
-            void loadModel(getAssetName(initialInfo), 'vehicle');
+            if (loadModels) {
+                void loadModel(getAssetName(initialInfo), 'vehicle');
+            }
         } else {
             setInfo(null);
             setSelectedModelType(null);
             setModels([]);
             setModelStatus('idle');
         }
-
-        return () => {
-            selectedItemAbortController.current?.abort();
-            selectedItemGeneration.current++;
-            modelLoadAbortController.current?.abort();
-            modelLoadGeneration.current++;
-        };
     }, [
         initialSelection?.modelId,
         initialSelection?.ready,
         initialSelection?.type,
         loadModel,
+        loadModels,
         loadSelectedItem,
         modelType,
     ]);
+
+    useEffect(
+        () => () => {
+            selectedItemAbortController.current?.abort();
+            selectedItemGeneration.current++;
+            modelLoadAbortController.current?.abort();
+            modelLoadGeneration.current++;
+        },
+        []
+    );
+
+    useEffect(() => {
+        loadModelsRef.current = loadModels;
+        if (!loadModels) {
+            modelLoadAbortController.current?.abort();
+            modelLoadGeneration.current++;
+            setModels([]);
+            setModelStatus((current) => (current === 'loading' && !info ? current : 'idle'));
+        } else if (
+            initialLoadHandled.current &&
+            !selectedItemAbortController.current &&
+            info &&
+            selectedModelType === modelType &&
+            !models.length
+        ) {
+            void loadModel(getAssetName(info), modelType);
+        }
+    }, [loadModels]);
 
     const retryModel = useCallback((): void => {
         if (!info || selectedModelType !== modelType) {
@@ -228,23 +263,27 @@ export function useModelSelection(
         void loadModel(getAssetName(info), modelType);
     }, [info, loadModel, modelType, selectedModelType]);
 
+    const onClearSelection = useCallback((): void => {
+        selectedItemAbortController.current?.abort();
+        selectedItemGeneration.current++;
+        modelLoadAbortController.current?.abort();
+        modelLoadGeneration.current++;
+        setSelectedModelType(null);
+        setInfo(null);
+        setModels([]);
+        setModelStatus('idle');
+        setModelError(null);
+    }, []);
+
     const onModelTypeChange = useCallback(
         (type: ModelTypeSelection): void => {
             if (type.value === modelType) {
                 return;
             }
 
-            selectedItemAbortController.current?.abort();
-            selectedItemGeneration.current++;
-            modelLoadAbortController.current?.abort();
-            modelLoadGeneration.current++;
-            setSelectedModelType(null);
-            setInfo(null);
-            setModels([]);
-            setModelStatus('idle');
-            setModelError(null);
+            onClearSelection();
         },
-        [modelType]
+        [modelType, onClearSelection]
     );
 
     const onSelectItem = useCallback(
@@ -352,6 +391,7 @@ export function useModelSelection(
         modelStatus,
         modelError,
         onModelTypeChange,
+        onClearSelection,
         onSelectItem,
         onSelectModelId,
         retryModel,

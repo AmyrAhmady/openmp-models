@@ -4,1483 +4,2543 @@
     "name": "Landstalker",
     "cat": "Off Road",
     "mods": "Transfender",
-    "model": "landstal"
+    "model": "landstal",
+    "txd": "landstal.txd",
+    "type": "car",
+    "handling": "LANDSTAL",
+    "class": "normal",
+    "size": [2.361, 4.701, 1.804]
   },
   {
     "id": 401,
     "name": "Bravura",
     "cat": "Saloons",
     "mods": "Transfender",
-    "model": "bravura"
+    "model": "bravura",
+    "txd": "bravura.txd",
+    "type": "car",
+    "handling": "BRAVURA",
+    "class": "poorfamily",
+    "size": [2.675, 5.43, 1.459]
   },
   {
     "id": 402,
     "name": "Buffalo",
     "cat": "Sport Vehicles",
     "mods": "Transfender",
-    "model": "buffalo"
+    "model": "buffalo",
+    "txd": "buffalo.txd",
+    "type": "car",
+    "handling": "BUFFALO",
+    "class": "executive",
+    "size": [2.497, 5.578, 1.426]
   },
   {
     "id": 403,
     "name": "Linerunner",
     "cat": "Industrial",
     "mods": "None",
-    "model": "linerun"
+    "model": "linerun",
+    "txd": "linerun.txd",
+    "type": "car",
+    "handling": "LINERUN",
+    "class": "worker",
+    "size": [3.2, 8.683, 3.989]
   },
   {
     "id": 404,
     "name": "Perennial",
     "cat": "Station Wagons",
     "mods": "Transfender",
-    "model": "peren"
+    "model": "peren",
+    "txd": "peren.txd",
+    "type": "car",
+    "handling": "PEREN",
+    "class": "poorfamily",
+    "size": [2.071, 5.157, 1.645]
   },
   {
     "id": 405,
     "name": "Sentinel",
     "cat": "Saloons",
     "mods": "Transfender",
-    "model": "sentinel"
+    "model": "sentinel",
+    "txd": "sentinel.txd",
+    "type": "car",
+    "handling": "SENTINEL",
+    "class": "richfamily",
+    "size": [2.338, 5.493, 1.527]
   },
   {
     "id": 406,
     "name": "Dumper",
     "cat": "Unique Vehicles",
     "mods": "None",
-    "model": "dumper"
+    "model": "dumper",
+    "txd": "dumper.txd",
+    "type": "mtruck",
+    "handling": "DUMPER",
+    "class": "worker",
+    "size": [5.187, 11.232, 4.621]
   },
   {
     "id": 407,
     "name": "Firetruck",
     "cat": "Public Service",
     "mods": "None",
-    "model": "firetruk"
+    "model": "firetruk",
+    "txd": "firetruk.txd",
+    "type": "car",
+    "handling": "FIRETRUK",
+    "class": "ignore",
+    "size": [2.96, 8.338, 3.018]
   },
   {
     "id": 408,
     "name": "Trashmaster",
     "cat": "Industrial",
     "mods": "None",
-    "model": "trash"
+    "model": "trash",
+    "txd": "trash.txd",
+    "type": "car",
+    "handling": "TRASH",
+    "class": "worker",
+    "size": [2.9, 9.326, 3.621]
   },
   {
     "id": 409,
     "name": "Stretch",
     "cat": "Unique Vehicles",
     "mods": "Transfender",
-    "model": "stretch"
+    "model": "stretch",
+    "txd": "stretch.txd",
+    "type": "car",
+    "handling": "STRETCH",
+    "class": "executive",
+    "size": [2.405, 7.873, 1.49]
   },
   {
     "id": 410,
     "name": "Manana",
     "cat": "Saloons",
     "mods": "Transfender",
-    "model": "manana"
+    "model": "manana",
+    "txd": "manana.txd",
+    "type": "car",
+    "handling": "MANANA",
+    "class": "poorfamily",
+    "size": [2.233, 4.753, 1.477]
   },
   {
     "id": 411,
     "name": "Infernus",
     "cat": "Sport Vehicles",
     "mods": "Transfender",
-    "model": "infernus"
+    "model": "infernus",
+    "txd": "infernus.txd",
+    "type": "car",
+    "handling": "INFERNUS",
+    "class": "executive",
+    "size": [2.46, 5.463, 1.375]
   },
   {
     "id": 412,
     "name": "Voodoo",
     "cat": "Lowriders",
     "mods": "Loco Low Co",
-    "model": "voodoo"
+    "model": "voodoo",
+    "txd": "voodoo.txd",
+    "type": "car",
+    "handling": "VOODOO",
+    "class": "poorfamily",
+    "size": [2.387, 6.412, 1.355]
   },
   {
     "id": 413,
     "name": "Pony",
     "cat": "Industrial",
     "mods": "None",
-    "model": "pony"
+    "model": "pony",
+    "txd": "pony.txd",
+    "type": "car",
+    "handling": "PONY",
+    "class": "worker",
+    "size": [2.463, 5.52, 2.123]
   },
   {
     "id": 414,
     "name": "Mule",
     "cat": "Industrial",
     "mods": "None",
-    "model": "mule"
+    "model": "mule",
+    "txd": "mule.txd",
+    "type": "car",
+    "handling": "MULE",
+    "class": "worker",
+    "size": [2.727, 6.353, 3.299]
   },
   {
     "id": 415,
     "name": "Cheetah",
     "cat": "Sport Vehicles",
     "mods": "Transfender",
-    "model": "cheetah"
+    "model": "cheetah",
+    "txd": "cheetah.txd",
+    "type": "car",
+    "handling": "CHEETAH",
+    "class": "executive",
+    "size": [2.22, 5.149, 1.291]
   },
   {
     "id": 416,
     "name": "Ambulance",
     "cat": "Public Service",
     "mods": "None",
-    "model": "ambulan"
+    "model": "ambulan",
+    "txd": "ambulan.txd",
+    "type": "car",
+    "handling": "AMBULAN",
+    "class": "ignore",
+    "size": [3.029, 7.007, 2.792]
   },
   {
     "id": 417,
     "name": "Leviathan",
     "cat": "Helicopters",
     "mods": "None",
-    "model": "leviathn"
+    "model": "leviathn",
+    "txd": "leviathn.txd",
+    "type": "heli",
+    "handling": "LEVIATHN",
+    "class": "ignore",
+    "size": [19.249, 22.89, 6.016]
   },
   {
     "id": 418,
     "name": "Moonbeam",
     "cat": "Station Wagons",
     "mods": "Transfender",
-    "model": "moonbeam"
+    "model": "moonbeam",
+    "txd": "moonbeam.txd",
+    "type": "car",
+    "handling": "MOONBEAM",
+    "class": "normal",
+    "size": [2.615, 5.354, 2.024]
   },
   {
     "id": 419,
     "name": "Esperanto",
     "cat": "Saloons",
     "mods": "Transfender",
-    "model": "esperant"
+    "model": "esperant",
+    "txd": "esperant.txd",
+    "type": "car",
+    "handling": "ESPERANT",
+    "class": "normal",
+    "size": [2.516, 5.863, 1.408]
   },
   {
     "id": 420,
     "name": "Taxi",
     "cat": "Public Service",
     "mods": "Transfender",
-    "model": "taxi"
+    "model": "taxi",
+    "txd": "taxi.txd",
+    "type": "car",
+    "handling": "TAXI",
+    "class": "taxi",
+    "size": [2.577, 5.502, 1.772]
   },
   {
     "id": 421,
     "name": "Washington",
     "cat": "Saloons",
     "mods": "Transfender",
-    "model": "washing"
+    "model": "washing",
+    "txd": "washing.txd",
+    "type": "car",
+    "handling": "WASHING",
+    "class": "richfamily",
+    "size": [2.318, 5.949, 1.482]
   },
   {
     "id": 422,
     "name": "Bobcat",
     "cat": "Industrial",
     "mods": "Transfender",
-    "model": "bobcat"
+    "model": "bobcat",
+    "txd": "bobcat.txd",
+    "type": "car",
+    "handling": "BOBCAT",
+    "class": "worker",
+    "size": [2.334, 5.003, 1.672]
   },
   {
     "id": 423,
     "name": "Mr. Whoopee",
     "cat": "Unique Vehicles",
     "mods": "None",
-    "model": "mrwhoop"
+    "model": "mrwhoop",
+    "txd": "mrwhoop.txd",
+    "type": "car",
+    "handling": "MRWHOOP",
+    "class": "worker",
+    "size": [2.62, 4.72, 3.452]
   },
   {
     "id": 424,
     "name": "BF Injection",
     "cat": "Off Road",
     "mods": "None",
-    "model": "bfinject"
+    "model": "bfinject",
+    "txd": "bfinject.txd",
+    "type": "car",
+    "handling": "BFINJECT",
+    "class": "executive",
+    "size": [2.25, 3.777, 1.632]
   },
   {
     "id": 425,
     "name": "Hunter",
     "cat": "Helicopters",
     "mods": "None",
-    "model": "hunter"
+    "model": "hunter",
+    "txd": "hunter.txd",
+    "type": "heli",
+    "handling": "HUNTER",
+    "class": "ignore",
+    "size": [19.859, 19.839, 5.105]
   },
   {
     "id": 426,
     "name": "Premier",
     "cat": "Saloons",
     "mods": "Transfender",
-    "model": "premier"
+    "model": "premier",
+    "txd": "premier.txd",
+    "type": "car",
+    "handling": "PREMIER",
+    "class": "richfamily",
+    "size": [2.577, 5.502, 1.517]
   },
   {
     "id": 427,
     "name": "Enforcer",
     "cat": "Public Service",
     "mods": "None",
-    "model": "enforcer"
+    "model": "enforcer",
+    "txd": "enforcer.txd",
+    "type": "car",
+    "handling": "ENFORCER",
+    "class": "ignore",
+    "size": [2.745, 7.398, 2.667]
   },
   {
     "id": 428,
     "name": "Securicar",
     "cat": "Unique Vehicles",
     "mods": "None",
-    "model": "securica"
+    "model": "securica",
+    "txd": "securica.txd",
+    "type": "car",
+    "handling": "SECURICA",
+    "class": "big",
+    "size": [2.937, 5.937, 2.642]
   },
   {
     "id": 429,
     "name": "Banshee",
     "cat": "Sport Vehicles",
     "mods": "Transfender",
-    "model": "banshee"
+    "model": "banshee",
+    "txd": "banshee.txd",
+    "type": "car",
+    "handling": "BANSHEE",
+    "class": "executive",
+    "size": [2.231, 5.071, 1.182]
   },
   {
     "id": 430,
     "name": "Predator",
     "cat": "Boats",
     "mods": "None",
-    "model": "predator"
+    "model": "predator",
+    "txd": "predator.txd",
+    "type": "boat",
+    "handling": "PREDATOR",
+    "class": "ignore",
+    "size": [3.886, 13.023, 7.586]
   },
   {
     "id": 431,
     "name": "Bus",
     "cat": "Public Service",
     "mods": "None",
-    "model": "bus"
+    "model": "bus",
+    "txd": "bus.txd",
+    "type": "car",
+    "handling": "BUS",
+    "class": "normal",
+    "size": [3.185, 11.918, 3.191]
   },
   {
     "id": 432,
     "name": "Rhino",
     "cat": "Public Service",
     "mods": "None",
-    "model": "rhino"
+    "model": "rhino",
+    "txd": "rhino.txd",
+    "type": "car",
+    "handling": "RHINO",
+    "class": "ignore",
+    "size": [4.173, 10.98, 4.628]
   },
   {
     "id": 433,
     "name": "Barracks",
     "cat": "Public Service",
     "mods": "None",
-    "model": "barracks"
+    "model": "barracks",
+    "txd": "barracks.txd",
+    "type": "car",
+    "handling": "BARRACKS",
+    "class": "ignore",
+    "size": [3.581, 9.006, 3.845]
   },
   {
     "id": 434,
     "name": "Hotknife",
     "cat": "Unique Vehicles",
     "mods": "None",
-    "model": "hotknife"
+    "model": "hotknife",
+    "txd": "hotknife.txd",
+    "type": "car",
+    "handling": "HOTKNIFE",
+    "class": "executive",
+    "size": [2.279, 4.226, 1.766]
   },
   {
     "id": 435,
     "name": "Article Trailer",
     "cat": "Trailers",
     "mods": "None",
-    "model": "artict1"
+    "model": "artict1",
+    "txd": "artict1.txd",
+    "type": "trailer",
+    "handling": "ARTICT1",
+    "class": "ignore",
+    "size": [2.889, 10.769, 3.985]
   },
   {
     "id": 436,
     "name": "Previon",
     "cat": "Saloons",
     "mods": "Transfender",
-    "model": "previon"
+    "model": "previon",
+    "txd": "previon.txd",
+    "type": "car",
+    "handling": "PREVION",
+    "class": "poorfamily",
+    "size": [2.251, 5.129, 1.523]
   },
   {
     "id": 437,
     "name": "Coach",
     "cat": "Public Service",
     "mods": "None",
-    "model": "coach"
+    "model": "coach",
+    "txd": "coach.txd",
+    "type": "car",
+    "handling": "COACH",
+    "class": "normal",
+    "size": [3.279, 11.239, 3.049]
   },
   {
     "id": 438,
     "name": "Cabbie",
     "cat": "Public Service",
     "mods": "Transfender",
-    "model": "cabbie"
+    "model": "cabbie",
+    "txd": "cabbie.txd",
+    "type": "car",
+    "handling": "CABBIE",
+    "class": "taxi",
+    "size": [2.435, 5.697, 1.823]
   },
   {
     "id": 439,
     "name": "Stallion",
     "cat": "Convertibles",
     "mods": "Transfender",
-    "model": "stallion"
+    "model": "stallion",
+    "txd": "stallion.txd",
+    "type": "car",
+    "handling": "STALLION",
+    "class": "poorfamily",
+    "size": [2.452, 5.293, 1.511]
   },
   {
     "id": 440,
     "name": "Rumpo",
     "cat": "Industrial",
     "mods": "None",
-    "model": "rumpo"
+    "model": "rumpo",
+    "txd": "rumpo.txd",
+    "type": "car",
+    "handling": "RUMPO",
+    "class": "poorfamily",
+    "size": [2.406, 5.485, 2.307]
   },
   {
     "id": 441,
     "name": "RC Bandit",
     "cat": "RC Vehicles",
     "mods": "None",
-    "model": "rcbandit"
+    "model": "rcbandit",
+    "txd": "rcbandit.txd",
+    "type": "car",
+    "handling": "RCBANDIT",
+    "class": "ignore",
+    "size": [0.681, 1.561, 0.526]
   },
   {
     "id": 442,
     "name": "Romero",
     "cat": "Unique Vehicles",
     "mods": "Transfender",
-    "model": "romero"
+    "model": "romero",
+    "txd": "romero.txd",
+    "type": "car",
+    "handling": "ROMERO",
+    "class": "normal",
+    "size": [2.598, 6.286, 1.682]
   },
   {
     "id": 443,
     "name": "Packer",
     "cat": "Industrial",
     "mods": "None",
-    "model": "packer"
+    "model": "packer",
+    "txd": "packer.txd",
+    "type": "car",
+    "handling": "PACKER",
+    "class": "worker",
+    "size": [3.229, 15.93, 3.775]
   },
   {
     "id": 444,
     "name": "Monster",
     "cat": "Off Road",
     "mods": "None",
-    "model": "monster"
+    "model": "monster",
+    "txd": "monster.txd",
+    "type": "mtruck",
+    "handling": "MONSTER",
+    "class": "ignore",
+    "size": [3.459, 6.2, 2.849]
   },
   {
     "id": 445,
     "name": "Admiral",
     "cat": "Saloons",
     "mods": "Transfender",
-    "model": "admiral"
+    "model": "admiral",
+    "txd": "admiral.txd",
+    "type": "car",
+    "handling": "ADMIRAL",
+    "class": "richfamily",
+    "size": [2.55, 5.479, 1.611]
   },
   {
     "id": 446,
     "name": "Squallo",
     "cat": "Boats",
     "mods": "None",
-    "model": "squalo"
+    "model": "squalo",
+    "txd": "squalo.txd",
+    "type": "boat",
+    "handling": "SQUALO",
+    "class": "ignore",
+    "size": [3.883, 13.844, 3.244]
   },
   {
     "id": 447,
     "name": "Seasparrow",
     "cat": "Helicopters",
     "mods": "None",
-    "model": "seaspar"
+    "model": "seaspar",
+    "txd": "seaspar.txd",
+    "type": "heli",
+    "handling": "SEASPAR",
+    "class": "ignore",
+    "size": [10.358, 12.563, 2.914]
   },
   {
     "id": 448,
     "name": "Pizzaboy",
     "cat": "Bikes",
     "mods": "None",
-    "model": "pizzaboy"
+    "model": "pizzaboy",
+    "txd": "pizzaboy.txd",
+    "type": "bike",
+    "handling": "MOPED",
+    "class": "normal",
+    "size": [0.939, 2.116, 1.327]
   },
   {
     "id": 449,
     "name": "Tram",
     "cat": "Unique Vehicles",
     "mods": "None",
-    "model": "tram"
+    "model": "tram",
+    "txd": "tram.txd",
+    "type": "train",
+    "handling": "TRAM",
+    "class": "ignore",
+    "size": [2.586, 8.663, 3.414]
   },
   {
     "id": 450,
     "name": "Article Trailer 2",
     "cat": "Trailers",
     "mods": "None",
-    "model": "artict2"
+    "model": "artict2",
+    "txd": "artict2.txd",
+    "type": "trailer",
+    "handling": "ARTICT2",
+    "class": "ignore",
+    "size": [2.889, 10.769, 3.458]
   },
   {
     "id": 451,
     "name": "Turismo",
     "cat": "Sport Vehicles",
     "mods": "Transfender",
-    "model": "turismo"
+    "model": "turismo",
+    "txd": "turismo.txd",
+    "type": "car",
+    "handling": "TURISMO",
+    "class": "executive",
+    "size": [2.456, 5.401, 1.118]
   },
   {
     "id": 452,
     "name": "Speeder",
     "cat": "Boats",
     "mods": "None",
-    "model": "speeder"
+    "model": "speeder",
+    "txd": "speeder.txd",
+    "type": "boat",
+    "handling": "SPEEDER",
+    "class": "leisureboat",
+    "size": [3.124, 11.912, 3.549]
   },
   {
     "id": 453,
     "name": "Reefer",
     "cat": "Boats",
     "mods": "None",
-    "model": "reefer"
+    "model": "reefer",
+    "txd": "reefer.txd",
+    "type": "boat",
+    "handling": "REEFER",
+    "class": "workerboat",
+    "size": [4.551, 12.958, 8.565]
   },
   {
     "id": 454,
     "name": "Tropic",
     "cat": "Boats",
     "mods": "None",
-    "model": "tropic"
+    "model": "tropic",
+    "txd": "tropic.txd",
+    "type": "boat",
+    "handling": "TROPIC",
+    "class": "leisureboat",
+    "size": [6.08, 15.923, 9.909]
   },
   {
     "id": 455,
     "name": "Flatbed",
     "cat": "Industrial",
     "mods": "None",
-    "model": "flatbed"
+    "model": "flatbed",
+    "txd": "flatbed.txd",
+    "type": "car",
+    "handling": "FLATBED",
+    "class": "worker",
+    "size": [3.581, 9.006, 3.231]
   },
   {
     "id": 456,
     "name": "Yankee",
     "cat": "Industrial",
     "mods": "None",
-    "model": "yankee"
+    "model": "yankee",
+    "txd": "yankee.txd",
+    "type": "car",
+    "handling": "YANKEE",
+    "class": "worker",
+    "size": [2.976, 8.255, 3.311]
   },
   {
     "id": 457,
     "name": "Caddy",
     "cat": "Unique Vehicles",
     "mods": "None",
-    "model": "caddy"
+    "model": "caddy",
+    "txd": "caddy.txd",
+    "type": "car",
+    "handling": "GOLFCART",
+    "class": "richfamily",
+    "size": [1.435, 2.665, 1.928]
   },
   {
     "id": 458,
     "name": "Solair",
     "cat": "Station Wagons",
     "mods": "Transfender",
-    "model": "solair"
+    "model": "solair",
+    "txd": "solair.txd",
+    "type": "car",
+    "handling": "SOLAIR",
+    "class": "normal",
+    "size": [2.401, 5.685, 1.506]
   },
   {
     "id": 459,
     "name": "Topfun Van (Berkley's RC)",
     "cat": "Industrial",
     "mods": "None",
-    "model": "topfun"
+    "model": "topfun",
+    "txd": "topfun.txd",
+    "type": "car",
+    "handling": "TOPFUN",
+    "class": "ignore",
+    "size": [2.463, 5.509, 2.123]
   },
   {
     "id": 460,
     "name": "Skimmer",
     "cat": "Airplane",
     "mods": "None",
-    "model": "skimmer"
+    "model": "skimmer",
+    "txd": "skimmer.txd",
+    "type": "plane",
+    "handling": "SEAPLANE",
+    "class": "ignore",
+    "size": [10.756, 10.733, 4.128]
   },
   {
     "id": 461,
     "name": "PCJ-600",
     "cat": "Bikes",
     "mods": "None",
-    "model": "pcj600"
+    "model": "pcj600",
+    "txd": "pcj600.txd",
+    "type": "bike",
+    "handling": "BIKE",
+    "class": "motorbike",
+    "size": [0.765, 2.258, 1.254]
   },
   {
     "id": 462,
     "name": "Faggio",
     "cat": "Bikes",
     "mods": "None",
-    "model": "faggio"
+    "model": "faggio",
+    "txd": "faggio.txd",
+    "type": "bike",
+    "handling": "MOPED",
+    "class": "moped",
+    "size": [0.939, 1.936, 1.327]
   },
   {
     "id": 463,
     "name": "Freeway",
     "cat": "Bikes",
     "mods": "None",
-    "model": "freeway"
+    "model": "freeway",
+    "txd": "freeway.txd",
+    "type": "bike",
+    "handling": "FREEWAY",
+    "class": "motorbike",
+    "size": [0.766, 2.572, 1.325]
   },
   {
     "id": 464,
     "name": "RC Baron",
     "cat": "RC Vehicles",
     "mods": "None",
-    "model": "rcbaron"
+    "model": "rcbaron",
+    "txd": "rcbaron.txd",
+    "type": "plane",
+    "handling": "RCBARON",
+    "class": "ignore",
+    "size": [1.675, 1.435, 0.629]
   },
   {
     "id": 465,
     "name": "RC Raider",
     "cat": "RC Vehicles",
     "mods": "None",
-    "model": "rcraider"
+    "model": "rcraider",
+    "txd": "rcraider.txd",
+    "type": "heli",
+    "handling": "RCRAIDER",
+    "class": "ignore",
+    "size": [1.653, 1.815, 0.839]
   },
   {
     "id": 466,
     "name": "Glendale",
     "cat": "Saloons",
     "mods": "Transfender",
-    "model": "glendale"
+    "model": "glendale",
+    "txd": "glendale.txd",
+    "type": "car",
+    "handling": "GLENDALE",
+    "class": "normal",
+    "size": [2.457, 5.844, 1.533]
   },
   {
     "id": 467,
     "name": "Oceanic",
     "cat": "Saloons",
     "mods": "Transfender",
-    "model": "oceanic"
+    "model": "oceanic",
+    "txd": "oceanic.txd",
+    "type": "car",
+    "handling": "OCEANIC",
+    "class": "normal",
+    "size": [2.316, 6.017, 1.502]
   },
   {
     "id": 468,
     "name": "Sanchez",
     "cat": "Bikes",
     "mods": "None",
-    "model": "sanchez"
+    "model": "sanchez",
+    "txd": "sanchez.txd",
+    "type": "bike",
+    "handling": "DIRTBIKE",
+    "class": "motorbike",
+    "size": [0.803, 2.232, 1.241]
   },
   {
     "id": 469,
     "name": "Sparrow",
     "cat": "Helicopters",
     "mods": "None",
-    "model": "sparrow"
+    "model": "sparrow",
+    "txd": "sparrow.txd",
+    "type": "heli",
+    "handling": "SPARROW",
+    "class": "ignore",
+    "size": [10.358, 13.305, 2.719]
   },
   {
     "id": 470,
     "name": "Patriot",
     "cat": "Off Road",
     "mods": "None",
-    "model": "patriot"
+    "model": "patriot",
+    "txd": "patriot.txd",
+    "type": "car",
+    "handling": "PATRIOT",
+    "class": "ignore",
+    "size": [2.865, 4.972, 1.963]
   },
   {
     "id": 471,
     "name": "Quad",
     "cat": "Bikes",
     "mods": "None",
-    "model": "quad"
+    "model": "quad",
+    "txd": "quad.txd",
+    "type": "quad",
+    "handling": "QUADBIKE",
+    "class": "normal",
+    "size": [1.128, 1.818, 1.184]
   },
   {
     "id": 472,
     "name": "Coastguard",
     "cat": "Boats",
     "mods": "None",
-    "model": "coastg"
+    "model": "coastg",
+    "txd": "coastg.txd",
+    "type": "boat",
+    "handling": "COASTGRD",
+    "class": "ignore",
+    "size": [2.53, 9.184, 5.018]
   },
   {
     "id": 473,
     "name": "Dinghy",
     "cat": "Boats",
     "mods": "None",
-    "model": "dinghy"
+    "model": "dinghy",
+    "txd": "dinghy.txd",
+    "type": "boat",
+    "handling": "DINGHY",
+    "class": "workerboat",
+    "size": [2.506, 4.79, 1.568]
   },
   {
     "id": 474,
     "name": "Hermes",
     "cat": "Saloons",
     "mods": "Transfender",
-    "model": "hermes"
+    "model": "hermes",
+    "txd": "hermes.txd",
+    "type": "car",
+    "handling": "HERMES",
+    "class": "richfamily",
+    "size": [2.395, 5.724, 1.499]
   },
   {
     "id": 475,
     "name": "Sabre",
     "cat": "Sport Vehicles",
     "mods": "Transfender",
-    "model": "sabre"
+    "model": "sabre",
+    "txd": "sabre.txd",
+    "type": "car",
+    "handling": "SABRE",
+    "class": "normal",
+    "size": [2.423, 5.429, 1.39]
   },
   {
     "id": 476,
     "name": "Rustler",
     "cat": "Airplane",
     "mods": "None",
-    "model": "rustler"
+    "model": "rustler",
+    "txd": "rustler.txd",
+    "type": "plane",
+    "handling": "RUSTLER",
+    "class": "ignore",
+    "size": [11.266, 9.605, 3.429]
   },
   {
     "id": 477,
     "name": "ZR-350",
     "cat": "Sport Vehicles",
     "mods": "Transfender",
-    "model": "zr350"
+    "model": "zr350",
+    "txd": "zr350.txd",
+    "type": "car",
+    "handling": "ZR350",
+    "class": "richfamily",
+    "size": [2.602, 5.8, 1.384]
   },
   {
     "id": 478,
     "name": "Walton",
     "cat": "Industrial",
     "mods": "Transfender",
-    "model": "walton"
+    "model": "walton",
+    "txd": "walton.txd",
+    "type": "car",
+    "handling": "WALTON",
+    "class": "worker",
+    "size": [2.344, 5.051, 1.759]
   },
   {
     "id": 479,
     "name": "Regina",
     "cat": "Station Wagons",
     "mods": "Transfender",
-    "model": "regina"
+    "model": "regina",
+    "txd": "regina.txd",
+    "type": "car",
+    "handling": "REGINA",
+    "class": "normal",
+    "size": [2.452, 5.721, 1.679]
   },
   {
     "id": 480,
     "name": "Comet",
     "cat": "Convertibles",
     "mods": "Transfender",
-    "model": "comet"
+    "model": "comet",
+    "txd": "comet.txd",
+    "type": "car",
+    "handling": "COMET",
+    "class": "executive",
+    "size": [2.348, 5.105, 1.367]
   },
   {
     "id": 481,
     "name": "BMX",
     "cat": "Bikes",
     "mods": "None",
-    "model": "bmx"
+    "model": "bmx",
+    "txd": "bmx.txd",
+    "type": "bmx",
+    "handling": "BMX",
+    "class": "bicycle",
+    "size": [0.656, 1.658, 1.031]
   },
   {
     "id": 482,
     "name": "Burrito",
     "cat": "Industrial",
     "mods": "None",
-    "model": "burrito"
+    "model": "burrito",
+    "txd": "burrito.txd",
+    "type": "car",
+    "handling": "BURRITO",
+    "class": "normal",
+    "size": [2.505, 5.307, 2.05]
   },
   {
     "id": 483,
     "name": "Camper",
     "cat": "Unique Vehicles",
     "mods": "None",
-    "model": "camper"
+    "model": "camper",
+    "txd": "camper.txd",
+    "type": "car",
+    "handling": "CAMPER",
+    "class": "normal",
+    "size": [2.269, 5.941, 2.295]
   },
   {
     "id": 484,
     "name": "Marquis",
     "cat": "Boats",
     "mods": "None",
-    "model": "marquis"
+    "model": "marquis",
+    "txd": "marquis.txd",
+    "type": "boat",
+    "handling": "MARQUIS",
+    "class": "workerboat",
+    "size": [4.881, 20.257, 27.292]
   },
   {
     "id": 485,
     "name": "Baggage",
     "cat": "Unique Vehicles",
     "mods": "None",
-    "model": "baggage"
+    "model": "baggage",
+    "txd": "baggage.txd",
+    "type": "car",
+    "handling": "BAGGAGE",
+    "class": "normal",
+    "size": [1.653, 3.615, 1.797]
   },
   {
     "id": 486,
     "name": "Dozer",
     "cat": "Unique Vehicles",
     "mods": "None",
-    "model": "dozer"
+    "model": "dozer",
+    "txd": "dozer.txd",
+    "type": "car",
+    "handling": "DOZER",
+    "class": "ignore",
+    "size": [3.943, 6.979, 3.36]
   },
   {
     "id": 487,
     "name": "Maverick",
     "cat": "Helicopters",
     "mods": "None",
-    "model": "maverick"
+    "model": "maverick",
+    "txd": "maverick.txd",
+    "type": "heli",
+    "handling": "MAVERICK",
+    "class": "ignore",
+    "size": [11.394, 14.11, 3.831]
   },
   {
     "id": 488,
     "name": "SAN News Maverick",
     "cat": "Helicopters",
     "mods": "None",
-    "model": "vcnmav"
+    "model": "vcnmav",
+    "txd": "vcnmav.txd",
+    "type": "heli",
+    "handling": "COASTMAV",
+    "class": "ignore",
+    "size": [11.394, 12.565, 3.751]
   },
   {
     "id": 489,
     "name": "Rancher",
     "cat": "Off Road",
     "mods": "Transfender",
-    "model": "rancher"
+    "model": "rancher",
+    "txd": "rancher.txd",
+    "type": "car",
+    "handling": "RANCHER",
+    "class": "normal",
+    "size": [2.865, 5.672, 2.182]
   },
   {
     "id": 490,
     "name": "FBI Rancher",
     "cat": "Public Service",
     "mods": "None",
-    "model": "fbiranch"
+    "model": "fbiranch",
+    "txd": "fbiranch.txd",
+    "type": "car",
+    "handling": "FBIRANCH",
+    "class": "ignore",
+    "size": [2.865, 6.672, 2.182]
   },
   {
     "id": 491,
     "name": "Virgo",
     "cat": "Saloons",
     "mods": "Transfender",
-    "model": "virgo"
+    "model": "virgo",
+    "txd": "virgo.txd",
+    "type": "car",
+    "handling": "VIRGO",
+    "class": "normal",
+    "size": [2.262, 5.824, 1.435]
   },
   {
     "id": 492,
     "name": "Greenwood",
     "cat": "Saloons",
     "mods": "Transfender",
-    "model": "greenwoo"
+    "model": "greenwoo",
+    "txd": "greenwoo.txd",
+    "type": "car",
+    "handling": "GREENWOO",
+    "class": "poorfamily",
+    "size": [2.392, 5.743, 1.54]
   },
   {
     "id": 493,
     "name": "Jetmax",
     "cat": "Boats",
     "mods": "None",
-    "model": "jetmax"
+    "model": "jetmax",
+    "txd": "jetmax.txd",
+    "type": "boat",
+    "handling": "CUPBOAT",
+    "class": "ignore",
+    "size": [3.858, 13.064, 2.627]
   },
   {
     "id": 494,
     "name": "Hotring Racer",
     "cat": "Sport Vehicles",
     "mods": "None",
-    "model": "hotring"
+    "model": "hotring",
+    "txd": "hotring.txd",
+    "type": "car",
+    "handling": "HOTRING",
+    "class": "ignore",
+    "size": [2.099, 5.905, 1.524]
   },
   {
     "id": 495,
     "name": "Sandking",
     "cat": "Off Road",
     "mods": "None",
-    "model": "sandking"
+    "model": "sandking",
+    "txd": "sandking.txd",
+    "type": "car",
+    "handling": "SANDKING",
+    "class": "ignore",
+    "size": [3, 4.977, 2.482]
   },
   {
     "id": 496,
     "name": "Blista Compact",
     "cat": "Sport Vehicles",
     "mods": "Transfender",
-    "model": "blistac"
+    "model": "blistac",
+    "txd": "blistac.txd",
+    "type": "car",
+    "handling": "BLISTAC",
+    "class": "normal",
+    "size": [2.494, 4.591, 1.483]
   },
   {
     "id": 497,
     "name": "Police Maverick",
     "cat": "Helicopters",
     "mods": "None",
-    "model": "polmav"
+    "model": "polmav",
+    "txd": "polmav.txd",
+    "type": "heli",
+    "handling": "POLMAV",
+    "class": "ignore",
+    "size": [11.394, 14.11, 3.831]
   },
   {
     "id": 498,
     "name": "Boxville",
     "cat": "Industrial",
     "mods": "None",
-    "model": "boxville"
+    "model": "boxville",
+    "txd": "boxville.txd",
+    "type": "car",
+    "handling": "BOXVILLE",
+    "class": "worker",
+    "size": [3.037, 6.36, 3.093]
   },
   {
     "id": 499,
     "name": "Benson",
     "cat": "Industrial",
     "mods": "None",
-    "model": "benson"
+    "model": "benson",
+    "txd": "benson.txd",
+    "type": "car",
+    "handling": "BENSON",
+    "class": "worker",
+    "size": [2.555, 6.202, 2.842]
   },
   {
     "id": 500,
     "name": "Mesa",
     "cat": "Off Road",
     "mods": "Transfender",
-    "model": "mesa"
+    "model": "mesa",
+    "txd": "mesa.txd",
+    "type": "car",
+    "handling": "MESA",
+    "class": "normal",
+    "size": [2.292, 4.558, 1.974]
   },
   {
     "id": 501,
     "name": "RC Goblin",
     "cat": "RC Vehicles",
     "mods": "None",
-    "model": "rcgoblin"
+    "model": "rcgoblin",
+    "txd": "rcgoblin.txd",
+    "type": "heli",
+    "handling": "RCGOBLIN",
+    "class": "ignore",
+    "size": [1.653, 1.815, 0.839]
   },
   {
     "id": 502,
     "name": "Hotring Racer A",
     "cat": "Sport Vehicles",
     "mods": "None",
-    "model": "hotrina"
+    "model": "hotrina",
+    "txd": "hotrina.txd",
+    "type": "car",
+    "handling": "HOTRING",
+    "class": "ignore",
+    "size": [2.151, 5.751, 1.562]
   },
   {
     "id": 503,
     "name": "Hotring Racer B",
     "cat": "Sport Vehicles",
     "mods": "None",
-    "model": "hotrinb"
+    "model": "hotrinb",
+    "txd": "hotrinb.txd",
+    "type": "car",
+    "handling": "HOTRING",
+    "class": "ignore",
+    "size": [2.151, 5.795, 1.577]
   },
   {
     "id": 504,
     "name": "Bloodring Banger",
     "cat": "Saloons",
     "mods": "None",
-    "model": "bloodra / bloodrb"
+    "model": "bloodra",
+    "txd": "bloodra.txd",
+    "type": "car",
+    "handling": "BLOODRA",
+    "class": "ignore",
+    "size": [2.457, 5.864, 1.661]
   },
   {
     "id": 505,
     "name": "Rancher Lure",
     "cat": "Off Road",
     "mods": "None",
-    "model": "rnchlure"
+    "model": "rnchlure",
+    "txd": "rnchlure.txd",
+    "type": "car",
+    "handling": "RANCHER",
+    "class": "normal",
+    "size": [2.865, 5.672, 2.182]
   },
   {
     "id": 506,
     "name": "Super GT",
     "cat": "Sport Vehicles",
     "mods": "Transfender",
-    "model": "supergt"
+    "model": "supergt",
+    "txd": "supergt.txd",
+    "type": "car",
+    "handling": "SUPERGT",
+    "class": "executive",
+    "size": [2.129, 4.991, 1.242]
   },
   {
     "id": 507,
     "name": "Elegant",
     "cat": "Saloons",
     "mods": "Transfender",
-    "model": "elegant"
+    "model": "elegant",
+    "txd": "elegant.txd",
+    "type": "car",
+    "handling": "ELEGANT",
+    "class": "normal",
+    "size": [2.8, 6.138, 1.573]
   },
   {
     "id": 508,
     "name": "Journey",
     "cat": "Unique Vehicles",
     "mods": "None",
-    "model": "journey"
+    "model": "journey",
+    "txd": "journey.txd",
+    "type": "car",
+    "handling": "JOURNEY",
+    "class": "worker",
+    "size": [3.142, 7.157, 3.08]
   },
   {
     "id": 509,
     "name": "Bike",
     "cat": "Bikes",
     "mods": "None",
-    "model": "bike"
+    "model": "bike",
+    "txd": "bike.txd",
+    "type": "bmx",
+    "handling": "CHOPPERB",
+    "class": "bicycle",
+    "size": [0.624, 1.791, 1.148]
   },
   {
     "id": 510,
     "name": "Mountain Bike",
     "cat": "Bikes",
     "mods": "None",
-    "model": "mtbike"
+    "model": "mtbike",
+    "txd": "mtbike.txd",
+    "type": "bmx",
+    "handling": "MTB",
+    "class": "bicycle",
+    "size": [0.641, 1.856, 1.094]
   },
   {
     "id": 511,
     "name": "Beagle",
     "cat": "Airplane",
     "mods": "None",
-    "model": "beagle"
+    "model": "beagle",
+    "txd": "beagle.txd",
+    "type": "plane",
+    "handling": "BEAGLE",
+    "class": "ignore",
+    "size": [20.943, 15.817, 4.831]
   },
   {
     "id": 512,
     "name": "Cropduster",
     "cat": "Airplane",
     "mods": "None",
-    "model": "cropdust"
+    "model": "cropdust",
+    "txd": "cropdust.txd",
+    "type": "plane",
+    "handling": "CROPDUST",
+    "class": "ignore",
+    "size": [10.942, 5.931, 2.767]
   },
   {
     "id": 513,
     "name": "Stuntplane",
     "cat": "Airplane",
     "mods": "None",
-    "model": "stunt"
+    "model": "stunt",
+    "txd": "stunt.txd",
+    "type": "plane",
+    "handling": "STUNT",
+    "class": "ignore",
+    "size": [8.5, 6.744, 2.659]
   },
   {
     "id": 514,
     "name": "Tanker",
     "cat": "Industrial",
     "mods": "None",
-    "model": "petro"
+    "model": "petro",
+    "txd": "petro.txd",
+    "type": "car",
+    "handling": "PETROL",
+    "class": "worker",
+    "size": [3.2, 9.514, 3.746]
   },
   {
     "id": 515,
     "name": "Roadtrain",
     "cat": "Industrial",
     "mods": "None",
-    "model": "rdtrain"
+    "model": "rdtrain",
+    "txd": "rdtrain.txd",
+    "type": "car",
+    "handling": "RDTRAIN",
+    "class": "worker",
+    "size": [3.651, 10.043, 4.111]
   },
   {
     "id": 516,
     "name": "Nebula",
     "cat": "Saloons",
     "mods": "Transfender",
-    "model": "nebula"
+    "model": "nebula",
+    "txd": "nebula.txd",
+    "type": "car",
+    "handling": "NEBULA",
+    "class": "poorfamily",
+    "size": [2.336, 6.095, 1.637]
   },
   {
     "id": 517,
     "name": "Majestic",
     "cat": "Saloons",
     "mods": "Transfender",
-    "model": "majestic"
+    "model": "majestic",
+    "txd": "majestic.txd",
+    "type": "car",
+    "handling": "MAJESTIC",
+    "class": "poorfamily",
+    "size": [2.513, 6.088, 1.616]
   },
   {
     "id": 518,
     "name": "Buccaneer",
     "cat": "Saloons",
     "mods": "Transfender",
-    "model": "buccanee"
+    "model": "buccanee",
+    "txd": "buccanee.txd",
+    "type": "car",
+    "handling": "BUCCANEE",
+    "class": "normal",
+    "size": [2.372, 5.874, 1.28]
   },
   {
     "id": 519,
     "name": "Shamal",
     "cat": "Airplane",
     "mods": "None",
-    "model": "shamal"
+    "model": "shamal",
+    "txd": "shamal.txd",
+    "type": "plane",
+    "handling": "SHAMAL",
+    "class": "ignore",
+    "size": [20.044, 18.288, 4.603]
   },
   {
     "id": 520,
     "name": "Hydra",
     "cat": "Airplane",
     "mods": "None",
-    "model": "hydra"
+    "model": "hydra",
+    "txd": "hydra.txd",
+    "type": "plane",
+    "handling": "HYDRA",
+    "class": "ignore",
+    "size": [9.635, 13.359, 3.844]
   },
   {
     "id": 521,
     "name": "FCR-900",
     "cat": "Bikes",
     "mods": "None",
-    "model": "fcr900"
+    "model": "fcr900",
+    "txd": "fcr900.txd",
+    "type": "bike",
+    "handling": "FCR900",
+    "class": "motorbike",
+    "size": [0.765, 2.318, 1.25]
   },
   {
     "id": 522,
     "name": "NRG-500",
     "cat": "Bikes",
     "mods": "None",
-    "model": "nrg500"
+    "model": "nrg500",
+    "txd": "nrg500.txd",
+    "type": "bike",
+    "handling": "NRG500",
+    "class": "motorbike",
+    "size": [0.765, 2.316, 1.282]
   },
   {
     "id": 523,
     "name": "HPV1000",
     "cat": "Public Service",
     "mods": "None",
-    "model": "copbike"
+    "model": "copbike",
+    "txd": "copbike.txd",
+    "type": "bike",
+    "handling": "HPV1000",
+    "class": "ignore",
+    "size": [0.765, 2.359, 1.516]
   },
   {
     "id": 524,
     "name": "Cement Truck",
     "cat": "Industrial",
     "mods": "None",
-    "model": "cement"
+    "model": "cement",
+    "txd": "cement.txd",
+    "type": "car",
+    "handling": "CEMENT",
+    "class": "worker",
+    "size": [3.149, 8.314, 4.065]
   },
   {
     "id": 525,
     "name": "Towtruck",
     "cat": "Unique Vehicles",
     "mods": "None",
-    "model": "towtruck"
+    "model": "towtruck",
+    "txd": "towtruck.txd",
+    "type": "car",
+    "handling": "TOWTRUCK",
+    "class": "worker",
+    "size": [2.87, 6.972, 2.76]
   },
   {
     "id": 526,
     "name": "Fortune",
     "cat": "Saloons",
     "mods": "Transfender",
-    "model": "fortune"
+    "model": "fortune",
+    "txd": "fortune.txd",
+    "type": "car",
+    "handling": "FORTUNE",
+    "class": "normal",
+    "size": [2.31, 5.233, 1.375]
   },
   {
     "id": 527,
     "name": "Cadrona",
     "cat": "Saloons",
     "mods": "Transfender",
-    "model": "cadrona"
+    "model": "cadrona",
+    "txd": "cadrona.txd",
+    "type": "car",
+    "handling": "CADRONA",
+    "class": "poorfamily",
+    "size": [2.522, 5.302, 1.547]
   },
   {
     "id": 528,
     "name": "FBI Truck",
     "cat": "Public Service",
     "mods": "None",
-    "model": "fbitruck"
+    "model": "fbitruck",
+    "txd": "fbitruck.txd",
+    "type": "car",
+    "handling": "FBITRUCK",
+    "class": "big",
+    "size": [2.753, 5.502, 2.103]
   },
   {
     "id": 529,
     "name": "Willard",
     "cat": "Saloons",
     "mods": "Transfender",
-    "model": "willard"
+    "model": "willard",
+    "txd": "willard.txd",
+    "type": "car",
+    "handling": "WILLARD",
+    "class": "normal",
+    "size": [2.682, 5.587, 1.502]
   },
   {
     "id": 530,
     "name": "Forklift",
     "cat": "Unique Vehicles",
     "mods": "None",
-    "model": "forklift"
+    "model": "forklift",
+    "txd": "forklift.txd",
+    "type": "car",
+    "handling": "FORKLIFT",
+    "class": "worker",
+    "size": [1.224, 3.14, 2.103]
   },
   {
     "id": 531,
     "name": "Tractor",
     "cat": "Industrial",
     "mods": "None",
-    "model": "tractor"
+    "model": "tractor",
+    "txd": "tractor.txd",
+    "type": "car",
+    "handling": "TRACTOR",
+    "class": "normal",
+    "size": [1.912, 4.224, 2.103]
   },
   {
     "id": 532,
     "name": "Combine Harvester",
     "cat": "Unique Vehicles",
     "mods": "None",
-    "model": "combine"
+    "model": "combine",
+    "txd": "combine.txd",
+    "type": "car",
+    "handling": "COMBINE",
+    "class": "ignore",
+    "size": [8.333, 8.719, 4.268]
   },
   {
     "id": 533,
     "name": "Feltzer",
     "cat": "Convertibles",
     "mods": "Transfender",
-    "model": "feltzer"
+    "model": "feltzer",
+    "txd": "feltzer.txd",
+    "type": "car",
+    "handling": "FELTZER",
+    "class": "executive",
+    "size": [2.272, 5.241, 1.407]
   },
   {
     "id": 534,
     "name": "Remington",
     "cat": "Lowriders",
     "mods": "Loco Low Co",
-    "model": "remingtn"
+    "model": "remingtn",
+    "txd": "remingtn.txd",
+    "type": "car",
+    "handling": "REMINGTN",
+    "class": "executive",
+    "size": [2.362, 6.301, 1.218]
   },
   {
     "id": 535,
     "name": "Slamvan",
     "cat": "Lowriders",
     "mods": "Loco Low Co",
-    "model": "slamvan"
+    "model": "slamvan",
+    "txd": "slamvan.txd",
+    "type": "car",
+    "handling": "SLAMVAN",
+    "class": "richfamily",
+    "size": [2.359, 5.309, 1.472]
   },
   {
     "id": 536,
     "name": "Blade",
     "cat": "Lowriders",
     "mods": "Loco Low Co",
-    "model": "blade"
+    "model": "blade",
+    "txd": "blade.txd",
+    "type": "car",
+    "handling": "BLADE",
+    "class": "executive",
+    "size": [2.231, 5.72, 1.27]
   },
   {
     "id": 537,
     "name": "Freight (Train)",
     "cat": "Unique Vehicles",
     "mods": "None",
-    "model": "freight"
+    "model": "freight",
+    "txd": "freight.txd",
+    "type": "train",
+    "handling": "FREIGHT",
+    "class": "ignore",
+    "size": [3.28, 18.148, 4.773]
   },
   {
     "id": 538,
     "name": "Brownstreak (Train)",
     "cat": "Unique Vehicles",
     "mods": "None",
-    "model": "streak"
+    "model": "streak",
+    "txd": "streak.txd",
+    "type": "train",
+    "handling": "STREAK",
+    "class": "ignore",
+    "size": [3.321, 17.119, 4.595]
   },
   {
     "id": 539,
     "name": "Vortex",
     "cat": "Unique Vehicles",
     "mods": "None",
-    "model": "vortex"
+    "model": "vortex",
+    "txd": "vortex.txd",
+    "type": "plane",
+    "handling": "VORTEX",
+    "class": "ignore",
+    "size": [2.272, 3.801, 1.515]
   },
   {
     "id": 540,
     "name": "Vincent",
     "cat": "Saloons",
     "mods": "Transfender",
-    "model": "vincent"
+    "model": "vincent",
+    "txd": "vincent.txd",
+    "type": "car",
+    "handling": "VINCENT",
+    "class": "normal",
+    "size": [2.683, 5.718, 1.497]
   },
   {
     "id": 541,
     "name": "Bullet",
     "cat": "Sport Vehicles",
     "mods": "Transfender",
-    "model": "bullet"
+    "model": "bullet",
+    "txd": "bullet.txd",
+    "type": "car",
+    "handling": "BULLET",
+    "class": "executive",
+    "size": [2.287, 4.714, 1.207]
   },
   {
     "id": 542,
     "name": "Clover",
     "cat": "Saloons",
     "mods": "Transfender",
-    "model": "clover"
+    "model": "clover",
+    "txd": "clover.txd",
+    "type": "car",
+    "handling": "CLOVER",
+    "class": "poorfamily",
+    "size": [2.44, 5.839, 1.558]
   },
   {
     "id": 543,
     "name": "Sadler",
     "cat": "Industrial",
     "mods": "None",
-    "model": "sadler"
+    "model": "sadler",
+    "txd": "sadler.txd",
+    "type": "car",
+    "handling": "SADLER",
+    "class": "normal",
+    "size": [2.619, 5.098, 1.647]
   },
   {
     "id": 544,
     "name": "Firetruck LA",
     "cat": "Public Service",
     "mods": "None",
-    "model": "firela"
+    "model": "firela",
+    "txd": "firela.txd",
+    "type": "car",
+    "handling": "FIRETRUK",
+    "class": "ignore",
+    "size": [2.772, 11.647, 3.068]
   },
   {
     "id": 545,
     "name": "Hustler",
     "cat": "Unique Vehicles",
     "mods": "Transfender",
-    "model": "hustler"
+    "model": "hustler",
+    "txd": "hustler.txd",
+    "type": "car",
+    "handling": "HUSTLER",
+    "class": "normal",
+    "size": [2.011, 4.461, 1.552]
   },
   {
     "id": 546,
     "name": "Intruder",
     "cat": "Saloons",
     "mods": "Transfender",
-    "model": "intruder"
+    "model": "intruder",
+    "txd": "intruder.txd",
+    "type": "car",
+    "handling": "INTRUDER",
+    "class": "normal",
+    "size": [2.58, 5.786, 1.514]
   },
   {
     "id": 547,
     "name": "Primo",
     "cat": "Saloons",
     "mods": "Transfender",
-    "model": "primo"
+    "model": "primo",
+    "txd": "primo.txd",
+    "type": "car",
+    "handling": "PRIMO",
+    "class": "normal",
+    "size": [2.374, 5.689, 1.566]
   },
   {
     "id": 548,
     "name": "Cargobob",
     "cat": "Helicopters",
     "mods": "None",
-    "model": "cargobob"
+    "model": "cargobob",
+    "txd": "cargobob.txd",
+    "type": "heli",
+    "handling": "CARGOBOB",
+    "class": "ignore",
+    "size": [25.718, 25.692, 5.528]
   },
   {
     "id": 549,
     "name": "Tampa",
     "cat": "Saloons",
     "mods": "Transfender",
-    "model": "tampa"
+    "model": "tampa",
+    "txd": "tampa.txd",
+    "type": "car",
+    "handling": "TAMPA",
+    "class": "poorfamily",
+    "size": [2.362, 5.327, 1.391]
   },
   {
     "id": 550,
     "name": "Sunrise",
     "cat": "Saloons",
     "mods": "Transfender",
-    "model": "sunrise"
+    "model": "sunrise",
+    "txd": "sunrise.txd",
+    "type": "car",
+    "handling": "SUNRISE",
+    "class": "normal",
+    "size": [2.631, 5.779, 1.473]
   },
   {
     "id": 551,
     "name": "Merit",
     "cat": "Saloons",
     "mods": "Transfender",
-    "model": "merit"
+    "model": "merit",
+    "txd": "merit.txd",
+    "type": "car",
+    "handling": "MERIT",
+    "class": "richfamily",
+    "size": [2.311, 6.16, 1.677]
   },
   {
     "id": 552,
     "name": "Utility Van",
     "cat": "Industrial",
     "mods": "None",
-    "model": "utility"
+    "model": "utility",
+    "txd": "utility.txd",
+    "type": "car",
+    "handling": "UTILITY",
+    "class": "worker",
+    "size": [2.864, 6.602, 2.259]
   },
   {
     "id": 553,
     "name": "Nevada",
     "cat": "Airplane",
     "mods": "None",
-    "model": "nevada"
+    "model": "nevada",
+    "txd": "nevada.txd",
+    "type": "plane",
+    "handling": "NEVADA",
+    "class": "ignore",
+    "size": [28.655, 22.148, 6.686]
   },
   {
     "id": 554,
     "name": "Yosemite",
     "cat": "Industrial",
     "mods": "None",
-    "model": "yosemite"
+    "model": "yosemite",
+    "txd": "yosemite.txd",
+    "type": "car",
+    "handling": "YOSEMITE",
+    "class": "normal",
+    "size": [2.681, 5.751, 2.008]
   },
   {
     "id": 555,
     "name": "Windsor",
     "cat": "Convertibles",
     "mods": "Transfender",
-    "model": "windsor"
+    "model": "windsor",
+    "txd": "windsor.txd",
+    "type": "car",
+    "handling": "WINDSOR",
+    "class": "executive",
+    "size": [2.029, 5.066, 1.265]
   },
   {
     "id": 556,
     "name": "Monster \"A\"",
     "cat": "Off Road",
     "mods": "None",
-    "model": "monstera"
+    "model": "monstera",
+    "txd": "monstera.txd",
+    "type": "mtruck",
+    "handling": "MTRUCK_A",
+    "class": "ignore",
+    "size": [3.5, 5.808, 3.075]
   },
   {
     "id": 557,
     "name": "Monster \"B\"",
     "cat": "Off Road",
     "mods": "None",
-    "model": "monsterb"
+    "model": "monsterb",
+    "txd": "monsterb.txd",
+    "type": "mtruck",
+    "handling": "MTRUCK_B",
+    "class": "ignore",
+    "size": [3.501, 5.664, 3.026]
   },
   {
     "id": 558,
     "name": "Uranus",
     "cat": "Sport Vehicles",
     "mods": "Wheel Arch Angels",
-    "model": "uranus"
+    "model": "uranus",
+    "txd": "uranus.txd",
+    "type": "car",
+    "handling": "URANUS",
+    "class": "richfamily",
+    "size": [2.386, 5.067, 1.433]
   },
   {
     "id": 559,
     "name": "Jester",
     "cat": "Sport Vehicles",
     "mods": "Wheel Arch Angels",
-    "model": "jester"
+    "model": "jester",
+    "txd": "jester.txd",
+    "type": "car",
+    "handling": "JESTER",
+    "class": "richfamily",
+    "size": [2.456, 5.26, 1.292]
   },
   {
     "id": 560,
     "name": "Sultan",
     "cat": "Saloons",
     "mods": "Wheel Arch Angels",
-    "model": "sultan"
+    "model": "sultan",
+    "txd": "sultan.txd",
+    "type": "car",
+    "handling": "SULTAN",
+    "class": "richfamily",
+    "size": [2.457, 5.187, 1.395]
   },
   {
     "id": 561,
     "name": "Stratum",
     "cat": "Station Wagons",
     "mods": "Wheel Arch Angels",
-    "model": "stratum"
+    "model": "stratum",
+    "txd": "stratum.txd",
+    "type": "car",
+    "handling": "STRATUM",
+    "class": "richfamily",
+    "size": [2.33, 5.691, 1.595]
   },
   {
     "id": 562,
     "name": "Elegy",
     "cat": "Saloons",
     "mods": "Wheel Arch Angels",
-    "model": "elegy"
+    "model": "elegy",
+    "txd": "elegy.txd",
+    "type": "car",
+    "handling": "ELEGY",
+    "class": "richfamily",
+    "size": [2.221, 4.974, 1.412]
   },
   {
     "id": 563,
     "name": "Raindance",
     "cat": "Helicopters",
     "mods": "None",
-    "model": "raindanc"
+    "model": "raindanc",
+    "txd": "raindanc.txd",
+    "type": "heli",
+    "handling": "RAINDANC",
+    "class": "ignore",
+    "size": [19.008, 19.189, 4.458]
   },
   {
     "id": 564,
     "name": "RC Tiger",
     "cat": "RC Vehicles",
     "mods": "None",
-    "model": "rctiger"
+    "model": "rctiger",
+    "txd": "rctiger.txd",
+    "type": "car",
+    "handling": "RCTIGER",
+    "class": "ignore",
+    "size": [0.827, 1.993, 0.633]
   },
   {
     "id": 565,
     "name": "Flash",
     "cat": "Sport Vehicles",
     "mods": "Wheel Arch Angels",
-    "model": "flash"
+    "model": "flash",
+    "txd": "flash.txd",
+    "type": "car",
+    "handling": "FLASH",
+    "class": "richfamily",
+    "size": [2.268, 4.398, 1.259]
   },
   {
     "id": 566,
     "name": "Tahoma",
     "cat": "Lowriders",
     "mods": "Loco Low Co",
-    "model": "tahoma"
+    "model": "tahoma",
+    "txd": "tahoma.txd",
+    "type": "car",
+    "handling": "TAHOMA",
+    "class": "richfamily",
+    "size": [2.607, 6.121, 1.518]
   },
   {
     "id": 567,
     "name": "Savanna",
     "cat": "Lowriders",
     "mods": "Loco Low Co",
-    "model": "savanna"
+    "model": "savanna",
+    "txd": "savanna.txd",
+    "type": "car",
+    "handling": "SAVANNA",
+    "class": "poorfamily",
+    "size": [2.575, 6.044, 1.453]
   },
   {
     "id": 568,
     "name": "Bandito",
     "cat": "Off Road",
     "mods": "None",
-    "model": "bandito"
+    "model": "bandito",
+    "txd": "bandito.txd",
+    "type": "car",
+    "handling": "BANDITO",
+    "class": "ignore",
+    "size": [2.004, 3.913, 1.533]
   },
   {
     "id": 569,
     "name": "Freight Flat Trailer (Train)",
     "cat": "Trailers",
     "mods": "None",
-    "model": "freiflat"
+    "model": "freiflat",
+    "txd": "freiflat.txd",
+    "type": "train",
+    "handling": "FREIFLAT",
+    "class": "ignore",
+    "size": [3.177, 18.148, 2.366]
   },
   {
     "id": 570,
     "name": "Streak Trailer (Train)",
     "cat": "Trailers",
     "mods": "None",
-    "model": "streakc"
+    "model": "streakc",
+    "txd": "streakc.txd",
+    "type": "train",
+    "handling": "CSTREAK",
+    "class": "ignore",
+    "size": [3.14, 21.034, 4.623]
   },
   {
     "id": 571,
     "name": "Kart",
     "cat": "Unique Vehicles",
     "mods": "None",
-    "model": "kart"
+    "model": "kart",
+    "txd": "kart.txd",
+    "type": "car",
+    "handling": "KART",
+    "class": "ignore",
+    "size": [1.279, 1.825, 0.666]
   },
   {
     "id": 572,
     "name": "Mower",
     "cat": "Unique Vehicles",
     "mods": "None",
-    "model": "mower"
+    "model": "mower",
+    "txd": "mower.txd",
+    "type": "car",
+    "handling": "MOWER",
+    "class": "ignore",
+    "size": [1.445, 2.044, 1.353]
   },
   {
     "id": 573,
     "name": "Dune",
     "cat": "Off Road",
     "mods": "None",
-    "model": "duneride"
+    "model": "duneride",
+    "txd": "duneride.txd",
+    "type": "mtruck",
+    "handling": "DUNE",
+    "class": "ignore",
+    "size": [2.79, 6.648, 3.258]
   },
   {
     "id": 574,
     "name": "Sweeper",
     "cat": "Unique Vehicles",
     "mods": "None",
-    "model": "sweeper"
+    "model": "sweeper",
+    "txd": "sweeper.txd",
+    "type": "car",
+    "handling": "SWEEPER",
+    "class": "worker",
+    "size": [1.781, 3.216, 2.113]
   },
   {
     "id": 575,
     "name": "Broadway",
     "cat": "Lowriders",
     "mods": "Loco Low Co",
-    "model": "broadway"
+    "model": "broadway",
+    "txd": "broadway.txd",
+    "type": "car",
+    "handling": "BROADWAY",
+    "class": "poorfamily",
+    "size": [2.311, 5.477, 1.52]
   },
   {
     "id": 576,
     "name": "Tornado",
     "cat": "Lowriders",
     "mods": "Loco Low Co",
-    "model": "tornado"
+    "model": "tornado",
+    "txd": "tornado.txd",
+    "type": "car",
+    "handling": "TORNADO",
+    "class": "poorfamily",
+    "size": [2.374, 5.803, 1.467]
   },
   {
     "id": 577,
     "name": "AT400",
     "cat": "Airplane",
     "mods": "None",
-    "model": "at400"
+    "model": "at400",
+    "txd": "at400.txd",
+    "type": "plane",
+    "handling": "AT400",
+    "class": "ignore",
+    "size": [61.208, 58.199, 18.213]
   },
   {
     "id": 578,
     "name": "DFT-30",
     "cat": "Industrial",
     "mods": "None",
-    "model": "dft30"
+    "model": "dft30",
+    "txd": "dft30.txd",
+    "type": "car",
+    "handling": "DFT30",
+    "class": "worker",
+    "size": [3.48, 10.138, 2.83]
   },
   {
     "id": 579,
     "name": "Huntley",
     "cat": "Off Road",
     "mods": "Transfender",
-    "model": "huntley"
+    "model": "huntley",
+    "txd": "huntley.txd",
+    "type": "car",
+    "handling": "HUNTLEY",
+    "class": "richfamily",
+    "size": [2.487, 5.45, 2.11]
   },
   {
     "id": 580,
     "name": "Stafford",
     "cat": "Saloons",
     "mods": "Transfender",
-    "model": "stafford"
+    "model": "stafford",
+    "txd": "stafford.txd",
+    "type": "car",
+    "handling": "STAFFORD",
+    "class": "normal",
+    "size": [2.602, 5.925, 1.71]
   },
   {
     "id": 581,
     "name": "BF-400",
     "cat": "Bikes",
     "mods": "None",
-    "model": "bf400"
+    "model": "bf400",
+    "txd": "bf400.txd",
+    "type": "bike",
+    "handling": "BF400",
+    "class": "motorbike",
+    "size": [0.765, 2.261, 1.245]
   },
   {
     "id": 582,
     "name": "Newsvan",
     "cat": "Industrial",
     "mods": "None",
-    "model": "newsvan"
+    "model": "newsvan",
+    "txd": "newsvan.txd",
+    "type": "car",
+    "handling": "NEWSVAN",
+    "class": "normal",
+    "size": [2.656, 6.217, 3.093]
   },
   {
     "id": 583,
     "name": "Tug",
     "cat": "Unique Vehicles",
     "mods": "None",
-    "model": "tug"
+    "model": "tug",
+    "txd": "tug.txd",
+    "type": "car",
+    "handling": "TUG",
+    "class": "normal",
+    "size": [1.618, 3.488, 2.177]
   },
   {
     "id": 584,
     "name": "Petrol Trailer",
     "cat": "Trailers",
     "mods": "None",
-    "model": "petrotr"
+    "model": "petrotr",
+    "txd": "petrotr.txd",
+    "type": "trailer",
+    "handling": "PETROTR",
+    "class": "ignore",
+    "size": [2.8, 12.48, 3.383]
   },
   {
     "id": 585,
     "name": "Emperor",
     "cat": "Saloons",
     "mods": "Transfender",
-    "model": "emperor"
+    "model": "emperor",
+    "txd": "emperor.txd",
+    "type": "car",
+    "handling": "EMPEROR",
+    "class": "normal",
+    "size": [2.61, 6.133, 1.579]
   },
   {
     "id": 586,
     "name": "Wayfarer",
     "cat": "Bikes",
     "mods": "None",
-    "model": "wayfarer"
+    "model": "wayfarer",
+    "txd": "wayfarer.txd",
+    "type": "bike",
+    "handling": "WAYFARER",
+    "class": "motorbike",
+    "size": [1.065, 2.567, 1.491]
   },
   {
     "id": 587,
     "name": "Euros",
     "cat": "Sport Vehicles",
     "mods": "Transfender",
-    "model": "euros"
+    "model": "euros",
+    "txd": "euros.txd",
+    "type": "car",
+    "handling": "EUROS",
+    "class": "richfamily",
+    "size": [2.546, 5.211, 1.454]
   },
   {
     "id": 588,
     "name": "Hotdog",
     "cat": "Unique Vehicles",
     "mods": "None",
-    "model": "hotdog"
+    "model": "hotdog",
+    "txd": "hotdog.txd",
+    "type": "car",
+    "handling": "HOTDOG",
+    "class": "worker",
+    "size": [3.539, 7.918, 4.572]
   },
   {
     "id": 589,
     "name": "Club",
     "cat": "Sport Vehicles",
     "mods": "Transfender",
-    "model": "club"
+    "model": "club",
+    "txd": "club.txd",
+    "type": "car",
+    "handling": "CLUB",
+    "class": "normal",
+    "size": [2.256, 4.911, 1.638]
   },
   {
     "id": 590,
     "name": "Freight Box Trailer (Train)",
     "cat": "Trailers",
     "mods": "None",
-    "model": "freibox"
+    "model": "freibox",
+    "txd": "freibox.txd",
+    "type": "train",
+    "handling": "FREIFLAT",
+    "class": "ignore",
+    "size": [3.451, 17.833, 4.74]
   },
   {
     "id": 591,
     "name": "Article Trailer 3",
     "cat": "Trailers",
     "mods": "None",
-    "model": "artict3"
+    "model": "artict3",
+    "txd": "artict3.txd",
+    "type": "trailer",
+    "handling": "ARTICT3",
+    "class": "ignore",
+    "size": [2.889, 10.769, 3.985]
   },
   {
     "id": 592,
     "name": "Andromada",
     "cat": "Airplane",
     "mods": "None",
-    "model": "androm"
+    "model": "androm",
+    "txd": "androm.txd",
+    "type": "plane",
+    "handling": "ANDROM",
+    "class": "ignore",
+    "size": [44.279, 46.159, 11.18]
   },
   {
     "id": 593,
     "name": "Dodo",
     "cat": "Airplane",
     "mods": "None",
-    "model": "dodo"
+    "model": "dodo",
+    "txd": "dodo.txd",
+    "type": "plane",
+    "handling": "DODO",
+    "class": "ignore",
+    "size": [12.429, 10.144, 3.418]
   },
   {
     "id": 594,
     "name": "RC Cam",
     "cat": "RC Vehicles",
     "mods": "None",
-    "model": "rccam"
+    "model": "rccam",
+    "txd": "rccam.txd",
+    "type": "car",
+    "handling": "RCCAM",
+    "class": "ignore",
+    "size": [0.514, 0.472, 0.39]
   },
   {
     "id": 595,
     "name": "Launch",
     "cat": "Boats",
     "mods": "None",
-    "model": "launch"
+    "model": "launch",
+    "txd": "launch.txd",
+    "type": "boat",
+    "handling": "LAUNCH",
+    "class": "leisureboat",
+    "size": [2.495, 13.37, 4.962]
   },
   {
     "id": 596,
     "name": "Police Car (LSPD)",
     "cat": "Public Service",
     "mods": "None",
-    "model": "copcarla"
+    "model": "copcarla",
+    "txd": "copcarla.txd",
+    "type": "car",
+    "handling": "POLICE_LA",
+    "class": "ignore",
+    "size": [2.577, 5.502, 1.7]
   },
   {
     "id": 597,
     "name": "Police Car (SFPD)",
     "cat": "Public Service",
     "mods": "None",
-    "model": "copcarsf"
+    "model": "copcarsf",
+    "txd": "copcarsf.txd",
+    "type": "car",
+    "handling": "POLICE_SF",
+    "class": "ignore",
+    "size": [2.577, 5.502, 1.7]
   },
   {
     "id": 598,
     "name": "Police Car (LVPD)",
     "cat": "Public Service",
     "mods": "None",
-    "model": "copcarvg"
+    "model": "copcarvg",
+    "txd": "copcarvg.txd",
+    "type": "car",
+    "handling": "POLICE_VG",
+    "class": "ignore",
+    "size": [2.62, 5.423, 1.758]
   },
   {
     "id": 599,
     "name": "Police Ranger",
     "cat": "Public Service",
     "mods": "None",
-    "model": "copcarru"
+    "model": "copcarru",
+    "txd": "copcarru.txd",
+    "type": "car",
+    "handling": "POLRANGER",
+    "class": "ignore",
+    "size": [2.865, 5.606, 3.592]
   },
   {
     "id": 600,
     "name": "Picador",
     "cat": "Industrial",
     "mods": "Transfender",
-    "model": "picador"
+    "model": "picador",
+    "txd": "picador.txd",
+    "type": "car",
+    "handling": "PICADOR",
+    "class": "normal",
+    "size": [2.372, 5.803, 1.965]
   },
   {
     "id": 601,
     "name": "S.W.A.T.",
     "cat": "Public Service",
     "mods": "None",
-    "model": "swatvan"
+    "model": "swatvan",
+    "txd": "swatvan.txd",
+    "type": "car",
+    "handling": "SWATVAN",
+    "class": "big",
+    "size": [2.644, 6.555, 2.647]
   },
   {
     "id": 602,
     "name": "Alpha",
     "cat": "Sport Vehicles",
     "mods": "Transfender",
-    "model": "alpha"
+    "model": "alpha",
+    "txd": "alpha.txd",
+    "type": "car",
+    "handling": "ALPHA",
+    "class": "executive",
+    "size": [2.464, 5.256, 1.409]
   },
   {
     "id": 603,
     "name": "Phoenix",
     "cat": "Sport Vehicles",
     "mods": "Transfender",
-    "model": "phoenix"
+    "model": "phoenix",
+    "txd": "phoenix.txd",
+    "type": "car",
+    "handling": "PHOENIX",
+    "class": "normal",
+    "size": [2.598, 5.775, 1.412]
   },
   {
     "id": 604,
     "name": "Glendale Shit",
     "cat": "Saloons",
     "mods": "None",
-    "model": "glenshit"
+    "model": "glenshit",
+    "txd": "glenshit.txd",
+    "type": "car",
+    "handling": "GLENDALE",
+    "class": "normal",
+    "size": [2.457, 5.849, 1.533]
   },
   {
     "id": 605,
     "name": "Sadler Shit",
     "cat": "Industrial",
     "mods": "None",
-    "model": "sadlshit"
+    "model": "sadlshit",
+    "txd": "sadlshit.txd",
+    "type": "car",
+    "handling": "SADLER",
+    "class": "normal",
+    "size": [2.617, 5.336, 1.647]
   },
   {
     "id": 606,
     "name": "Baggage Trailer \"A\"",
     "cat": "Trailers",
     "mods": "None",
-    "model": "bagboxa"
+    "model": "bagboxa",
+    "txd": "bagboxa.txd",
+    "type": "trailer",
+    "handling": "BAGBOXA",
+    "class": "ignore",
+    "size": [1.539, 3.977, 2.104]
   },
   {
     "id": 607,
     "name": "Baggage Trailer \"B\"",
     "cat": "Trailers",
     "mods": "None",
-    "model": "bagboxb"
+    "model": "bagboxb",
+    "txd": "bagboxb.txd",
+    "type": "trailer",
+    "handling": "BAGBOXB",
+    "class": "ignore",
+    "size": [1.539, 3.977, 1.346]
   },
   {
     "id": 608,
     "name": "Tug Stairs Trailer",
     "cat": "Trailers",
     "mods": "None",
-    "model": "tugstair"
+    "model": "tugstair",
+    "txd": "tugstair.txd",
+    "type": "trailer",
+    "handling": "STAIRS",
+    "class": "ignore",
+    "size": [1.767, 4.3, 4.585]
   },
   {
     "id": 609,
     "name": "Boxville",
     "cat": "Industrial",
     "mods": "None",
-    "model": "boxburg"
+    "model": "boxburg",
+    "txd": "boxburg.txd",
+    "type": "car",
+    "handling": "BOXBURG",
+    "class": "worker",
+    "size": [3.037, 6.36, 3.093]
   },
   {
     "id": 610,
     "name": "Farm Trailer",
     "cat": "Trailers",
     "mods": "None",
-    "model": "farmtr1"
+    "model": "farmtr1",
+    "txd": "farmtr1.txd",
+    "type": "trailer",
+    "handling": "FARM_TR1",
+    "class": "ignore",
+    "size": [2.468, 1.468, 1.09]
   },
   {
     "id": 611,
     "name": "Utility Trailer",
     "cat": "Trailers",
     "mods": "None",
-    "model": "utiltr1"
+    "model": "utiltr1",
+    "txd": "utiltr1.txd",
+    "type": "trailer",
+    "handling": "UTIL_TR1",
+    "class": "ignore",
+    "size": [2.129, 3.177, 1.708]
   }
 ]

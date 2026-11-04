@@ -12,6 +12,14 @@ function isNonEmptyString(value: unknown): value is string {
     return typeof value === 'string' && value.length > 0;
 }
 
+function isVector3(value: unknown): value is number[] {
+    return Array.isArray(value) && value.length === 3 && value.every(isFiniteNumber);
+}
+
+function isOptionalSize(value: unknown): boolean {
+    return value === undefined || isVector3(value);
+}
+
 export function isObjectInfo(value: unknown): value is ObjectInfo {
     return (
         isRecord(value) &&
@@ -22,10 +30,11 @@ export function isObjectInfo(value: unknown): value is ObjectInfo {
         isNonEmptyString(value.visibility) &&
         typeof value.anime === 'boolean' &&
         isFiniteNumber(value.radius) &&
-        Array.isArray(value.borderbox) &&
-        value.borderbox.length === 3 &&
-        value.borderbox.every(isFiniteNumber) &&
-        isNonEmptyString(value.txd)
+        isVector3(value.borderbox) &&
+        isNonEmptyString(value.txd) &&
+        isNonEmptyString(value.ide) &&
+        isFiniteNumber(value.drawdist) &&
+        isOptionalSize(value.size)
     );
 }
 
@@ -36,7 +45,12 @@ export function isVehicleInfo(value: unknown): value is VehicleInfo {
         isNonEmptyString(value.name) &&
         isNonEmptyString(value.cat) &&
         isNonEmptyString(value.mods) &&
-        isNonEmptyString(value.model)
+        isNonEmptyString(value.model) &&
+        isNonEmptyString(value.txd) &&
+        isNonEmptyString(value.type) &&
+        isNonEmptyString(value.handling) &&
+        isNonEmptyString(value.class) &&
+        isOptionalSize(value.size)
     );
 }
 
@@ -47,6 +61,10 @@ export function isSkinInfo(value: unknown): value is SkinInfo {
         isNonEmptyString(value.name) &&
         isNonEmptyString(value.model) &&
         isNonEmptyString(value.location) &&
-        isNonEmptyString(value.gender)
+        isNonEmptyString(value.gender) &&
+        isNonEmptyString(value.txd) &&
+        isNonEmptyString(value.pedtype) &&
+        isNonEmptyString(value.animgroup) &&
+        isOptionalSize(value.size)
     );
 }

@@ -54,6 +54,42 @@ function createValidDff() {
 
 const validDff = createValidDff();
 
+function createNamedFrameDff(name) {
+    const chunk = (type, payload) => {
+        const bytes = new Uint8Array(12 + payload.length);
+        const view = new DataView(bytes.buffer);
+        view.setUint32(0, type, true);
+        view.setUint32(4, payload.length, true);
+        view.setUint32(8, 0x1803ffff, true);
+        bytes.set(payload, 12);
+        return bytes;
+    };
+    const frameStruct = new Uint8Array(56);
+    new DataView(frameStruct.buffer).setUint32(48, 0xffffffff, true);
+    const frameList = chunk(
+        0x0e,
+        Uint8Array.from([
+            ...chunk(0x01, Uint8Array.from([1, 0, 0, 0, ...frameStruct])),
+            ...chunk(0x03, chunk(0x253f2fe, new TextEncoder().encode(name))),
+        ])
+    );
+    const geometryList = chunk(0x1a, chunk(0x01, Uint8Array.from([0, 0, 0, 0])));
+    const payload = Uint8Array.from([
+        ...chunk(0x01, new Uint8Array(12)),
+        ...frameList,
+        ...geometryList,
+    ]);
+    return chunk(0x10, payload).buffer;
+}
+
+function prependUvAnimationDictionary(dff) {
+    const header = new Uint8Array(12);
+    const view = new DataView(header.buffer);
+    view.setUint32(0, 0x2b, true);
+    view.setUint32(8, 0x1803ffff, true);
+    return Uint8Array.from([...header, ...new Uint8Array(dff)]).buffer;
+}
+
 function compileDomainModules(outputDirectory) {
     return new Promise((resolve, reject) => {
         const compiler = spawn(
@@ -307,6 +343,65 @@ test('model asset client rejects HTTP failures and does not cache them', async (
         await assert.rejects(client.getModelExport('missing'), /status 404/);
         await assert.rejects(client.getModelExport('missing'), /status 404/);
         assert.equal(fetchCount, 2);
+    } finally {
+        globalThis.fetch = originalFetch;
+        await cleanup();
+    }
+});
+
+test('model asset client parses models that start with a UV animation dictionary', async () => {
+    const originalFetch = globalThis.fetch;
+    globalThis.fetch = async () => ({
+        ok: true,
+        status: 200,
+        arrayBuffer: async () => prependUvAnimationDictionary(validDff),
+    });
+
+    const { client, cleanup } = await loadClient();
+    try {
+        assert.equal((await client.getModelExport('vegaswaterfall02')).length, 1);
+    } finally {
+        globalThis.fetch = originalFetch;
+        await cleanup();
+    }
+});
+
+test('model preview data drops vehicle LOD frames only', async () => {
+    const { preview, cleanup } = await loadPreview();
+    try {
+        const modelExport = [
+            { ...validModelExport[0], name: 'chassis' },
+            { ...validModelExport[0], frame: 1, name: 'chassis_vlo', parent: 0 },
+        ];
+        const vehicle = preview.createModelPreviewData('admiral', 'vehicle', modelExport);
+        const object = preview.createModelPreviewData('pkr_chp_vlo04', 'object', [
+            { ...validModelExport[0], name: 'pkr_chp_vlo04' },
+        ]);
+
+        assert.deepEqual(
+            vehicle.obj.map((frame) => frame.name),
+            ['chassis']
+        );
+        assert.equal(object.obj.length, 1);
+    } finally {
+        await cleanup();
+    }
+});
+
+test('model asset client marks only damage-part frames as damaged', async () => {
+    const originalFetch = globalThis.fetch;
+    globalThis.fetch = async (input) => ({
+        ok: true,
+        status: 200,
+        arrayBuffer: async () => createNamedFrameDff(input.split('/').pop().replace('.dff', '')),
+    });
+
+    const { client, cleanup } = await loadClient();
+    try {
+        const damaged = async (name) => (await client.getModelExport(name))[0].damaged;
+        assert.equal(await damaged('door_lf_dam'), true);
+        assert.equal(await damaged('ug_spoiler_dam01'), true);
+        assert.equal(await damaged('n_dambarriers'), false);
     } finally {
         globalThis.fetch = originalFetch;
         await cleanup();

@@ -2,9 +2,8 @@ import { getModelExport } from './modelAssetClient';
 import type { ModelAssetRequestOptions } from './modelAssetClient';
 import type { ModelExport } from './modelAssets';
 import type { ModelType } from './modelType';
+import { getTextureUrl } from './textureCatalog';
 import { vehicleColorValues } from './vehicleColors';
-
-const MODEL_TEXTURE_BASE_URL = 'https://assets.open.mp/models/exports/';
 
 export interface ModelPreviewTexture {
     name: string;
@@ -39,7 +38,7 @@ function getTextureData(modelExport: ModelExport): ModelPreviewTexture[] {
                 textureNames.add(normalizedTextureName);
                 textures.push({
                     name: textureName,
-                    url: `${MODEL_TEXTURE_BASE_URL}${normalizedTextureName}.png`,
+                    url: getTextureUrl(textureName),
                 });
             }
         });
@@ -61,11 +60,16 @@ export function createModelPreviewData(
     modelExport: ModelExport,
     random: RandomNumber = Math.random
 ): ModelPreviewData {
+    const frames =
+        type === 'vehicle'
+            ? modelExport.filter((frame) => !frame.name.toLowerCase().includes('_vlo'))
+            : modelExport;
+
     return {
         type,
         name: name.trim().toLowerCase(),
-        obj: modelExport,
-        textures: getTextureData(modelExport),
+        obj: frames,
+        textures: getTextureData(frames),
         color: {
             primary: getRandomColor(random),
             secondary: getRandomColor(random),

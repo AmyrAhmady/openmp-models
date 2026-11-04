@@ -142,6 +142,8 @@ function createLifecycleEnvironment() {
         createControls() {
             return {
                 enabled: false,
+                target: new THREE.Vector3(),
+                update() {},
                 addEventListener() {},
                 removeEventListener() {},
                 dispose() {
@@ -289,6 +291,33 @@ const emptyModel = {
     textures: [],
 };
 
+const objectViewDirection = new THREE.Vector3(0.6, 0.7, 1).normalize();
+
+const offsetObject = {
+    type: 'object',
+    name: 'offset-object',
+    obj: [
+        {
+            damaged: false,
+            frame: 0,
+            geometry: {
+                facetype: 'Triangles',
+                textures: [{ color: [0, 0, 0, 255], indices: [0, 1, 2, 1, 3, 2], name: 'missing' }],
+                vertices: [
+                    { x: 100, y: 50, z: 0 },
+                    { x: 140, y: 50, z: 0 },
+                    { x: 100, y: 60, z: 10 },
+                    { x: 140, y: 60, z: 10 },
+                ],
+            },
+            matrix: identity,
+            name: 'root',
+            parent: -1,
+        },
+    ],
+    textures: [],
+};
+
 test('scene mount, replacement, and disposal release owned resources', async () => {
     const outputDirectory = await mkdtemp(join(tmpdir(), 'omp-scene-lifecycle-'));
     const originalWindow = globalThis.window;
@@ -412,6 +441,81 @@ test('scene mount, replacement, and disposal release owned resources', async () 
         await assert.rejects(emptyScene.mount(root), /no renderable frames/);
         emptyScene.dispose();
         assert.equal(root.children.length, 0);
+    } finally {
+        globalThis.window = originalWindow;
+        globalThis.document = originalDocument;
+        globalThis.requestAnimationFrame = originalRequestAnimationFrame;
+        globalThis.cancelAnimationFrame = originalCancelAnimationFrame;
+        await rm(outputDirectory, { recursive: true, force: true });
+    }
+});
+
+test('scene fits centered objects to the camera', async () => {
+    const outputDirectory = await mkdtemp(join(tmpdir(), 'omp-scene-framing-'));
+    const originalWindow = globalThis.window;
+    const originalDocument = globalThis.document;
+    const originalRequestAnimationFrame = globalThis.requestAnimationFrame;
+    const originalCancelAnimationFrame = globalThis.cancelAnimationFrame;
+
+    try {
+        await compileScene(outputDirectory);
+        process.env.NODE_PATH = [outputDirectory, join(projectRoot, 'node_modules')].join(
+            delimiter
+        );
+        Module._initPaths();
+        const imported = await import(
+            `${
+                pathToFileURL(join(outputDirectory, 'src', 'rendering', 'Scene.js')).href
+            }?test=${Date.now()}`
+        );
+        const Scene = imported.default.default ?? imported.default;
+        const environment = createLifecycleEnvironment();
+        environment.install();
+        const root = createRoot();
+        const scene = new Scene(
+            [offsetObject],
+            false,
+            async (name) => (name === offsetObject.name ? offsetObject.obj : model.obj),
+            {
+                createRenderer: () => environment.createRenderer(),
+                createTextureLoader: () => environment.createTextureLoader(),
+                createControls: () => environment.createControls(),
+            }
+        );
+
+        await scene.mount(root);
+        const instance = scene.scene?.getObjectByName('root');
+        assert.ok(instance);
+        instance.updateMatrixWorld(true);
+        const bounds = new THREE.Box3().setFromObject(instance);
+        const center = bounds.getCenter(new THREE.Vector3());
+        assert.ok(center.length() < 1e-6);
+
+        const camera = scene.camera;
+        camera.updateMatrixWorld(true);
+        const frustum = new THREE.Frustum().setFromProjectionMatrix(
+            new THREE.Matrix4().multiplyMatrices(camera.projectionMatrix, camera.matrixWorldInverse)
+        );
+        for (const x of [bounds.min.x, bounds.max.x]) {
+            for (const y of [bounds.min.y, bounds.max.y]) {
+                for (const z of [bounds.min.z, bounds.max.z]) {
+                    assert.ok(frustum.containsPoint(new THREE.Vector3(x, y, z)));
+                }
+            }
+        }
+        assert.equal(scene.controls.target.length(), 0);
+        assert.equal(instance.rotation.x, -Math.PI / 2);
+        assert.ok(camera.position.clone().normalize().distanceTo(objectViewDirection) < 1e-6);
+
+        await scene.mount(root);
+        assert.ok(scene.camera.position.clone().normalize().distanceTo(objectViewDirection) < 1e-6);
+
+        await scene.setModel([{ ...model, type: 'vehicle', name: 'test-vehicle' }], false);
+        assert.equal(scene.camera.near, 0.5);
+        assert.equal(scene.camera.far, 200);
+        assert.equal(scene.controls.target.length(), 0);
+
+        scene.dispose();
     } finally {
         globalThis.window = originalWindow;
         globalThis.document = originalDocument;

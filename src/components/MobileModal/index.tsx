@@ -13,7 +13,7 @@ interface Props {
     contentStyle?: StyleProp<ViewStyle>;
     fullScreenContent?: boolean;
     initialFocusSelector?: string;
-    placement?: 'center' | 'bottom';
+    placement?: 'center' | 'bottom' | 'top';
 }
 
 const MobileModal = ({
@@ -47,6 +47,7 @@ const MobileModal = ({
                 style={[
                     styles.overlay,
                     placement === 'bottom' && styles.bottomOverlay,
+                    placement === 'top' && styles.topOverlay,
                     fullScreenContent && styles.fullScreenOverlay,
                 ]}
             >
@@ -97,6 +98,9 @@ const styles = {
     } as ViewStyle,
     bottomOverlay: {
         justifyContent: 'flex-end',
+    } as ViewStyle,
+    topOverlay: {
+        justifyContent: 'flex-start',
     } as ViewStyle,
     content: {
         position: 'relative',

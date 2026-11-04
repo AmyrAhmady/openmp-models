@@ -12,6 +12,9 @@ export interface ObjectInfo {
     radius: number;
     borderbox: number[];
     txd: string;
+    ide: string;
+    drawdist: number;
+    size?: number[];
 }
 
 export interface VehicleInfo {
@@ -20,6 +23,11 @@ export interface VehicleInfo {
     cat: string;
     mods: string;
     model: string;
+    txd: string;
+    type: string;
+    handling: string;
+    class: string;
+    size?: number[];
 }
 
 export interface SkinInfo {
@@ -28,6 +36,10 @@ export interface SkinInfo {
     model: string;
     location: string;
     gender: string;
+    txd: string;
+    pedtype: string;
+    animgroup: string;
+    size?: number[];
 }
 
 export interface CatalogRegistry {

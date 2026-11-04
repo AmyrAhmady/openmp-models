@@ -10,6 +10,12 @@ export interface ShareableUrlState {
     primaryColorId: number | null;
     secondaryColorId: number | null;
     backgroundColor: string | null;
+    texturesSelected: boolean;
+    textureDictionary: string | null;
+    textureName: string | null;
+    mapSelected: boolean;
+    mapX: number | null;
+    mapY: number | null;
 }
 
 export const DEFAULT_SHAREABLE_URL_STATE: ShareableUrlState = {
@@ -21,6 +27,12 @@ export const DEFAULT_SHAREABLE_URL_STATE: ShareableUrlState = {
     primaryColorId: null,
     secondaryColorId: null,
     backgroundColor: null,
+    texturesSelected: false,
+    textureDictionary: null,
+    textureName: null,
+    mapSelected: false,
+    mapX: null,
+    mapY: null,
 };
 
 const MODEL_TYPE_BY_URL_VALUE: Record<string, ModelType> = {
@@ -46,6 +58,15 @@ function positiveInteger(value: string | null): number | null {
     return Number.isSafeInteger(parsed) && parsed >= 0 ? parsed : null;
 }
 
+function mapCoordinate(value: string | null): number | null {
+    if (!value || !/^-?\d+(\.\d+)?$/.test(value)) {
+        return null;
+    }
+
+    const parsed = Number(value);
+    return Math.abs(parsed) <= 3000 ? parsed : null;
+}
+
 function colorId(value: string | null): number | null {
     const parsed = positiveInteger(value);
     return parsed !== null && parsed < vehicleColorOptions.length ? parsed : null;
@@ -63,7 +84,16 @@ function modificationIds(value: string | null): number[] {
 
 export function parseShareableUrl(search: string): ShareableUrlState {
     const params = new URLSearchParams(search.startsWith('?') ? search.slice(1) : search);
-    const modelType = MODEL_TYPE_BY_URL_VALUE[queryValue(params, 'cat') ?? ''] ?? 'vehicle';
+    const category = queryValue(params, 'cat') ?? '';
+    const modelType = MODEL_TYPE_BY_URL_VALUE[category] ?? 'vehicle';
+    const texturesSelected = category === 'textures';
+    const textureDictionary = queryValue(params, 'txd');
+    const textureName = queryValue(params, 'texture');
+    const hasTexture = texturesSelected && textureDictionary !== null && textureName !== null;
+    const mapSelected = category === 'map';
+    const mapX = mapCoordinate(queryValue(params, 'x'));
+    const mapY = mapCoordinate(queryValue(params, 'y'));
+    const hasMapPoint = mapSelected && mapX !== null && mapY !== null;
 
     return {
         modelType,
@@ -74,11 +104,43 @@ export function parseShareableUrl(search: string): ShareableUrlState {
         primaryColorId: colorId(queryValue(params, 'primaryColor')),
         secondaryColorId: colorId(queryValue(params, 'secondaryColor')),
         backgroundColor: queryValue(params, 'bg'),
+        texturesSelected,
+        textureDictionary: hasTexture ? textureDictionary : null,
+        textureName: hasTexture ? textureName : null,
+        mapSelected,
+        mapX: hasMapPoint ? mapX : null,
+        mapY: hasMapPoint ? mapY : null,
     };
 }
 
 export function serializeShareableUrl(state: ShareableUrlState): string {
     const params = new URLSearchParams();
+    if (state.texturesSelected) {
+        params.set('cat', 'textures');
+        if (state.textureDictionary && state.textureName) {
+            params.set('txd', state.textureDictionary);
+            params.set('texture', state.textureName);
+        }
+        if (state.backgroundColor) {
+            params.set('bg', state.backgroundColor);
+        }
+
+        return `?${params.toString()}`;
+    }
+
+    if (state.mapSelected) {
+        params.set('cat', 'map');
+        if (state.mapX !== null && state.mapY !== null) {
+            params.set('x', String(state.mapX));
+            params.set('y', String(state.mapY));
+        }
+        if (state.backgroundColor) {
+            params.set('bg', state.backgroundColor);
+        }
+
+        return `?${params.toString()}`;
+    }
+
     params.set('cat', `${state.modelType}s`);
 
     if (state.modelId !== null) {

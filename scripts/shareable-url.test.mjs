@@ -63,11 +63,71 @@ test('shareable URL state round-trips model features and ignores invalid IDs', a
             primaryColorId: 12,
             secondaryColorId: 255,
             backgroundColor: '#dbeafe',
+            texturesSelected: false,
+            textureDictionary: null,
+            textureName: null,
+            mapSelected: false,
+            mapX: null,
+            mapY: null,
         });
         assert.equal(
             module.serializeShareableUrl(state),
             '?cat=skins&model=12&animLib=BAR&anim=Barserve_loop&mods=1000&primaryColor=12&secondaryColor=255&bg=%23dbeafe'
         );
+    } finally {
+        await cleanup();
+    }
+});
+
+test('shareable URL state round-trips textures and ignores a missing texture file', async () => {
+    const { module, cleanup } = await loadUrlState();
+    try {
+        const state = module.parseShareableUrl(
+            '?cat=textures&txd=boxes&texture=cardboxes_128&model=12&bg=%23dbeafe'
+        );
+
+        assert.equal(state.texturesSelected, true);
+        assert.equal(state.textureDictionary, 'boxes');
+        assert.equal(state.textureName, 'cardboxes_128');
+        assert.equal(
+            module.serializeShareableUrl(state),
+            '?cat=textures&txd=boxes&texture=cardboxes_128&bg=%23dbeafe'
+        );
+
+        const incomplete = module.parseShareableUrl('?cat=textures&texture=cardboxes_128');
+        assert.equal(incomplete.texturesSelected, true);
+        assert.equal(incomplete.textureDictionary, null);
+        assert.equal(incomplete.textureName, null);
+        assert.equal(module.serializeShareableUrl(incomplete), '?cat=textures');
+
+        const model = module.parseShareableUrl(
+            '?cat=objects&model=1220&txd=boxes&texture=crate128'
+        );
+        assert.equal(model.texturesSelected, false);
+        assert.equal(model.textureDictionary, null);
+        assert.equal(module.serializeShareableUrl(model), '?cat=objects&model=1220');
+    } finally {
+        await cleanup();
+    }
+});
+
+test('shareable URL state round-trips a map position and ignores one off the map', async () => {
+    const { module, cleanup } = await loadUrlState();
+    try {
+        const state = module.parseShareableUrl('?cat=map&x=1093&y=-1879&model=1220');
+        assert.equal(state.mapSelected, true);
+        assert.equal(state.mapX, 1093);
+        assert.equal(state.mapY, -1879);
+        assert.equal(module.serializeShareableUrl(state), '?cat=map&x=1093&y=-1879');
+
+        const offMap = module.parseShareableUrl('?cat=map&x=3500&y=0');
+        assert.equal(offMap.mapX, null);
+        assert.equal(offMap.mapY, null);
+        assert.equal(module.serializeShareableUrl(offMap), '?cat=map');
+
+        const model = module.parseShareableUrl('?cat=objects&model=1220&x=1093&y=-1879');
+        assert.equal(model.mapSelected, false);
+        assert.equal(module.serializeShareableUrl(model), '?cat=objects&model=1220');
     } finally {
         await cleanup();
     }

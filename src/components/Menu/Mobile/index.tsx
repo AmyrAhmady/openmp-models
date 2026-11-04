@@ -9,6 +9,9 @@ import BGColorPicker from './BGColorPicker';
 import VehicleModPickerMobile from './VehicleModPickerMobile';
 import VehicleColorPickerMobile from './VehicleColorPickerMobile';
 import AnimationBrowserMobile from './AnimationBrowserMobile';
+import ModelTexturesMobile from './ModelTexturesMobile';
+import ModelMapMobile from './ModelMapMobile';
+import type { PreviewMode } from 'src/domain/previewMode';
 import type { VehicleModification } from 'src/domain/vehicleModifications';
 import { vehicleColorOptions } from 'src/domain/vehicleColors';
 import type { ParsedAnimation } from 'src/animation/ifpParser';
@@ -32,6 +35,11 @@ interface Props {
     onSelectionChange?: ((selection: AnimationSelection) => void) | undefined;
     initialAnimationLibraryId?: string | null | undefined;
     initialAnimationName?: string | null | undefined;
+    textures: string[];
+    onOpenTexture: (name: string) => void;
+    onOpenSearch: () => void;
+    previewMode: PreviewMode;
+    onPreviewModeChange: (mode: PreviewMode) => void;
 }
 
 const MenuMobile = ({
@@ -52,6 +60,11 @@ const MenuMobile = ({
     onSelectionChange,
     initialAnimationLibraryId,
     initialAnimationName,
+    textures,
+    onOpenTexture,
+    onOpenSearch,
+    previewMode,
+    onPreviewModeChange,
 }: Props) => {
     const [listVisible, setListVisible] = useState(false);
     const [bgColorModalVisible, setBgColorModalVisible] = useState(false);
@@ -59,11 +72,16 @@ const MenuMobile = ({
     const [vehicleModModalVisible, setVehicleModModalVisible] = useState(false);
     const [vehicleColorModalVisible, setVehicleColorModalVisible] = useState(false);
     const [animationBrowserVisible, setAnimationBrowserVisible] = useState(false);
+    const [texturesVisible, setTexturesVisible] = useState(false);
+    const [mapVisible, setMapVisible] = useState(false);
     const { theme } = useTheme();
 
     useEffect(() => {
         if (modelType !== 'skin') {
             setAnimationBrowserVisible(false);
+        }
+        if (modelType !== 'object') {
+            setMapVisible(false);
         }
     }, [modelType]);
 
@@ -112,6 +130,24 @@ const MenuMobile = ({
                             }}
                         />
                     </View>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    style={{
+                        alignItems: 'center',
+                        borderColor: theme.button,
+                        borderRadius: 100,
+                        borderWidth: 1.8,
+                        height: '2.5rem',
+                        justifyContent: 'center',
+                        marginBottom: 4,
+                        marginRight: 4,
+                        paddingHorizontal: 8,
+                    }}
+                    onPress={onOpenSearch}
+                    accessibilityRole="button"
+                    accessibilityLabel="Open search"
+                >
+                    <Text style={{ color: theme.button }}>Search</Text>
                 </TouchableOpacity>
                 {modelType === 'skin' && (
                     <TouchableOpacity
@@ -205,6 +241,7 @@ const MenuMobile = ({
                         height: '2.5rem',
                         justifyContent: 'center',
                         marginBottom: 4,
+                        marginRight: 4,
                         paddingHorizontal: 8,
                     }}
                     onPress={() => setModelInfoModalVisible(true)}
@@ -212,6 +249,66 @@ const MenuMobile = ({
                     accessibilityLabel="Open model information"
                 >
                     <Text style={{ color: theme.button }}>Model info</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    style={{
+                        alignItems: 'center',
+                        borderColor: theme.button,
+                        borderRadius: 100,
+                        borderWidth: 1.8,
+                        height: '2.5rem',
+                        justifyContent: 'center',
+                        marginBottom: 4,
+                        marginRight: 4,
+                        paddingHorizontal: 8,
+                    }}
+                    onPress={() => setTexturesVisible(true)}
+                    accessibilityRole="button"
+                    accessibilityLabel="Open model textures"
+                >
+                    <Text style={{ color: theme.button }}>Textures</Text>
+                </TouchableOpacity>
+                {modelType === 'object' && (
+                    <TouchableOpacity
+                        style={{
+                            alignItems: 'center',
+                            borderColor: theme.button,
+                            borderRadius: 100,
+                            borderWidth: 1.8,
+                            height: '2.5rem',
+                            justifyContent: 'center',
+                            marginBottom: 4,
+                            marginRight: 4,
+                            paddingHorizontal: 8,
+                        }}
+                        onPress={() => setMapVisible(true)}
+                        accessibilityRole="button"
+                        accessibilityLabel="Open model map"
+                    >
+                        <Text style={{ color: theme.button }}>Map</Text>
+                    </TouchableOpacity>
+                )}
+                <TouchableOpacity
+                    style={{
+                        alignItems: 'center',
+                        borderColor: theme.button,
+                        borderRadius: 100,
+                        borderWidth: 1.8,
+                        height: '2.5rem',
+                        justifyContent: 'center',
+                        marginBottom: 4,
+                        marginRight: 4,
+                        paddingHorizontal: 8,
+                    }}
+                    onPress={() =>
+                        onPreviewModeChange(previewMode === 'model' ? 'thumbnail' : 'model')
+                    }
+                    accessibilityRole="button"
+                    accessibilityLabel="Toggle thumbnail view"
+                >
+                    <Text style={{ color: theme.button }}>
+                        {previewMode === 'thumbnail' ? 'Thumbnail' : '3D view'}
+                    </Text>
                 </TouchableOpacity>
             </View>
             <ModelList
@@ -258,6 +355,22 @@ const MenuMobile = ({
                 primaryColorId={primaryVehicleColorId}
                 secondaryColorId={secondaryVehicleColorId}
                 onSelect={onSelectVehicleColor}
+            />
+            <ModelTexturesMobile
+                visible={texturesVisible}
+                onRequestClose={() => setTexturesVisible(false)}
+                textures={textures}
+                emptyText={
+                    previewMode === 'thumbnail' && selectedItemId >= 0
+                        ? 'Switch to the 3D view to list its textures.'
+                        : 'No model selected.'
+                }
+                onSelect={onOpenTexture}
+            />
+            <ModelMapMobile
+                visible={mapVisible}
+                onRequestClose={() => setMapVisible(false)}
+                objectId={modelType === 'object' && selectedItemId >= 0 ? selectedItemId : null}
             />
             <AnimationBrowserMobile
                 key={`animation-browser-${selectedItemId}`}

@@ -10,6 +10,8 @@ import {
     parseCatalogSearchResponse,
 } from 'src/domain/catalogResponses';
 import { getOrLoadCatalogList } from 'src/catalog/catalogListCache';
+import { parseGlobalSearchResponse } from 'src/domain/globalSearchResponses';
+import type { GlobalSearchResponse } from 'src/domain/globalSearch';
 import { request } from 'src/api/request';
 
 export const catalogClient = {
@@ -53,6 +55,17 @@ export const catalogClient = {
             signal
                 ? { signal, parse: parseCatalogSearchResponse }
                 : { parse: parseCatalogSearchResponse }
+        );
+    },
+
+    searchAll(query: string, signal?: AbortSignal): Promise<GlobalSearchResponse> {
+        return request<{ q: string }, GlobalSearchResponse>(
+            'GET',
+            '/api/search/all',
+            { q: query },
+            signal
+                ? { signal, parse: parseGlobalSearchResponse }
+                : { parse: parseGlobalSearchResponse }
         );
     },
 

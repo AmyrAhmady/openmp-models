@@ -86,6 +86,11 @@ test('catalog response parsers accept typed list and detail envelopes', async ()
                     cat: 'Off Road',
                     mods: 'Transfender',
                     model: 'landstal',
+                    txd: 'landstal.txd',
+                    type: 'car',
+                    handling: 'LANDSTAL',
+                    class: 'normal',
+                    size: [2.364, 4.701, 1.795],
                 },
             }).item.model,
             'landstal'

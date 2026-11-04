@@ -2,6 +2,7 @@ declare module 'react-native-web' {
     import type * as React from 'react';
     import type {
         ActivityIndicatorProps,
+        FlatList as NativeFlatList,
         FlatListProps,
         ImageProps,
         ModalProps,
@@ -23,7 +24,7 @@ declare module 'react-native-web' {
 
     export const ActivityIndicator: React.ComponentType<WebComponentProps<ActivityIndicatorProps>>;
     export const FlatList: <ItemT = unknown>(
-        props: WebComponentProps<FlatListProps<ItemT>>
+        props: WebComponentProps<FlatListProps<ItemT>, NativeFlatList<ItemT>>
     ) => React.ReactElement | null;
     export const Image: React.ComponentType<WebComponentProps<ImageProps>>;
     export const Modal: React.ComponentType<WebComponentProps<ModalProps>>;
