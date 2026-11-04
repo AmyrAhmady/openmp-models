@@ -606,7 +606,7 @@ const Main: NextPage<MainProps> = ({ initialMetadata }) => {
             }
             return;
         }
-        if (modelType !== pending.modelType) {
+        if (texturesSelected || mapSelected || modelType !== pending.modelType) {
             return;
         }
         if (pending.modelId !== null && info?.id !== pending.modelId) {
