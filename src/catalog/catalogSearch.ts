@@ -6,6 +6,7 @@ interface CatalogSearchEntry {
     item: CatalogListItem;
     normalizedId: string;
     normalizedName: string;
+    normalizedModel: string;
 }
 
 function toListItem(item: CatalogItem): CatalogListItem {
@@ -21,6 +22,7 @@ function createSearchIndex(items: CatalogItem[]): CatalogSearchEntry[] {
         item: toListItem(item),
         normalizedId: String(item.id),
         normalizedName: normalizeSearchText(item.name),
+        normalizedModel: 'model' in item ? normalizeSearchText(item.model) : '',
     }));
 }
 
@@ -38,8 +40,10 @@ export function searchCatalog(type: ModelType, query: string): CatalogListItem[]
 
     return searchIndex[type]
         .filter(
-            ({ normalizedId, normalizedName }) =>
-                normalizedName.includes(normalizedQuery) || normalizedId.includes(normalizedQuery)
+            ({ normalizedId, normalizedName, normalizedModel }) =>
+                normalizedName.includes(normalizedQuery) ||
+                normalizedModel.includes(normalizedQuery) ||
+                normalizedId.includes(normalizedQuery)
         )
         .sort((a, b) => a.normalizedName.localeCompare(b.normalizedName))
         .map(({ item }) => item);

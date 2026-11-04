@@ -76,6 +76,21 @@ try {
     );
     assert.deepEqual(Object.keys(search.body.results[0]).sort(), ['id', 'model', 'name']);
 
+    const skinByModel = await getJson('/api/search?type=skin&q=bmybu');
+    assert.deepEqual(
+        skinByModel.body.results.map((item) => item.id),
+        [17]
+    );
+    const skinByName = await getJson('/api/search?type=skin&q=businessman');
+    assert.ok(skinByName.body.results.some((item) => item.id === 17));
+    const vehicleByModel = await getJson('/api/search?type=vehicle&q=copcarla');
+    assert.deepEqual(
+        vehicleByModel.body.results.map((item) => item.id),
+        [596]
+    );
+    const globalByModel = await getJson('/api/search/all?q=bmybu');
+    assert.equal(globalByModel.body.skin.results[0].id, 17);
+
     const item = await getJson('/api/item?type=vehicle&id=400');
     assert.equal(item.response.status, 200);
     assert.equal(item.body.item.name, 'Landstalker');
