@@ -156,7 +156,7 @@ const GlobalSearch = ({ onSelectModel, onSelectTexture, onShowAll, style }: Prop
                     color={theme.elementBg}
                     padding={14}
                     shadowed
-                    style={{ position: 'absolute', top: 50, left: 0, width: '100%', maxWidth: 640 }}
+                    style={{ position: 'absolute', top: 50, left: 0, right: 0 }}
                 >
                     {status === 'loading' && !results ? (
                         <ActivityIndicator color={theme.accent} />
@@ -172,8 +172,18 @@ const GlobalSearch = ({ onSelectModel, onSelectTexture, onShowAll, style }: Prop
                         <ScrollView style={{ maxHeight: Math.min(560, height - 160) }}>
                             {groups
                                 .filter((group) => group.total > 0)
-                                .map((group) => (
-                                    <View key={group.type} style={{ marginBottom: 8 }}>
+                                .map((group, index) => (
+                                    <View
+                                        key={group.type}
+                                        style={[
+                                            { marginBottom: 8 },
+                                            index > 0 && {
+                                                borderTopWidth: 1,
+                                                borderTopColor: theme.lines,
+                                                paddingTop: 10,
+                                            },
+                                        ]}
+                                    >
                                         <View
                                             style={{
                                                 flexDirection: 'row',
