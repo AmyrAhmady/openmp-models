@@ -606,7 +606,7 @@ const Main: NextPage<MainProps> = ({ initialMetadata }) => {
             }
             return;
         }
-        if (modelType !== pending.modelType) {
+        if (texturesSelected || mapSelected || modelType !== pending.modelType) {
             return;
         }
         if (pending.modelId !== null && info?.id !== pending.modelId) {
@@ -711,11 +711,11 @@ const Main: NextPage<MainProps> = ({ initialMetadata }) => {
             return;
         }
 
-        pushState(shareableState);
+        pushLocalState(shareableState);
     }, [
         info,
         mapSelected,
-        pushState,
+        pushLocalState,
         shareableState,
         shareableUrlReady,
         texturesSelected,
